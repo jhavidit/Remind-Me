@@ -1,20 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/home_graph"
     app:startDestination="@id/notesFragment">
 
     <fragment
         android:id="@+id/notesFragment"
-        android:name="tech.jhavidit.remindme.NotesFragment"
-        android:label="NotesFragment" />
+        android:name="tech.jhavidit.remindme.view.fragments.NotesFragment"
+        android:label="NotesFragment">
+
+        <action
+            android:id="@+id/updateNotes"
+            app:destination="@id/createNotesFragment">
+            <argument
+                android:name="update"
+                app:argType="string" />
+
+            <argument
+                android:name="currentNotes"
+                app:argType="tech.jhavidit.remindme.model.NotesModel" />
+        </action>
+
+    </fragment>
+
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="tech.jhavidit.remindme.SettingsFragment"
+        android:name="tech.jhavidit.remindme.view.fragments.SettingsFragment"
         android:label="SettingsFragment" />
     <fragment
         android:id="@+id/eventsFragment"
-        android:name="tech.jhavidit.remindme.EventsFragment"
+        android:name="tech.jhavidit.remindme.view.fragments.EventsFragment"
         android:label="EventsFragment" />
+    <fragment
+        android:id="@+id/createNotesFragment"
+        android:name="tech.jhavidit.remindme.view.fragments.CreateNotesFragment"
+        android:label="CreateNotesFragment">
+
+        <argument
+            android:name="update"
+            android:defaultValue=""
+            app:argType="string" />
+
+        <argument
+            android:name="currentNotes"
+            app:argType="tech.jhavidit.remindme.model.NotesModel" />
+
+        <action
+            android:id="@+id/notes_list"
+            app:destination="@id/notesFragment" />
+
+
+    </fragment>
+
 </navigation>
