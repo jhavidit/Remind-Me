@@ -7,6 +7,7 @@ import tech.jhavidit.remindme.room.NotesDao
 class NotesRepository(private val notesDao: NotesDao) {
 
     val readAllData: LiveData<List<NotesModel>> = notesDao.readAllData()
+    val notesCount : LiveData<Int> = notesDao.notesCount()
 
     suspend fun addNotes(notes: NotesModel) {
         notesDao.addNotes(notes)

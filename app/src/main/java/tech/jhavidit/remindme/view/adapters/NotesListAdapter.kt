@@ -16,7 +16,7 @@ class NotesListAdapter : RecyclerView.Adapter<NotesListAdapter.MyViewHolder>() {
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {}
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesListAdapter.MyViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.notes_item, parent, false))
 
     }
@@ -25,7 +25,7 @@ class NotesListAdapter : RecyclerView.Adapter<NotesListAdapter.MyViewHolder>() {
         return notes.size
     }
 
-    override fun onBindViewHolder(holder: NotesListAdapter.MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentNotes = notes[position]
         holder.itemView.title.text = currentNotes.title
         holder.itemView.description.text = currentNotes.description

@@ -23,6 +23,7 @@ class NotesFragment : Fragment() {
         private lateinit var navController: NavController
         private lateinit var adapter: NotesListAdapter
         private lateinit var viewModel : NotesViewModel
+        private var notesCount = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,7 +40,10 @@ class NotesFragment : Fragment() {
         viewModel.readAllData.observe(viewLifecycleOwner, Observer {
             adapter.setNotes(it)
         })
-        val notes = NotesModel(0,"","")
+        viewModel.notesCount.observe(viewLifecycleOwner, Observer {
+            notesCount = it
+        })
+        val notes = NotesModel(notesCount+1,"","")
         binding.fabAddNotes.setOnClickListener {
             navController.navigate(NotesFragmentDirections.updateNotes("created",notes))
         }

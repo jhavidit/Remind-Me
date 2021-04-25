@@ -13,6 +13,7 @@ import tech.jhavidit.remindme.room.NotesDatabase
 class NotesViewModel(application: Application) : AndroidViewModel(application) {
 
     val readAllData: LiveData<List<NotesModel>>
+    val notesCount : LiveData<Int>
     private val repository: NotesRepository
 
     init {
@@ -21,6 +22,7 @@ class NotesViewModel(application: Application) : AndroidViewModel(application) {
         ).userDao()
         repository = NotesRepository(userDao)
         readAllData = repository.readAllData
+        notesCount = repository.notesCount
     }
 
     fun addNotes(notes: NotesModel) {
