@@ -5,4 +5,14 @@
     <string name="notes_add">Notes Add</string>
     <string name="title">Title</string>
     <string name="description">Description</string>
+
+    <string-array name="Repeating">
+        <item>Not Repeating</item>
+        <item>Repeat every hour</item>
+        <item>Repeat Regularly</item>
+        <item>Repeat Weekly</item>
+        <item>Repeat Monthly</item>
+        <item>Repeat Yearly</item>
+    </string-array>
+
 </resources>

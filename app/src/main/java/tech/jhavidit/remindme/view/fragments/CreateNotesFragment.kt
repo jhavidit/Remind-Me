@@ -6,9 +6,12 @@ import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.SurfaceControl
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import tech.jhavidit.remindme.R
@@ -22,6 +25,7 @@ class CreateNotesFragment : Fragment() {
     private lateinit var binding: FragmentCreateNotesBinding
     private lateinit var notesViewModel: NotesViewModel
     private lateinit var notes: NotesModel
+    private lateinit var navController: NavController
     private val args: CreateNotesFragmentArgs by navArgs()
     private var updated = false
     private var notesId = 0
@@ -32,6 +36,7 @@ class CreateNotesFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentCreateNotesBinding.inflate(inflater, container, false)
+        navController = Navigation.findNavController(requireActivity(), R.id.NavHostFragment)
         notesViewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
         notes = args.currentNotes
         notesId = args.currentNotes.id
@@ -44,7 +49,9 @@ class CreateNotesFragment : Fragment() {
             binding.title.setText(notes.title)
             binding.description.setText(notes.description)
         }
-
+        binding.btnTime.setOnClickListener {
+            navController.navigate(CreateNotesFragmentDirections.timeReminder(notesId))
+        }
         binding.title.addTextChangedListener(textWatcher)
         binding.description.addTextChangedListener(textWatcher)
 

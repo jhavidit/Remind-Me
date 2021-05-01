@@ -11,5 +11,10 @@ data class NotesModel(
         @PrimaryKey(autoGenerate = true)
         val id: Int = 0,
         var title : String  = "",
-        val description : String = ""
+        val description : String = "",
+        val locationReminder : Boolean = false,
+        val timeReminder : Boolean = false,
+        val reminderTime : String?=null,
+        val location : String?=null,
+        val radius : String?=null
 ):Parcelable

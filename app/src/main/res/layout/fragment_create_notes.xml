@@ -20,6 +20,13 @@
                 app:layout_constraintGuide_percent="0.05" />
 
             <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/middleGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/endGuideline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -79,6 +86,36 @@
                 app:layout_constraintEnd_toEndOf="@id/endGuideline"
                 app:layout_constraintStart_toStartOf="@id/startGuideline"
                 app:layout_constraintTop_toBottomOf="@id/title" />
+
+            <Button
+                android:id="@+id/btn_time"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:text="Time\n Reminder"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                app:layout_constraintEnd_toEndOf="@id/middleGuideline"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                app:layout_constraintTop_toBottomOf="@id/description"
+                android:layout_marginTop="200dp"
+                android:layout_marginEnd="10dp"/>
+
+            <Button
+                android:id="@+id/btn_location"
+                android:layout_width="0dp"
+                android:text="Location\n Reminder"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                android:layout_height="60dp"
+                app:layout_constraintEnd_toEndOf="@id/endGuideline"
+                app:layout_constraintStart_toStartOf="@id/middleGuideline"
+                app:layout_constraintTop_toBottomOf="@id/description"
+                android:layout_marginTop="200dp"
+                android:layout_marginStart="10dp"/>
+
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
