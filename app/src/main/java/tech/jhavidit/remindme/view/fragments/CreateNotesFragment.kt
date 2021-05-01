@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.SurfaceControl
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -42,7 +43,6 @@ class CreateNotesFragment : Fragment() {
         notesId = args.currentNotes.id
         if (args.update == "update") {
             updated = true
-
         }
         if (updated) {
             binding.notesEditHeading.text = "Update"
@@ -50,7 +50,11 @@ class CreateNotesFragment : Fragment() {
             binding.description.setText(notes.description)
         }
         binding.btnTime.setOnClickListener {
-            navController.navigate(CreateNotesFragmentDirections.timeReminder(notesId))
+            navController.navigate(CreateNotesFragmentDirections.timeReminder(args.currentNotes))
+        }
+        binding.btnLocation.setOnClickListener {
+            notesViewModel.deleteNotes(notes)
+            navController.navigateUp()
         }
         binding.title.addTextChangedListener(textWatcher)
         binding.description.addTextChangedListener(textWatcher)
@@ -89,6 +93,9 @@ class CreateNotesFragment : Fragment() {
         val notesModel = NotesModel(0, title, description)
         notesViewModel.addNotes(notesModel)
         updated = true
+        notesViewModel.createdId.observe(viewLifecycleOwner, Observer {
+            notesId = it
+        })
     }
 
 

@@ -45,9 +45,9 @@
             app:destination="@id/timeReminderFragment">
 
             <argument
-                android:name="notesId"
-                app:argType="integer"
-                />
+                android:name="currentNotes"
+                app:argType="tech.jhavidit.remindme.model.NotesModel" />
+
 
         </action>
 
@@ -73,9 +73,9 @@
         android:label="TimeReminderFragment" >
 
         <argument
-            android:name="notesId"
-            app:argType="integer"
-            />
+            android:name="currentNotes"
+            app:argType="tech.jhavidit.remindme.model.NotesModel" />
+
 
     </dialog>
 

@@ -8,6 +8,7 @@ class NotesRepository(private val notesDao: NotesDao) {
 
     val readAllData: LiveData<List<NotesModel>> = notesDao.readAllData()
     val notesCount : LiveData<Int> = notesDao.notesCount()
+    val createdId : LiveData<Int> = notesDao.createdId()
 
     suspend fun addNotes(notes: NotesModel) {
         notesDao.addNotes(notes)

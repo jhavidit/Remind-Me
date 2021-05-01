@@ -43,8 +43,8 @@ class NotesFragment : Fragment() {
         viewModel.notesCount.observe(viewLifecycleOwner, Observer {
             notesCount = it
         })
-        binding.fabAddNotes.setOnClickListener {
 
+        binding.fabAddNotes.setOnClickListener {
             val notes = NotesModel(notesCount+1,"","")
             navController.navigate(NotesFragmentDirections.updateNotes("created",notes))
         }

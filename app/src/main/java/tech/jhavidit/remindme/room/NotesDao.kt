@@ -19,12 +19,13 @@ interface NotesDao {
     @Query("DELETE FROM notes_table")
     suspend fun deleteAllNotes()
 
-    @Query("SELECT * FROM notes_table ORDER BY id ASC")
+    @Query("SELECT * FROM notes_table ORDER BY id DESC")
     fun readAllData(): LiveData<List<NotesModel>>
 
     @Query("SELECT COUNT(id) FROM notes_table")
     fun notesCount():LiveData<Int>
 
-
+    @Query("SELECT id FROM notes_table ORDER BY id DESC LIMIT 1")
+    fun createdId():LiveData<Int>
 
 }

@@ -14,6 +14,7 @@ class NotesViewModel(application: Application) : AndroidViewModel(application) {
 
     val readAllData: LiveData<List<NotesModel>>
     val notesCount : LiveData<Int>
+    val createdId  : LiveData<Int>
     private val repository: NotesRepository
 
     init {
@@ -23,6 +24,7 @@ class NotesViewModel(application: Application) : AndroidViewModel(application) {
         repository = NotesRepository(userDao)
         readAllData = repository.readAllData
         notesCount = repository.notesCount
+        createdId = repository.createdId
     }
 
     fun addNotes(notes: NotesModel) {

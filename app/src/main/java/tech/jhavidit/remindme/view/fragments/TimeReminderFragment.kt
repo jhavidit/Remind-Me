@@ -35,11 +35,8 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
         // Inflate the layout for this fragment
         binding = FragmentTimeReminderBinding.inflate(inflater, container, false)
         val mTimePicker: TimePickerDialog
-        // var repeating = false
         val alarmManager = activity?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
         val c = Calendar.getInstance()
-
         val hour = c.get(Calendar.HOUR_OF_DAY)
         val minute = c.get(Calendar.MINUTE)
         val year = c.get(Calendar.YEAR)
@@ -56,13 +53,11 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
         val datePickerDialog = DatePickerDialog(
             requireContext(),
             DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-
                 // Display Selected date in textbox
                 alarmYear = year
                 alarmMonth = monthOfYear
                 alarmDay = dayOfMonth
                 binding.datePickerText.text = "" + dayOfMonth + "/" + monthOfYear + "/" + year
-
 
             },
             year,
@@ -114,11 +109,11 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
 
 
 
-        binding.repeat.setOnClickListener {
+        binding.cancelAlarm.setOnClickListener {
 
             val intent = Intent(requireContext(), AlarmReceiver::class.java)
             val pendingIntent =
-                PendingIntent.getBroadcast(requireContext(), args.notesId, intent, 0)
+                PendingIntent.getBroadcast(requireContext(), args.currentNotes.id, intent, 0)
             alarmManager.cancel(pendingIntent)
 
         }
@@ -129,7 +124,7 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
             if (currentTime < alarmTime) {
                 val intent = Intent(requireContext(), AlarmReceiver::class.java)
                 val pendingIntent =
-                    PendingIntent.getBroadcast(requireContext(), args.notesId, intent, 0)
+                    PendingIntent.getBroadcast(requireContext(), args.currentNotes.id, intent, 0)
                 when (repeatingIndex) {
                     0 -> alarmManager.setExactAndAllowWhileIdle(
                         AlarmManager.RTC_WAKEUP,
