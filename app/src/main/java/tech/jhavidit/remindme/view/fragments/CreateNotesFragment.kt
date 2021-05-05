@@ -50,7 +50,17 @@ class CreateNotesFragment : Fragment() {
             binding.description.setText(notes.description)
         }
         binding.btnTime.setOnClickListener {
-            navController.navigate(CreateNotesFragmentDirections.timeReminder(args.currentNotes))
+            val notes = NotesModel(
+                notesId,
+                binding.title.text.toString(),
+                binding.description.text.toString(),
+                args.currentNotes.locationReminder,
+                args.currentNotes.timeReminder,
+                args.currentNotes.reminderTime,
+                args.currentNotes.location,
+                args.currentNotes.radius
+            )
+            navController.navigate(CreateNotesFragmentDirections.timeReminder(notes))
         }
         binding.btnLocation.setOnClickListener {
             notesViewModel.deleteNotes(notes)
@@ -76,7 +86,6 @@ class CreateNotesFragment : Fragment() {
                 insertDataToDatabase()
             }
         }
-
     }
 
     private fun updateData() {

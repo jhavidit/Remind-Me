@@ -10,22 +10,31 @@ import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.FragmentTimeReminderBinding
+import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.receiver.AlarmReceiver
+import tech.jhavidit.remindme.viewModel.NotesViewModel
 import java.util.*
 
 class TimeReminderFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentTimeReminderBinding
+    private lateinit var alarmReceiver: AlarmReceiver
     private val args: TimeReminderFragmentArgs by navArgs()
     private var repeatingIndex = 0
+    private var reminderTIme: String = ""
+    private lateinit var viewModel: NotesViewModel
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreateView(
@@ -34,8 +43,9 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentTimeReminderBinding.inflate(inflater, container, false)
+        viewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
         val mTimePicker: TimePickerDialog
-        val alarmManager = activity?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmReceiver = AlarmReceiver()
         val c = Calendar.getInstance()
         val hour = c.get(Calendar.HOUR_OF_DAY)
         val minute = c.get(Calendar.MINUTE)
@@ -47,6 +57,10 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
         var alarmYear = c.get(Calendar.YEAR)
         var alarmMonth = c.get(Calendar.MONTH)
         var alarmDay = c.get(Calendar.DAY_OF_MONTH)
+        if (args.currentNotes.timeReminder)
+            binding.cancelAlarm.visibility = VISIBLE
+        else
+            binding.cancelAlarm.visibility = GONE
 
         val repeating = resources.getStringArray(R.array.Repeating)
 
@@ -58,6 +72,7 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
                 alarmMonth = monthOfYear
                 alarmDay = dayOfMonth
                 binding.datePickerText.text = "" + dayOfMonth + "/" + monthOfYear + "/" + year
+                reminderTIme = "" + dayOfMonth + "/" + monthOfYear + "/" + year
 
             },
             year,
@@ -73,6 +88,7 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
                 alarmHour = hourOfDay
                 alarmMinute = minute
                 binding.timePickerText.text = String.format("%d : %d", hourOfDay, minute)
+                reminderTIme = reminderTIme + " " + String.format("%d : %d", hourOfDay, minute)
             }, hour, minute, false
 
         )
@@ -107,67 +123,30 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
             }
         }
 
-
-
         binding.cancelAlarm.setOnClickListener {
-
-            val intent = Intent(requireContext(), AlarmReceiver::class.java)
-            val pendingIntent =
-                PendingIntent.getBroadcast(requireContext(), args.currentNotes.id, intent, 0)
-            alarmManager.cancel(pendingIntent)
-
+            alarmReceiver.cancelAlarm(requireContext(), args.currentNotes.id)
+            findNavController().navigateUp()
         }
+
+
         binding.save.setOnClickListener {
             c.set(alarmYear, alarmMonth, alarmDay, alarmHour, alarmMinute, 0)
             val alarmTime = c.timeInMillis
-            val currentTime = Calendar.getInstance().timeInMillis
-            if (currentTime < alarmTime) {
-                val intent = Intent(requireContext(), AlarmReceiver::class.java)
-                val pendingIntent =
-                    PendingIntent.getBroadcast(requireContext(), args.currentNotes.id, intent, 0)
-                when (repeatingIndex) {
-                    0 -> alarmManager.setExactAndAllowWhileIdle(
-                        AlarmManager.RTC_WAKEUP,
-                        alarmTime,
-                        pendingIntent
-                    )
-                    1 -> alarmManager.setInexactRepeating(
-                        AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                        alarmTime,
-                        AlarmManager.INTERVAL_HOUR,
-                        pendingIntent
-                    )
-                    2 ->
-                        alarmManager.setInexactRepeating(
-                            AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                            alarmTime,
-                            AlarmManager.INTERVAL_DAY,
-                            pendingIntent
-                        )
-                    3 -> alarmManager.setInexactRepeating(
-                        AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                        alarmTime,
-                        AlarmManager.INTERVAL_DAY * 7,
-                        pendingIntent
-                    )
-                    4 -> alarmManager.setInexactRepeating(
-                        AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                        alarmTime,
-                        AlarmManager.INTERVAL_DAY * 30,
-                        pendingIntent
-                    )
-                    5 ->
-                        alarmManager.setInexactRepeating(
-                            AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                            alarmTime,
-                            AlarmManager.INTERVAL_DAY * 365,
-                            pendingIntent
-                        )
-                }
 
-                Toast.makeText(requireContext(), "Alarm is set", Toast.LENGTH_SHORT).show()
-            }
+            val notes = NotesModel(
+                id = args.currentNotes.id,
+                title = args.currentNotes.title,
+                description = args.currentNotes.description,
+                timeReminder = true,
+                reminderTime = alarmTime,
+                repeatAlarmIndex = repeatingIndex
+            )
+            viewModel.updateNotes(notes)
+            alarmReceiver.scheduleAlarm(requireContext(), notes)
+            findNavController().navigateUp()
+
         }
+
         return binding.root
     }
 }

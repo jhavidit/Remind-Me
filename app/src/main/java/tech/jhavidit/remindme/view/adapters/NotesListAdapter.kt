@@ -2,6 +2,7 @@ package tech.jhavidit.remindme.view.adapters
 
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -29,6 +30,10 @@ class NotesListAdapter : RecyclerView.Adapter<NotesListAdapter.MyViewHolder>() {
         val currentNotes = notes[position]
         holder.itemView.title.text = currentNotes.title
         holder.itemView.description.text = currentNotes.description
+        if(currentNotes.timeReminder)
+        {
+            holder.itemView.time.visibility = VISIBLE
+        }
         val notes = NotesModel(currentNotes.id,currentNotes.title,currentNotes.description)
         holder.itemView.notes.setOnClickListener {
             holder.itemView.findNavController().navigate(NotesFragmentDirections.updateNotes("update",notes))
