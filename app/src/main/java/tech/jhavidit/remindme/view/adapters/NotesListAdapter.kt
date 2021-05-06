@@ -18,7 +18,9 @@ class NotesListAdapter : RecyclerView.Adapter<NotesListAdapter.MyViewHolder>() {
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        return MyViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.notes_item, parent, false))
+        return MyViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.notes_item, parent, false)
+        )
 
     }
 
@@ -30,18 +32,28 @@ class NotesListAdapter : RecyclerView.Adapter<NotesListAdapter.MyViewHolder>() {
         val currentNotes = notes[position]
         holder.itemView.title.text = currentNotes.title
         holder.itemView.description.text = currentNotes.description
-        if(currentNotes.timeReminder)
-        {
+        if (currentNotes.timeReminder) {
             holder.itemView.time.visibility = VISIBLE
         }
-        val notes = NotesModel(currentNotes.id,currentNotes.title,currentNotes.description)
+        val notes = NotesModel(
+            currentNotes.id,
+            currentNotes.title,
+            currentNotes.description,
+            currentNotes.locationReminder,
+            currentNotes.timeReminder,
+            currentNotes.reminderTime,
+            currentNotes.location,
+            currentNotes.radius,
+            currentNotes.repeatAlarmIndex
+        )
         holder.itemView.notes.setOnClickListener {
-            holder.itemView.findNavController().navigate(NotesFragmentDirections.updateNotes("update",notes))
+            holder.itemView.findNavController()
+                .navigate(NotesFragmentDirections.updateNotes("update", notes))
         }
 
     }
 
-    fun setNotes(notes: List<NotesModel>){
+    fun setNotes(notes: List<NotesModel>) {
         this.notes = notes
         notifyDataSetChanged()
     }

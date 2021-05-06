@@ -43,7 +43,7 @@ class AlarmReceiver : BroadcastReceiver() {
         }
     }
 
-    private fun showNotification(context: Context, title: String) {
+   /* private fun showNotification(context: Context, title: String) {
         val intent = Intent(context, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(
@@ -78,7 +78,7 @@ class AlarmReceiver : BroadcastReceiver() {
         }
 
         notificationManager.notify(0, notificationBuilder.build())
-    }
+    }*/
 
     @RequiresApi(Build.VERSION_CODES.M)
     fun scheduleAlarm(context: Context, notes: NotesModel) {

@@ -124,6 +124,18 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
         }
 
         binding.cancelAlarm.setOnClickListener {
+            val notesModel = NotesModel(
+                id = args.currentNotes.id,
+                title = args.currentNotes.title,
+                description = args.currentNotes.description,
+                timeReminder = false,
+                reminderTime = null,
+                repeatAlarmIndex = repeatingIndex,
+                locationReminder = args.currentNotes.locationReminder,
+                location = args.currentNotes.location,
+                radius = args.currentNotes.radius
+            )
+            viewModel.updateNotes(notesModel)
             alarmReceiver.cancelAlarm(requireContext(), args.currentNotes.id)
             findNavController().navigateUp()
         }
@@ -139,7 +151,10 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
                 description = args.currentNotes.description,
                 timeReminder = true,
                 reminderTime = alarmTime,
-                repeatAlarmIndex = repeatingIndex
+                repeatAlarmIndex = repeatingIndex,
+                locationReminder = args.currentNotes.locationReminder,
+                location = args.currentNotes.location,
+                radius = args.currentNotes.radius
             )
             viewModel.updateNotes(notes)
             alarmReceiver.scheduleAlarm(requireContext(), notes)

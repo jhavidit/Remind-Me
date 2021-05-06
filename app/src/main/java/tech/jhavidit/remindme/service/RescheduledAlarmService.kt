@@ -1,6 +1,5 @@
 package tech.jhavidit.remindme.service
 
-import android.app.Service
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
@@ -12,9 +11,6 @@ import tech.jhavidit.remindme.repository.NotesRepository
 import tech.jhavidit.remindme.room.NotesDatabase
 
 class RescheduledAlarmService : LifecycleService() {
-
-//    private val db: NotesDatabase = NotesDatabase.getDatabase(application)
-//    private val notesDao = db.userDao()
 
     override fun onCreate() {
         super.onCreate()
