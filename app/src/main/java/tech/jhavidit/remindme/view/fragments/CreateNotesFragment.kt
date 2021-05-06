@@ -103,7 +103,7 @@ class CreateNotesFragment : Fragment() {
         notesViewModel.addNotes(notesModel)
         updated = true
         notesViewModel.createdId.observe(viewLifecycleOwner, Observer {
-            notesId = it
+            notesId = it?:0
         })
     }
 
