@@ -15,6 +15,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.model.NotesModel
+import tech.jhavidit.remindme.service.AlarmService
 import tech.jhavidit.remindme.view.activity.MainActivity
 import java.util.*
 
@@ -22,10 +23,23 @@ class AlarmReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         context?.let {
-            val title = intent?.getStringExtra("title") ?: ""
-            showNotification(context, title)
-            val i = Intent(context, MainActivity::class.java)
-            context.startActivity(i)
+            intent?.let { it1 -> startAlarmService(context, it1) }
+        }
+    }
+
+    private fun startAlarmService(
+        context: Context,
+        intent: Intent
+    ) {
+        val intentService = Intent(context, AlarmService::class.java)
+        intentService.putExtra(
+            "title",
+            intent.getStringExtra("title") ?: ""
+        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(intentService)
+        } else {
+            context.startService(intentService)
         }
     }
 
