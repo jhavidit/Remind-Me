@@ -51,6 +51,17 @@
 
         </action>
 
+        <action
+            android:id="@+id/locationReminder"
+            app:destination="@id/timeReminderFragment">
+
+            <argument
+                android:name="currentNotes"
+                app:argType="tech.jhavidit.remindme.model.NotesModel" />
+
+
+        </action>
+
         <argument
             android:name="update"
             android:defaultValue=""
@@ -70,7 +81,7 @@
     <dialog
         android:id="@+id/timeReminderFragment"
         android:name="tech.jhavidit.remindme.view.fragments.TimeReminderFragment"
-        android:label="TimeReminderFragment" >
+        android:label="TimeReminderFragment">
 
         <argument
             android:name="currentNotes"
@@ -78,5 +89,16 @@
 
 
     </dialog>
+    <dialog
+        android:id="@+id/locationReminderFragment"
+        android:name="tech.jhavidit.remindme.view.fragments.LocationReminderFragment"
+        android:label="LocationReminderFragment" >
+
+        <argument
+            android:name="currentNotes"
+            app:argType="tech.jhavidit.remindme.model.NotesModel" />
+
+    </dialog>
+
 
 </navigation>

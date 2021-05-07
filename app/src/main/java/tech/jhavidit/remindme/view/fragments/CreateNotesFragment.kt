@@ -49,6 +49,22 @@ class CreateNotesFragment : Fragment() {
             binding.title.setText(notes.title)
             binding.description.setText(notes.description)
         }
+
+        binding.btnLocation.setOnClickListener {
+            val notes = NotesModel(
+                notesId,
+                binding.title.text.toString(),
+                binding.description.text.toString(),
+                args.currentNotes.locationReminder,
+                args.currentNotes.timeReminder,
+                args.currentNotes.reminderTime,
+                args.currentNotes.location,
+                args.currentNotes.radius,
+                args.currentNotes.repeatAlarmIndex
+            )
+            navController.navigate(CreateNotesFragmentDirections.locationReminder(notes))
+        }
+
         binding.btnTime.setOnClickListener {
             val notes = NotesModel(
                 notesId,
@@ -58,7 +74,8 @@ class CreateNotesFragment : Fragment() {
                 args.currentNotes.timeReminder,
                 args.currentNotes.reminderTime,
                 args.currentNotes.location,
-                args.currentNotes.radius
+                args.currentNotes.radius,
+                args.currentNotes.repeatAlarmIndex
             )
             navController.navigate(CreateNotesFragmentDirections.timeReminder(notes))
         }

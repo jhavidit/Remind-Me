@@ -33,6 +33,7 @@ class AlarmService : Service() {
         val channelId = "default"
         val channelName = "Remind Me"
         val dismissIntent = Intent(this,TimeReminderActivity::class.java)
+        dismissIntent.putExtra("dismiss","dismiss")
         val dismissPendingIntent = PendingIntent.getActivity(this,0,dismissIntent,0)
         val notificationIntent = Intent(this, TimeReminderActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0)
