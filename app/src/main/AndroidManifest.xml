@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RemindMe">
-        <activity android:name=".view.activity.TimeReminderActivity"></activity>
+        <activity android:name=".view.activity.LocationSearchActivity"></activity>
+        <activity android:name=".view.activity.TimeReminderActivity" />
         <activity android:name=".view.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

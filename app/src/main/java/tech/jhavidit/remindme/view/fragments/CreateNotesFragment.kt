@@ -79,10 +79,10 @@ class CreateNotesFragment : Fragment() {
             )
             navController.navigate(CreateNotesFragmentDirections.timeReminder(notes))
         }
-        binding.btnLocation.setOnClickListener {
-            notesViewModel.deleteNotes(notes)
-            navController.navigateUp()
-        }
+//        binding.btnLocation.setOnClickListener {
+//            notesViewModel.deleteNotes(notes)
+//            navController.navigateUp()
+//        }
         binding.title.addTextChangedListener(textWatcher)
         binding.description.addTextChangedListener(textWatcher)
 
