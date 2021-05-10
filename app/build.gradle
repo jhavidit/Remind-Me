@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-android-extensions'
     id 'kotlin-kapt'
     id 'androidx.navigation.safeargs'
+    id 'com.google.secrets_gradle_plugin' version '0.5'
 }
 
 android {
