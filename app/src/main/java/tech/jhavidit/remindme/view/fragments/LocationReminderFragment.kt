@@ -63,16 +63,13 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when(requestCode)
-        {
+        when (requestCode) {
             200 ->
-                if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    val intent = Intent(requireContext(),LocationSearchActivity::class.java)
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    val intent = Intent(requireContext(), LocationSearchActivity::class.java)
                     startActivity(intent)
-                }
-            else
-                {
-                    val alertDialog  : AlertDialog.Builder =  AlertDialog.Builder(requireContext())
+                } else {
+                    val alertDialog: AlertDialog.Builder = AlertDialog.Builder(requireContext())
                     alertDialog.setMessage("You need to provide location permission to access this feature. Kindly enable it from settings")
                     alertDialog.setCancelable(true)
                     alertDialog.setPositiveButton(
@@ -93,7 +90,7 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
                     val alert = alertDialog.create()
                     alert.show()
 
-                    }
+                }
 
         }
     }

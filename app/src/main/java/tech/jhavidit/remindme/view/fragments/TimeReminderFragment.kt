@@ -23,7 +23,7 @@ import tech.jhavidit.remindme.receiver.AlarmReceiver
 import tech.jhavidit.remindme.viewModel.NotesViewModel
 import java.util.*
 
-class TimeReminderFragment : BottomSheetDialogFragment() {
+class lTimeReminderFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentTimeReminderBinding
     private lateinit var alarmReceiver: AlarmReceiver
     private val args: TimeReminderFragmentArgs by navArgs()
