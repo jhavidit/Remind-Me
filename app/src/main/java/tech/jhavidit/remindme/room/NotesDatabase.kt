@@ -10,6 +10,7 @@ import tech.jhavidit.remindme.model.NotesModel
 abstract class NotesDatabase : RoomDatabase() {
 
     abstract fun userDao(): NotesDao
+    abstract fun locationDao() : LocationDao
 
     companion object {
         @Volatile
