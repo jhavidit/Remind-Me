@@ -8,15 +8,35 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <fragment
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/select_location"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/search_bar"
-            map:cameraZoom="13"
-            tools:context="com.example.currentplacedetailsonmap.MapsActivityCurrentPlace" />
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/select_location">
+
+            <fragment
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                map:cameraZoom="13"
+                tools:context="com.example.currentplacedetailsonmap.MapsActivityCurrentPlace" />
+
+            <ImageView
+                android:id="@+id/marker"
+                android:layout_width="30dp"
+                android:layout_height="37dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="4dp"
+                android:src="@drawable/ic_maps_and_flags"
+                android:tint="@color/purple_200"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </FrameLayout>
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/search_bar"
@@ -31,6 +51,7 @@
             android:id="@+id/select_location"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:textColor="@color/white"
             android:fontFamily="cursive"
             android:text="Select Location"
             android:textAllCaps="false"

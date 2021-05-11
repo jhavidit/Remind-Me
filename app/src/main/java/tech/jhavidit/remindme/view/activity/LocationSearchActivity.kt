@@ -60,10 +60,19 @@ class LocationSearchActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
         options.mapType(GoogleMap.MAP_TYPE_HYBRID)
             .compassEnabled(false)
 
+        binding.selectLocation.setOnClickListener {
+            val latLng = map?.cameraPosition?.target
+            Log.d("lat",latLng.toString())
+
+
+        }
+
+
     }
 
     @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap?) {
+        this.map = googleMap
         googleMap?.setOnMyLocationButtonClickListener(this)
         googleMap?.setOnMyLocationClickListener(this)
         enableLocation()
@@ -73,18 +82,6 @@ class LocationSearchActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMa
             else
                 return
             val location = LatLng(lat, lon)
-            addMarker(
-                MarkerOptions()
-                    .draggable(true)
-                    .position(LatLng(lat, lon))
-                    .title("Select Location")
-            )
-            addCircle(
-                CircleOptions()
-                    .radius(100.0)
-                    .strokeWidth(2F)
-                    .center(LatLng(lat, lon))
-            )
             moveCamera(CameraUpdateFactory.newLatLng(location))
             animateCamera(CameraUpdateFactory.zoomTo(11.0F))
 
