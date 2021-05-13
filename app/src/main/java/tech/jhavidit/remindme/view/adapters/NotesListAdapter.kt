@@ -42,7 +42,8 @@ class NotesListAdapter : RecyclerView.Adapter<NotesListAdapter.MyViewHolder>() {
             currentNotes.locationReminder,
             currentNotes.timeReminder,
             currentNotes.reminderTime,
-            currentNotes.location,
+            currentNotes.latitude,
+            currentNotes.longitude,
             currentNotes.radius,
             currentNotes.repeatAlarmIndex
         )

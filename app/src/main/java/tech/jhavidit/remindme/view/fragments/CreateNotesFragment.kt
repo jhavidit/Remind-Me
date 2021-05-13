@@ -58,7 +58,8 @@ class CreateNotesFragment : Fragment() {
                 args.currentNotes.locationReminder,
                 args.currentNotes.timeReminder,
                 args.currentNotes.reminderTime,
-                args.currentNotes.location,
+                args.currentNotes.latitude,
+                args.currentNotes.longitude,
                 args.currentNotes.radius,
                 args.currentNotes.repeatAlarmIndex
             )
@@ -73,7 +74,8 @@ class CreateNotesFragment : Fragment() {
                 args.currentNotes.locationReminder,
                 args.currentNotes.timeReminder,
                 args.currentNotes.reminderTime,
-                args.currentNotes.location,
+                args.currentNotes.latitude,
+                args.currentNotes.longitude,
                 args.currentNotes.radius,
                 args.currentNotes.repeatAlarmIndex
             )
@@ -120,7 +122,7 @@ class CreateNotesFragment : Fragment() {
         notesViewModel.addNotes(notesModel)
         updated = true
         notesViewModel.createdId.observe(viewLifecycleOwner, Observer {
-            notesId = it?:0
+            notesId = it ?: 0
         })
     }
 

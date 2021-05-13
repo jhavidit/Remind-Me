@@ -23,7 +23,7 @@ import tech.jhavidit.remindme.receiver.AlarmReceiver
 import tech.jhavidit.remindme.viewModel.NotesViewModel
 import java.util.*
 
-class lTimeReminderFragment : BottomSheetDialogFragment() {
+class TimeReminderFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentTimeReminderBinding
     private lateinit var alarmReceiver: AlarmReceiver
     private val args: TimeReminderFragmentArgs by navArgs()
@@ -125,7 +125,8 @@ class lTimeReminderFragment : BottomSheetDialogFragment() {
                 reminderTime = null,
                 repeatAlarmIndex = repeatingIndex,
                 locationReminder = args.currentNotes.locationReminder,
-                location = args.currentNotes.location,
+                latitude = args.currentNotes.latitude,
+                longitude = args.currentNotes.longitude,
                 radius = args.currentNotes.radius
             )
             viewModel.updateNotes(notesModel)
@@ -146,7 +147,8 @@ class lTimeReminderFragment : BottomSheetDialogFragment() {
                 reminderTime = alarmTime,
                 repeatAlarmIndex = repeatingIndex,
                 locationReminder = args.currentNotes.locationReminder,
-                location = args.currentNotes.location,
+                latitude = args.currentNotes.latitude,
+                longitude = args.currentNotes.longitude,
                 radius = args.currentNotes.radius
             )
             viewModel.updateNotes(notes)
