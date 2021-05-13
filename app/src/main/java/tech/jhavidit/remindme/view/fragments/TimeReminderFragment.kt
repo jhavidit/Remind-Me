@@ -125,8 +125,10 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
                 reminderTime = null,
                 repeatAlarmIndex = repeatingIndex,
                 locationReminder = args.currentNotes.locationReminder,
-                location = args.currentNotes.location,
-                radius = args.currentNotes.radius
+                latitude = args.currentNotes.latitude,
+                longitude = args.currentNotes.longitude,
+                radius = args.currentNotes.radius,
+                locationName = args.currentNotes.locationName
             )
             viewModel.updateNotes(notesModel)
             alarmReceiver.cancelAlarm(requireContext(), args.currentNotes.id)
@@ -146,8 +148,10 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
                 reminderTime = alarmTime,
                 repeatAlarmIndex = repeatingIndex,
                 locationReminder = args.currentNotes.locationReminder,
-                location = args.currentNotes.location,
-                radius = args.currentNotes.radius
+                latitude = args.currentNotes.latitude,
+                longitude = args.currentNotes.longitude,
+                radius = args.currentNotes.radius,
+                locationName = args.currentNotes.locationName
             )
             viewModel.updateNotes(notes)
             alarmReceiver.scheduleAlarm(requireContext(), notes)

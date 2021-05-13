@@ -8,11 +8,11 @@
         android:paddingBottom="40dp">
 
         <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/startGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.05" />
+            android:id="@+id/startGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/middleGuideline"
@@ -43,11 +43,11 @@
             app:layout_constraintGuide_percent="0.95" />
 
         <TextView
-            android:id="@+id/time_reminder_heading"
+            android:id="@+id/location_reminder_heading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
-            android:text="Time Reminder"
+            android:text="Location Reminder"
             android:textColor="#373A42"
             android:textSize="28sp"
             android:textStyle="bold"
@@ -55,95 +55,75 @@
             app:layout_constraintTop_toTopOf="@id/topGuideline" />
 
         <TextView
-            android:id="@+id/time_picker_text"
+            android:id="@+id/location"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/startGuideline"
-            app:layout_constraintEnd_toEndOf="@id/endGuideline"
-            app:layout_constraintTop_toBottomOf="@id/time_reminder_heading"
             android:layout_marginTop="40dp"
+            android:text="No location selected"
             android:textAllCaps="false"
-            android:text="No time selected"
+            android:textSize="24sp"
             android:textStyle="bold"
-            android:textSize="24sp"/>
+            app:layout_constraintEnd_toEndOf="@id/endGuideline"
+            app:layout_constraintStart_toStartOf="@id/startGuideline"
+            app:layout_constraintTop_toBottomOf="@id/location_reminder_heading" />
 
         <Button
-            android:id="@+id/time_picker"
-            android:textColor="@color/white"
+            android:id="@+id/location_picker"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/startGuideline"
-            app:layout_constraintEnd_toEndOf="@id/endGuideline"
-            app:layout_constraintTop_toBottomOf="@id/time_picker_text"
             android:layout_marginTop="10dp"
+            android:text="Select Location"
             android:textAllCaps="false"
+            android:textColor="@color/white"
             android:textSize="20sp"
-            android:text="Select time"/>
+            app:layout_constraintEnd_toEndOf="@id/endGuideline"
+            app:layout_constraintStart_toStartOf="@id/startGuideline"
+            app:layout_constraintTop_toBottomOf="@id/location" />
 
-        <TextView
-            android:id="@+id/date_picker_text"
+        <EditText
+            android:id="@+id/radius"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/startGuideline"
-            app:layout_constraintEnd_toEndOf="@id/endGuideline"
-            app:layout_constraintTop_toBottomOf="@id/time_picker"
             android:layout_marginTop="20dp"
+            android:inputType="number"
+            android:text="0"
             android:textAllCaps="false"
-            android:text="No date selected"
+            android:textSize="24sp"
             android:textStyle="bold"
-            android:textSize="24sp"/>
-
-        <Button
-            android:id="@+id/date_picker"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/startGuideline"
             app:layout_constraintEnd_toEndOf="@id/endGuideline"
-            app:layout_constraintTop_toBottomOf="@id/date_picker_text"
-            android:layout_marginTop="20dp"
-            android:textColor="@color/white"
-            android:textAllCaps="false"
-            android:textSize="20sp"
-            android:text="Select Date"/>
-
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/spinner"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="@id/startGuideline"
-            app:layout_constraintEnd_toEndOf="@id/endGuideline"
-            android:layout_marginTop="20dp"
-            app:layout_constraintTop_toBottomOf="@id/date_picker"/>
+            app:layout_constraintTop_toBottomOf="@id/location_picker" />
 
 
         <Button
-            android:id="@+id/cancel_alarm"
+            android:id="@+id/cancel_reminder"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/startGuideline"
-            app:layout_constraintEnd_toEndOf="@id/endGuideline"
-            app:layout_constraintTop_toBottomOf="@id/spinner"
             android:layout_marginTop="20dp"
+            android:text="Cancel"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="20sp"
-            android:text="Cancel"/>
+            app:layout_constraintEnd_toEndOf="@id/endGuideline"
+            app:layout_constraintStart_toStartOf="@id/startGuideline"
+            app:layout_constraintTop_toBottomOf="@id/radius" />
 
         <Button
-            android:id="@+id/save"
+            android:id="@+id/save_location_reminder"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/startGuideline"
-            app:layout_constraintEnd_toEndOf="@id/endGuideline"
-            app:layout_constraintTop_toBottomOf="@id/cancel_alarm"
             android:layout_marginTop="20dp"
+            android:layout_marginBottom="40dp"
+            android:text="Save"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="20sp"
-            android:layout_marginBottom="40dp"
-            android:text="Save"/>
+            app:layout_constraintEnd_toEndOf="@id/endGuideline"
+            app:layout_constraintStart_toStartOf="@id/startGuideline"
+            app:layout_constraintTop_toBottomOf="@id/cancel_reminder" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </layout>

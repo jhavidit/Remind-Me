@@ -4,12 +4,14 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import tech.jhavidit.remindme.model.LocationModel
 import tech.jhavidit.remindme.model.NotesModel
 
-@Database(entities = [NotesModel::class], version = 1, exportSchema = false)
+@Database(entities = [NotesModel::class,LocationModel::class], version = 1, exportSchema = false)
 abstract class NotesDatabase : RoomDatabase() {
 
     abstract fun userDao(): NotesDao
+    abstract fun locationDao() : LocationDao
 
     companion object {
         @Volatile

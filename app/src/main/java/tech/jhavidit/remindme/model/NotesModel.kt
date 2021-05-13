@@ -15,7 +15,9 @@ data class NotesModel(
     val locationReminder: Boolean = false,
     val timeReminder: Boolean = false,
     val reminderTime: Long? = null,
-    val location: String? = null,
+    val latitude: String? = null,
+    val longitude: String? = null,
+    val locationName: String? = null,
     val radius: String? = null,
     val repeatAlarmIndex: Int = -1
 ) : Parcelable

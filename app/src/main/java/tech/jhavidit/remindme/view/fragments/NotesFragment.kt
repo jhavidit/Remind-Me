@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -15,15 +16,17 @@ import tech.jhavidit.remindme.databinding.FragmentNotesBinding
 import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.view.adapters.NotesListAdapter
 import tech.jhavidit.remindme.view.fragments.CreateNotesFragmentDirections.notesList
+import tech.jhavidit.remindme.viewModel.MainActivityViewModel
 import tech.jhavidit.remindme.viewModel.NotesViewModel
 
 
 class NotesFragment : Fragment() {
-        private lateinit var  binding : FragmentNotesBinding
-        private lateinit var navController: NavController
-        private lateinit var adapter: NotesListAdapter
-        private lateinit var viewModel : NotesViewModel
-        private var notesCount = 0
+    private lateinit var binding: FragmentNotesBinding
+    private lateinit var navController: NavController
+    private val activityViewModel: MainActivityViewModel by activityViewModels()
+    private lateinit var adapter: NotesListAdapter
+    private lateinit var viewModel: NotesViewModel
+    private var notesCount = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,8 +48,8 @@ class NotesFragment : Fragment() {
         })
 
         binding.fabAddNotes.setOnClickListener {
-            val notes = NotesModel(notesCount+1,"","")
-            navController.navigate(NotesFragmentDirections.updateNotes("created",notes))
+            val notes = NotesModel(notesCount + 1, "", "")
+            navController.navigate(NotesFragmentDirections.updateNotes("created", notes))
         }
         return binding.root
     }

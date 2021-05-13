@@ -49,23 +49,44 @@ class CreateNotesFragment : Fragment() {
             binding.title.setText(notes.title)
             binding.description.setText(notes.description)
         }
+
+        binding.btnLocation.setOnClickListener {
+            val notes = NotesModel(
+                id = notesId,
+                title = binding.title.text.toString(),
+                description = binding.description.text.toString(),
+                locationReminder = args.currentNotes.locationReminder,
+                timeReminder = args.currentNotes.timeReminder,
+                reminderTime = args.currentNotes.reminderTime,
+                latitude = args.currentNotes.latitude,
+                locationName = args.currentNotes.locationName,
+                longitude = args.currentNotes.longitude,
+                radius = args.currentNotes.radius,
+                repeatAlarmIndex = args.currentNotes.repeatAlarmIndex
+            )
+            navController.navigate(CreateNotesFragmentDirections.locationReminder(notes))
+        }
+
         binding.btnTime.setOnClickListener {
             val notes = NotesModel(
-                notesId,
-                binding.title.text.toString(),
-                binding.description.text.toString(),
-                args.currentNotes.locationReminder,
-                args.currentNotes.timeReminder,
-                args.currentNotes.reminderTime,
-                args.currentNotes.location,
-                args.currentNotes.radius
+                id = notesId,
+                title = binding.title.text.toString(),
+                description = binding.description.text.toString(),
+                locationReminder = args.currentNotes.locationReminder,
+                timeReminder = args.currentNotes.timeReminder,
+                reminderTime = args.currentNotes.reminderTime,
+                latitude = args.currentNotes.latitude,
+                longitude = args.currentNotes.longitude,
+                radius = args.currentNotes.radius,
+                repeatAlarmIndex = args.currentNotes.repeatAlarmIndex,
+                locationName = args.currentNotes.locationName
             )
             navController.navigate(CreateNotesFragmentDirections.timeReminder(notes))
         }
-        binding.btnLocation.setOnClickListener {
-            notesViewModel.deleteNotes(notes)
-            navController.navigateUp()
-        }
+//        binding.btnLocation.setOnClickListener {
+//            notesViewModel.deleteNotes(notes)
+//            navController.navigateUp()
+//        }
         binding.title.addTextChangedListener(textWatcher)
         binding.description.addTextChangedListener(textWatcher)
 
@@ -103,7 +124,7 @@ class CreateNotesFragment : Fragment() {
         notesViewModel.addNotes(notesModel)
         updated = true
         notesViewModel.createdId.observe(viewLifecycleOwner, Observer {
-            notesId = it?:0
+            notesId = it ?: 0
         })
     }
 
