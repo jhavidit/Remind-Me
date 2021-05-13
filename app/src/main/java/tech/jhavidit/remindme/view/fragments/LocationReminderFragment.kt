@@ -52,14 +52,10 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
         viewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
 
         activityViewModel.locationModel.observe(viewLifecycleOwner, Observer {
-            it?.let {
+            if (it != null) {
                 hasLocation = true
                 location = it
-                if (it.name.isNotEmpty()) {
-                    binding.location.text = location?.name
-                } else {
-                    binding.location.text = "No Location Selected"
-                }
+                binding.location.text = location?.name
             }
         })
 
