@@ -1,9 +1,12 @@
 package tech.jhavidit.remindme.view.fragments
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -12,10 +15,12 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import tech.jhavidit.remindme.databinding.FragmentLocationReminderBinding
@@ -31,6 +36,7 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
     private lateinit var viewModel: NotesViewModel
     private val activityViewModel: MainActivityViewModel by activityViewModels()
     private val args: LocationReminderFragmentArgs by navArgs()
+    private lateinit var locationManager: LocationManager
     private val LOCATION_REQUEST_CODE = 1
     private val PERMISSION_REQUEST_CODE = 200
     private var hasLocation = false
@@ -49,26 +55,71 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
             it?.let {
                 hasLocation = true
                 location = it
-                if(it.name.isNotEmpty()) {
+                if (it.name.isNotEmpty()) {
                     binding.location.text = location?.name
-                }
-                else
+                } else {
                     binding.location.text = "No Location Selected"
+                }
             }
         })
 
         activityViewModel.notesModel.observe(viewLifecycleOwner, Observer {
-            it?.let {
+            if (it != null) {
                 notesModel = it
-            } ?: kotlin.run {
+            } else {
                 notesModel = args.currentNotes
+                binding.location.text = notesModel.locationName
+                binding.radius.setText(notesModel.radius)
+            }
+            if (notesModel.locationReminder) {
+                binding.cancelReminder.visibility = VISIBLE
+                hasLocation = true
+            } else {
+                binding.cancelReminder.visibility = GONE
+                binding.location.text = "No location selected"
             }
         })
 
-        if(notesModel.locationReminder)
-            binding.cancelReminder.visibility = VISIBLE
-        else
-            binding.cancelReminder.visibility = GONE
+        binding.cancelReminder.setOnClickListener {
+            val notesModel = NotesModel(
+                id = notesModel.id,
+                title = notesModel.title,
+                description = notesModel.description,
+                locationReminder = false,
+                timeReminder = notesModel.timeReminder,
+                repeatAlarmIndex = notesModel.repeatAlarmIndex,
+                reminderTime = notesModel.reminderTime
+            )
+            viewModel.updateNotes(notesModel)
+            findNavController().navigate(LocationReminderFragmentDirections.homeScreen())
+        }
+
+        binding.saveLocationReminder.setOnClickListener {
+            if (!hasLocation && binding.radius.text.isEmpty())
+                Toast.makeText(
+                    requireContext(),
+                    "Location and Radius cannot be empty",
+                    Toast.LENGTH_SHORT
+                ).show()
+            else {
+                val notesModel = NotesModel(
+                    id = notesModel.id,
+                    title = notesModel.title,
+                    description = notesModel.description,
+                    locationReminder = true,
+                    timeReminder = notesModel.timeReminder,
+                    latitude = location?.latitude.toString(),
+                    longitude = location?.longitude?.toString(),
+                    radius = binding.radius.text.toString(),
+                    repeatAlarmIndex = notesModel.repeatAlarmIndex,
+                    reminderTime = notesModel.reminderTime,
+                    locationName = location?.name
+                )
+                viewModel.updateNotes(notesModel)
+                findNavController().navigate(LocationReminderFragmentDirections.homeScreen())
+            }
+        }
+
 
         binding.locationPicker.setOnClickListener {
             if (ActivityCompat.checkSelfPermission(
@@ -87,13 +138,45 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
                     ), PERMISSION_REQUEST_CODE
                 )
             } else {
-                val intent = Intent(requireContext(), LocationSearchActivity::class.java)
-                val notesModel = args.currentNotes
-                intent.putExtra("notes", notesModel)
-                startActivity(intent)
+                locationManager =
+                    context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    onGPS()
+                } else {
+                    getLocation()
+                }
+
             }
         }
         return binding.root
+    }
+
+    private fun onGPS() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setMessage("Enable GPS").setCancelable(false)
+            .setPositiveButton(
+                "Yes"
+            ) { dialog, which -> startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)) }
+            .setNegativeButton(
+                "No"
+            ) { dialog, which -> dialog.cancel() }
+        val alertDialog = builder.create()
+        alertDialog.show()
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun getLocation() {
+        val locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        locationGPS?.let {
+            val lat = locationGPS.latitude
+            val lon = locationGPS.longitude
+            val intent = Intent(requireContext(), LocationSearchActivity::class.java)
+            val notesModel = args.currentNotes
+            intent.putExtra("latitude", lat)
+            intent.putExtra("longitude", lon)
+            intent.putExtra("notes", notesModel)
+            startActivity(intent)
+        }
     }
 
     override fun onRequestPermissionsResult(
