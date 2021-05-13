@@ -69,6 +69,7 @@
 
         <Button
             android:id="@+id/time_picker"
+            android:textColor="@color/white"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="@id/startGuideline"
@@ -100,6 +101,7 @@
             app:layout_constraintEnd_toEndOf="@id/endGuideline"
             app:layout_constraintTop_toBottomOf="@id/date_picker_text"
             android:layout_marginTop="20dp"
+            android:textColor="@color/white"
             android:textAllCaps="false"
             android:textSize="20sp"
             android:text="Select Date"/>
@@ -123,6 +125,7 @@
             app:layout_constraintTop_toBottomOf="@id/spinner"
             android:layout_marginTop="20dp"
             android:textAllCaps="false"
+            android:textColor="@color/white"
             android:textSize="20sp"
             android:text="Cancel"/>
 
@@ -135,6 +138,7 @@
             app:layout_constraintTop_toBottomOf="@id/cancel_alarm"
             android:layout_marginTop="20dp"
             android:textAllCaps="false"
+            android:textColor="@color/white"
             android:textSize="20sp"
             android:layout_marginBottom="40dp"
             android:text="Save"/>

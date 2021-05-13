@@ -9,22 +9,33 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import tech.jhavidit.remindme.databinding.FragmentLocationReminderBinding
+import tech.jhavidit.remindme.model.LocationModel
+import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.view.activity.LocationSearchActivity
+import tech.jhavidit.remindme.viewModel.MainActivityViewModel
 import tech.jhavidit.remindme.viewModel.NotesViewModel
 
 
 class LocationReminderFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentLocationReminderBinding
     private lateinit var viewModel: NotesViewModel
+    private val activityViewModel: MainActivityViewModel by activityViewModels()
     private val args: LocationReminderFragmentArgs by navArgs()
     private val LOCATION_REQUEST_CODE = 1
     private val PERMISSION_REQUEST_CODE = 200
+    private var hasLocation = false
+    private var location: LocationModel? = null
+    private lateinit var notesModel: NotesModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,6 +44,32 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
         // Inflate the layout for this fragment
         binding = FragmentLocationReminderBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
+
+        activityViewModel.locationModel.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                hasLocation = true
+                location = it
+                if(it.name.isNotEmpty()) {
+                    binding.location.text = location?.name
+                }
+                else
+                    binding.location.text = "No Location Selected"
+            }
+        })
+
+        activityViewModel.notesModel.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                notesModel = it
+            } ?: kotlin.run {
+                notesModel = args.currentNotes
+            }
+        })
+
+        if(notesModel.locationReminder)
+            binding.cancelReminder.visibility = VISIBLE
+        else
+            binding.cancelReminder.visibility = GONE
+
         binding.locationPicker.setOnClickListener {
             if (ActivityCompat.checkSelfPermission(
                     requireContext(),
@@ -51,6 +88,8 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
                 )
             } else {
                 val intent = Intent(requireContext(), LocationSearchActivity::class.java)
+                val notesModel = args.currentNotes
+                intent.putExtra("notes", notesModel)
                 startActivity(intent)
             }
         }
@@ -93,5 +132,15 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
                 }
 
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        activityViewModel.clearData()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        activityViewModel.clearData()
     }
 }

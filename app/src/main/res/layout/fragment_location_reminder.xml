@@ -76,8 +76,9 @@
         app:layout_constraintTop_toBottomOf="@id/location"
         android:layout_marginTop="10dp"
         android:textAllCaps="false"
+        android:textColor="@color/white"
         android:textSize="20sp"
-        android:text="Select time"/>
+        android:text="Select Location"/>
 
     <EditText
         android:id="@+id/radius"
@@ -105,6 +106,7 @@
         app:layout_constraintEnd_toEndOf="@id/endGuideline"
         app:layout_constraintTop_toBottomOf="@id/radius"
         android:layout_marginTop="20dp"
+        android:textColor="@color/white"
         android:textAllCaps="false"
         android:textSize="20sp"
         android:text="Cancel"/>
@@ -119,6 +121,7 @@
         android:layout_marginTop="20dp"
         android:textAllCaps="false"
         android:textSize="20sp"
+        android:textColor="@color/white"
         android:layout_marginBottom="40dp"
         android:text="Save"/>
 
