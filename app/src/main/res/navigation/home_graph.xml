@@ -95,6 +95,10 @@
         android:name="tech.jhavidit.remindme.view.fragments.LocationReminderFragment"
         android:label="LocationReminderFragment" >
 
+        <action
+            android:id="@+id/homeScreen"
+            app:destination="@id/notesFragment"/>
+
         <argument
             android:name="currentNotes"
             app:argType="tech.jhavidit.remindme.model.NotesModel" />

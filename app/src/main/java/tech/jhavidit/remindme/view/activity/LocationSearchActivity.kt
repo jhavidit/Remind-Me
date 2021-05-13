@@ -66,6 +66,9 @@ class LocationSearchActivity : AppCompatActivity(), OnMapReadyCallback,
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_location_search)
         notesModel = intent?.getParcelableExtra<NotesModel>("notes")
+        lat = intent?.getDoubleExtra("latitude", 0.0) ?: 0.0
+        lon = intent?.getDoubleExtra("longitude", 0.0) ?: 0.0
+
         if (!Places.isInitialized()) {
             Places.initialize(applicationContext, MAPS_API_KEY)
             placesClient = Places.createClient(this)
@@ -123,7 +126,7 @@ class LocationSearchActivity : AppCompatActivity(), OnMapReadyCallback,
                 return
             val location = LatLng(lat, lon)
             moveCamera(CameraUpdateFactory.newLatLng(location))
-            animateCamera(CameraUpdateFactory.zoomTo(11.0F))
+            animateCamera(CameraUpdateFactory.zoomTo(15.0F))
         }
     }
 

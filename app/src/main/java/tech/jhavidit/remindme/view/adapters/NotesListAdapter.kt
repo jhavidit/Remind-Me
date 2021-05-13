@@ -15,7 +15,7 @@ class NotesListAdapter : RecyclerView.Adapter<NotesListAdapter.MyViewHolder>() {
 
     private var notes = emptyList<NotesModel>()
 
-    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {}
+    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder(
@@ -35,23 +35,28 @@ class NotesListAdapter : RecyclerView.Adapter<NotesListAdapter.MyViewHolder>() {
         if (currentNotes.timeReminder) {
             holder.itemView.time.visibility = VISIBLE
         }
+        if (currentNotes.locationReminder) {
+            holder.itemView.location.visibility = VISIBLE
+        }
+
         val notes = NotesModel(
-            currentNotes.id,
-            currentNotes.title,
-            currentNotes.description,
-            currentNotes.locationReminder,
-            currentNotes.timeReminder,
-            currentNotes.reminderTime,
-            currentNotes.latitude,
-            currentNotes.longitude,
-            currentNotes.radius,
-            currentNotes.repeatAlarmIndex
+            id = currentNotes.id,
+            title = currentNotes.title,
+            description = currentNotes.description,
+            locationReminder = currentNotes.locationReminder,
+            timeReminder = currentNotes.timeReminder,
+            reminderTime = currentNotes.reminderTime,
+            latitude = currentNotes.latitude,
+            locationName = currentNotes.locationName,
+            longitude = currentNotes.longitude,
+            radius = currentNotes.radius,
+            repeatAlarmIndex = currentNotes.repeatAlarmIndex
+
         )
         holder.itemView.notes.setOnClickListener {
             holder.itemView.findNavController()
                 .navigate(NotesFragmentDirections.updateNotes("update", notes))
         }
-
     }
 
     fun setNotes(notes: List<NotesModel>) {
