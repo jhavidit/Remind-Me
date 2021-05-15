@@ -22,6 +22,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.gms.location.GeofencingClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import tech.jhavidit.remindme.databinding.FragmentLocationReminderBinding
 import tech.jhavidit.remindme.model.LocationModel
@@ -34,6 +36,7 @@ import tech.jhavidit.remindme.viewModel.NotesViewModel
 class LocationReminderFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentLocationReminderBinding
     private lateinit var viewModel: NotesViewModel
+    private lateinit var geoFencingClient: GeofencingClient
     private val activityViewModel: MainActivityViewModel by activityViewModels()
     private val args: LocationReminderFragmentArgs by navArgs()
     private lateinit var locationManager: LocationManager
@@ -42,6 +45,26 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
     private var hasLocation = false
     private var location: LocationModel? = null
     private lateinit var notesModel: NotesModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activityViewModel.notesModel.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                notesModel = it
+            } else {
+                notesModel = args.currentNotes
+                binding.location.text = notesModel.locationName
+                binding.radius.setText(notesModel.radius)
+            }
+            if (notesModel.locationReminder) {
+                binding.cancelReminder.visibility = VISIBLE
+                hasLocation = true
+            } else {
+                binding.cancelReminder.visibility = GONE
+                binding.location.text = "No location selected"
+            }
+        })
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,22 +82,24 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
             }
         })
 
-        activityViewModel.notesModel.observe(viewLifecycleOwner, Observer {
-            if (it != null) {
-                notesModel = it
-            } else {
-                notesModel = args.currentNotes
-                binding.location.text = notesModel.locationName
-                binding.radius.setText(notesModel.radius)
-            }
-            if (notesModel.locationReminder) {
-                binding.cancelReminder.visibility = VISIBLE
-                hasLocation = true
-            } else {
-                binding.cancelReminder.visibility = GONE
-                binding.location.text = "No location selected"
-            }
-        })
+        /*   activityViewModel.notesModel.observe(viewLifecycleOwner, Observer {
+               if (it != null) {
+                   notesModel = it
+               } else {
+                   notesModel = args.currentNotes
+                   binding.location.text = notesModel.locationName
+                   binding.radius.setText(notesModel.radius)
+               }
+               if (notesModel.locationReminder) {
+                   binding.cancelReminder.visibility = VISIBLE
+                   hasLocation = true
+               } else {
+                   binding.cancelReminder.visibility = GONE
+                   binding.location.text = "No location selected"
+               }
+           })*/
+
+        geoFencingClient = LocationServices.getGeofencingClient(requireContext())
 
         binding.cancelReminder.setOnClickListener {
             val notesModel = NotesModel(
@@ -112,6 +137,7 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
                     locationName = location?.name
                 )
                 viewModel.updateNotes(notesModel)
+             //   geoFencingClient.add()
                 findNavController().navigate(LocationReminderFragmentDirections.homeScreen())
             }
         }
@@ -125,12 +151,16 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
                 ActivityCompat.checkSelfPermission(
                     requireContext(),
                     android.Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
                 requestPermissions(
                     arrayOf(
                         android.Manifest.permission.ACCESS_FINE_LOCATION,
-                        android.Manifest.permission.ACCESS_COARSE_LOCATION
+                        android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                        android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
                     ), PERMISSION_REQUEST_CODE
                 )
             } else {
@@ -191,7 +221,7 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
                     alertDialog.setMessage("You need to provide location permission to access this feature. Kindly enable it from settings")
                     alertDialog.setCancelable(true)
                     alertDialog.setPositiveButton(
-                        "Ok", DialogInterface.OnClickListener { dialog, which ->
+                        "Ok", DialogInterface.OnClickListener { _, _ ->
                             val intent =
                                 Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                             val uri: Uri =
@@ -201,7 +231,7 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
                         }
                     )
                     alertDialog.setNegativeButton(
-                        "Cancel", DialogInterface.OnClickListener { dialog, which ->
+                        "Cancel", DialogInterface.OnClickListener { dialog, _ ->
                             dialog.cancel()
                         }
                     )
