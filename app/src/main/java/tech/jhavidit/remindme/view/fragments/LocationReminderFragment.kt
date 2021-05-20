@@ -10,6 +10,7 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -22,12 +23,17 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import tech.jhavidit.remindme.databinding.FragmentLocationReminderBinding
 import tech.jhavidit.remindme.model.LocationModel
 import tech.jhavidit.remindme.model.NotesModel
+import tech.jhavidit.remindme.util.GeoFencingHelper
+import tech.jhavidit.remindme.util.errorMessage
+import tech.jhavidit.remindme.util.log
+import tech.jhavidit.remindme.util.toast
 import tech.jhavidit.remindme.view.activity.LocationSearchActivity
 import tech.jhavidit.remindme.viewModel.MainActivityViewModel
 import tech.jhavidit.remindme.viewModel.NotesViewModel
@@ -45,9 +51,28 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
     private var hasLocation = false
     private var location: LocationModel? = null
     private lateinit var notesModel: NotesModel
+    private var hasLocationPermission = false
+    private lateinit var geoFencingHelper: GeoFencingHelper
+    private val runningQOrLater =
+        android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        binding = FragmentLocationReminderBinding.inflate(inflater, container, false)
+        viewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
+        checkPermission()
+
+        activityViewModel.locationModel.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                hasLocation = true
+                location = it
+                binding.location.text = location?.name
+            }
+        })
+
         activityViewModel.notesModel.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 notesModel = it
@@ -64,43 +89,9 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
                 binding.location.text = "No location selected"
             }
         })
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        binding = FragmentLocationReminderBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
-
-        activityViewModel.locationModel.observe(viewLifecycleOwner, Observer {
-            if (it != null) {
-                hasLocation = true
-                location = it
-                binding.location.text = location?.name
-            }
-        })
-
-        /*   activityViewModel.notesModel.observe(viewLifecycleOwner, Observer {
-               if (it != null) {
-                   notesModel = it
-               } else {
-                   notesModel = args.currentNotes
-                   binding.location.text = notesModel.locationName
-                   binding.radius.setText(notesModel.radius)
-               }
-               if (notesModel.locationReminder) {
-                   binding.cancelReminder.visibility = VISIBLE
-                   hasLocation = true
-               } else {
-                   binding.cancelReminder.visibility = GONE
-                   binding.location.text = "No location selected"
-               }
-           })*/
 
         geoFencingClient = LocationServices.getGeofencingClient(requireContext())
-
+        geoFencingHelper = GeoFencingHelper(requireContext())
         binding.cancelReminder.setOnClickListener {
             val notesModel = NotesModel(
                 id = notesModel.id,
@@ -123,6 +114,11 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             else {
+                addGeofence(
+                    latitude = location?.latitude,
+                    longitude = location?.longitude,
+                    radius = binding.radius.text.toString().toDouble()
+                )
                 val notesModel = NotesModel(
                     id = notesModel.id,
                     title = notesModel.title,
@@ -137,13 +133,60 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
                     locationName = location?.name
                 )
                 viewModel.updateNotes(notesModel)
-             //   geoFencingClient.add()
                 findNavController().navigate(LocationReminderFragmentDirections.homeScreen())
             }
         }
 
 
         binding.locationPicker.setOnClickListener {
+            checkPermission()
+            if (hasLocationPermission) {
+                locationManager =
+                    context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                   toast(requireContext(),"achcha bhai")
+                    onGPS()
+                } else {
+                    toast(requireContext(),"yeh kyu ho rha")
+                    getLocation()
+                }
+
+            }
+        }
+        return binding.root
+    }
+
+
+    private fun addGeofence(latitude: Double?, longitude: Double?, radius: Double) {
+        if (latitude != null && longitude != null) {
+            val geofence: Geofence? = geoFencingHelper.getGeofence(
+                id = notesModel.id.toString(),
+                latitude = latitude,
+                longitude = longitude,
+                radius = radius,
+                transitionTypes = Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_DWELL or Geofence.GEOFENCE_TRANSITION_EXIT
+            )
+            val geofencingRequest = geoFencingHelper.getGeoFencingRequest(geofence)
+            val pendingIntent = geoFencingHelper.getPendingIntent()
+            checkPermission()
+            if (hasLocationPermission) {
+                geoFencingClient.addGeofences(geofencingRequest, pendingIntent)
+                    .addOnSuccessListener {
+                        log("Granted Geofencing successfully")
+                    }
+                    .addOnFailureListener {
+                        toast(requireContext(), errorMessage(requireContext(), it.cause.hashCode()))
+                        log(it.toString())
+                    }
+            }
+        } else {
+            toast(requireContext(), "location is null")
+            log("location is null")
+        }
+    }
+
+    private fun checkPermission() {
+        if (runningQOrLater) {
             if (ActivityCompat.checkSelfPermission(
                     requireContext(),
                     android.Manifest.permission.ACCESS_FINE_LOCATION
@@ -164,17 +207,27 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
                     ), PERMISSION_REQUEST_CODE
                 )
             } else {
-                locationManager =
-                    context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-                if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    onGPS()
-                } else {
-                    getLocation()
-                }
-
+                hasLocationPermission = true
             }
+        } else {
+            if (ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    android.Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                requestPermissions(
+                    arrayOf(
+                        android.Manifest.permission.ACCESS_FINE_LOCATION,
+                        android.Manifest.permission.ACCESS_COARSE_LOCATION
+                    ), PERMISSION_REQUEST_CODE
+                )
+            } else
+                hasLocationPermission = true
         }
-        return binding.root
     }
 
     private fun onGPS() {
@@ -190,18 +243,21 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
         alertDialog.show()
     }
 
-    @SuppressLint("MissingPermission")
+
     private fun getLocation() {
-        val locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        locationGPS?.let {
-            val lat = locationGPS.latitude
-            val lon = locationGPS.longitude
-            val intent = Intent(requireContext(), LocationSearchActivity::class.java)
-            val notesModel = args.currentNotes
-            intent.putExtra("latitude", lat)
-            intent.putExtra("longitude", lon)
-            intent.putExtra("notes", notesModel)
-            startActivity(intent)
+        checkPermission()
+        if (hasLocationPermission) {
+            val locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            locationGPS?.let {
+                val lat = locationGPS.latitude
+                val lon = locationGPS.longitude
+                val intent = Intent(requireContext(), LocationSearchActivity::class.java)
+                val notesModel = args.currentNotes
+                intent.putExtra("latitude", lat)
+                intent.putExtra("longitude", lon)
+                intent.putExtra("notes", notesModel)
+                startActivity(intent)
+            }
         }
     }
 
@@ -214,6 +270,7 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
         when (requestCode) {
             200 ->
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    hasLocationPermission = true
                     val intent = Intent(requireContext(), LocationSearchActivity::class.java)
                     startActivity(intent)
                 } else {
