@@ -13,4 +13,15 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/purple_200</item>
+        <item name="colorSecondary">@color/white</item>
+        <item name="colorButtonNormal">@color/white</item>
+        <item name="colorSecondaryVariant">@color/white</item>
+        <item name="android:textColor">@color/purple_200</item>
+        <item name="buttonTint">@color/white</item>
+
+    </style>
+
 </resources>

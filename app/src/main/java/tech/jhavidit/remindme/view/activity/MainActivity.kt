@@ -16,11 +16,13 @@ import tech.jhavidit.remindme.databinding.ActivityMainBinding
 import tech.jhavidit.remindme.model.LocationModel
 import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.viewModel.MainActivityViewModel
+import tech.jhavidit.remindme.viewModel.NotesViewModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var navController: NavController
+    private lateinit var viewModel : NotesViewModel
     private val activityViewModel: MainActivityViewModel by viewModels()
     private val LOCATION_REQUEST_CODE = 2
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +30,6 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         bottomNavigationView = binding.bottomNav
         navController = findNavController(R.id.NavHostFragment)
-        // activityViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
         if (intent.hasExtra("notes") && intent.hasExtra("location")) {
             val notesModel = intent.getParcelableExtra<NotesModel>("notes")
             val locationModel = intent.getParcelableExtra<LocationModel>("location")
