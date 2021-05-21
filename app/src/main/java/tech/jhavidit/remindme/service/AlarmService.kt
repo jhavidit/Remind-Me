@@ -1,5 +1,7 @@
 package tech.jhavidit.remindme.service
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
@@ -47,6 +49,18 @@ class AlarmService : Service() {
                 .setContentIntent(pendingIntent)
                 .addAction(R.drawable.snooze_icon,"Dismiss",dismissPendingIntent)
                 .build()
+
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                channelId,
+                channelName,
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            notificationManager.createNotificationChannel(channel)
+        }
 
         mediaPlayer.start()
         val pattern = longArrayOf(0, 100, 1000)
