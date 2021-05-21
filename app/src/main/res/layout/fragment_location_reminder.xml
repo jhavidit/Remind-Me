@@ -87,7 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:inputType="number"
-            android:text="0"
+            android:maxLength="5"
             android:textAllCaps="false"
             android:textSize="24sp"
             android:textStyle="bold"
