@@ -3,41 +3,40 @@ package tech.jhavidit.remindme.view.activity
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.Dialog
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationListener
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.*
-import com.google.android.gms.maps.model.*
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment
-import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
-import kotlinx.android.synthetic.main.fragment_location_reminder.*
+import com.google.android.material.internal.ContextUtils.getActivity
+import kotlinx.android.synthetic.main.dialog_save_location.view.*
 import tech.jhavidit.remindme.BuildConfig.MAPS_API_KEY
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.ActivityLocationSearchBinding
 import tech.jhavidit.remindme.model.LocationModel
 import tech.jhavidit.remindme.model.NotesModel
-import tech.jhavidit.remindme.util.LocalKeyStorage
 import tech.jhavidit.remindme.viewModel.LocationViewModel
 
 
@@ -84,7 +83,8 @@ class LocationSearchActivity : AppCompatActivity(), OnMapReadyCallback,
             .compassEnabled(false)
 
         binding.selectLocation.setOnClickListener {
-            val latLng = map?.cameraPosition?.target
+
+          /*  val latLng = map?.cameraPosition?.target
             latLng?.let {
                 val locationModel = LocationModel(
                     id = 0,
@@ -99,7 +99,8 @@ class LocationSearchActivity : AppCompatActivity(), OnMapReadyCallback,
                 intent.putExtra("location", locationModel)
                 startActivity(intent)
 
-            }
+            }*/
+            showDialog()
         }
 
         binding.searchBar.setOnSearchClickListener {
@@ -207,5 +208,38 @@ class LocationSearchActivity : AppCompatActivity(), OnMapReadyCallback,
         super.onActivityResult(requestCode, resultCode, data)
     }
 
+    private fun showDialog() {
+        val dialog = Dialog(this)
+        dialog.setCancelable(true)
+
+        val view: View = this.layoutInflater.inflate(R.layout.dialog_save_location, null)
+        dialog.setContentView(view)
+
+        view.cancel.setOnClickListener {
+            dialog.dismiss()
+        }
+        view.save.setOnClickListener {
+            locationPlace = view.location.text.toString()
+
+            val latLng = map?.cameraPosition?.target
+            latLng?.let {
+                val locationModel = LocationModel(
+                    id = 0,
+                    latitude = it.latitude,
+                    longitude = it.longitude,
+                    placeId = locationId,
+                    name = locationPlace
+                )
+                viewModel.addLocation(locationModel)
+                val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("notes", notesModel)
+                intent.putExtra("location", locationModel)
+                startActivity(intent)
+
+            }
+        }
+            dialog.show()
+
+        }
 
 }

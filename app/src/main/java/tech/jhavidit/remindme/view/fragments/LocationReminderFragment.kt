@@ -31,6 +31,7 @@ import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.FragmentLocationReminderBinding
 import tech.jhavidit.remindme.model.LocationModel
 import tech.jhavidit.remindme.model.NotesModel
@@ -337,7 +338,7 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
         ) {
 
             // Permission denied.
-            val alertDialog: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+            val alertDialog: AlertDialog.Builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
             alertDialog.setMessage("You need to provide location permission to access this feature. Kindly enable it from settings")
             alertDialog.setCancelable(true)
             alertDialog.setPositiveButton(
@@ -405,12 +406,7 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
         }
 
         Log.d(TAG, "Request foreground only location permission")
-       /* ActivityCompat.requestPermissions(
-            requireActivity(),
-            permissionsArray,
-            resultCode
-        )
-       */ requestPermissions(
+         requestPermissions(
             permissionsArray,resultCode)
     }
 
