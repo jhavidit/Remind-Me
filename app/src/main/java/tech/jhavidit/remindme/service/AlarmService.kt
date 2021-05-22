@@ -7,10 +7,7 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
-import android.os.Build
-import android.os.IBinder
-import android.os.VibrationEffect
-import android.os.Vibrator
+import android.os.*
 import androidx.core.app.NotificationCompat
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.view.activity.MainActivity
@@ -70,7 +67,7 @@ class AlarmService : Service() {
         else
             vibrator.vibrate(pattern,0)
 
-        startForeground(1, notification)
+        startForeground((1+System.currentTimeMillis()).toInt(), notification)
         return START_STICKY
     }
 

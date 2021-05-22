@@ -1,5 +1,6 @@
 package tech.jhavidit.remindme.receiver
 
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -7,7 +8,10 @@ import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofenceStatusCodes
 import com.google.android.gms.location.GeofencingEvent
 import tech.jhavidit.remindme.util.log
+import tech.jhavidit.remindme.util.notification
+import tech.jhavidit.remindme.util.showNotification
 import tech.jhavidit.remindme.util.toast
+import tech.jhavidit.remindme.view.activity.MainActivity
 
 class GeoFencingReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -23,18 +27,34 @@ class GeoFencingReceiver : BroadcastReceiver() {
         val geofenceTransition = geofencingEvent.geofenceTransition
 
         // Test that the reported transition was of interest.
-        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
-            geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT
-        ) {
+        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
 
-            // Get the geofences that were triggered. A single event can trigger
-
-            log("agaya")
-            toast(context!!, "aa gya")
-        } else {
+            log("GEOFENCE_TRANSITION_ENTER")
+            context?.let {
+                val intentNotification = Intent(context, MainActivity::class.java)
+                val pendingIntent =
+                    PendingIntent.getActivity(context, 0, intentNotification, PendingIntent.FLAG_UPDATE_CURRENT)
+                notification(context, "geofencing reached", pendingIntent)
+            }
+        } else if(geofenceTransition == Geofence.GEOFENCE_TRANSITION_DWELL) {
             // Log the error.
-            log("error")
-            toast(context!!, "nhi aya")
+            log("GEOFENCE_TRANSITION_DWELL")
+            context?.let {
+                val intentNotification = Intent(context, MainActivity::class.java)
+                val pendingIntent =
+                    PendingIntent.getActivity(context, 0, intentNotification, PendingIntent.FLAG_UPDATE_CURRENT)
+                notification(context, "GEOFENCE_TRANSITION_DWELL ", pendingIntent)
+            }
+        }
+        else if(geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT)
+        {
+
+            context?.let {
+                val intentNotification = Intent(context, MainActivity::class.java)
+                val pendingIntent =
+                    PendingIntent.getActivity(context, 0, intentNotification, PendingIntent.FLAG_UPDATE_CURRENT)
+                notification(context, "GEOFENCE_TRANSITION_EXIT ", pendingIntent)
+            }
         }
     }
 }
