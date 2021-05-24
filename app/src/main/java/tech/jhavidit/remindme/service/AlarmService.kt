@@ -1,14 +1,13 @@
 package tech.jhavidit.remindme.service
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
-import android.os.Build
-import android.os.IBinder
-import android.os.VibrationEffect
-import android.os.Vibrator
+import android.os.*
 import androidx.core.app.NotificationCompat
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.view.activity.MainActivity
@@ -48,6 +47,18 @@ class AlarmService : Service() {
                 .addAction(R.drawable.snooze_icon,"Dismiss",dismissPendingIntent)
                 .build()
 
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                channelId,
+                channelName,
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            notificationManager.createNotificationChannel(channel)
+        }
+
         mediaPlayer.start()
         val pattern = longArrayOf(0, 100, 1000)
 
@@ -56,7 +67,7 @@ class AlarmService : Service() {
         else
             vibrator.vibrate(pattern,0)
 
-        startForeground(1, notification)
+        startForeground((1+System.currentTimeMillis()).toInt(), notification)
         return START_STICKY
     }
 

@@ -87,10 +87,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:inputType="number"
-            android:text="0"
+            android:maxLength="5"
             android:textAllCaps="false"
             android:textSize="24sp"
             android:textStyle="bold"
+            android:hint="Radius"
             app:layout_constraintEnd_toEndOf="@id/endGuideline"
             app:layout_constraintStart_toStartOf="@id/startGuideline"
             app:layout_constraintTop_toBottomOf="@id/location_picker" />

@@ -35,9 +35,7 @@ import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.FragmentLocationReminderBinding
 import tech.jhavidit.remindme.model.LocationModel
 import tech.jhavidit.remindme.model.NotesModel
-import tech.jhavidit.remindme.util.GeoFencingHelper
-import tech.jhavidit.remindme.util.log
-import tech.jhavidit.remindme.util.toast
+import tech.jhavidit.remindme.util.*
 import tech.jhavidit.remindme.view.activity.LocationSearchActivity
 import tech.jhavidit.remindme.viewModel.MainActivityViewModel
 import tech.jhavidit.remindme.viewModel.NotesViewModel
@@ -50,15 +48,9 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
     private val activityViewModel: MainActivityViewModel by activityViewModels()
     private val args: LocationReminderFragmentArgs by navArgs()
     private lateinit var locationManager: LocationManager
-    private val LOCATION_REQUEST_CODE = 1
-    private val PERMISSION_REQUEST_CODE = 200
-    private val REQUEST_FOREGROUND_AND_BACKGROUND_PERMISSION_RESULT_CODE = 201
-    private val REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE = 202
-
     private var hasLocation = false
     private var location: LocationModel? = null
     private lateinit var notesModel: NotesModel
-    private var hasLocationPermission = false
     private lateinit var geoFencingHelper: GeoFencingHelper
     private val runningQOrLater =
         android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q
@@ -67,13 +59,12 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
 
         binding = FragmentLocationReminderBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
 
         activityViewModel.locationModel.observe(viewLifecycleOwner, Observer {
-            if (it != null) {
+            it?.let {
                 hasLocation = true
                 location = it
                 binding.location.text = location?.name
@@ -81,9 +72,9 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
         })
 
         activityViewModel.notesModel.observe(viewLifecycleOwner, Observer {
-            if (it != null) {
+            it?.let {
                 notesModel = it
-            } else {
+            } ?: run {
                 notesModel = args.currentNotes
                 binding.location.text = notesModel.locationName
                 binding.radius.setText(notesModel.radius)
@@ -114,10 +105,10 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
         }
 
         binding.saveLocationReminder.setOnClickListener {
-            if (!hasLocation && binding.radius.text.isEmpty())
+            if (!hasLocation && binding.radius.text.length < 3)
                 Toast.makeText(
                     requireContext(),
-                    "Location and Radius cannot be empty",
+                    "Invalid Location or Radius",
                     Toast.LENGTH_SHORT
                 ).show()
             else {
@@ -150,11 +141,9 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
                 locationManager =
                     context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
                 if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    toast(requireContext(), "achcha bhai")
                     onGPS()
                 } else {
-                    toast(requireContext(), "yeh kyu ho rha")
-                   getLastKnownLocation()
+                    getLastKnownLocation()
                 }
 
             } else
@@ -164,6 +153,7 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
     }
 
 
+    @SuppressLint("MissingPermission")
     private fun addGeofence(latitude: Double?, longitude: Double?, radius: Double) {
         if (latitude != null && longitude != null) {
             val geofence: Geofence? = geoFencingHelper.getGeofence(
@@ -175,7 +165,6 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
             )
             val geofencingRequest = geoFencingHelper.getGeoFencingRequest(geofence)
             val pendingIntent = geoFencingHelper.getPendingIntent()
-            //requestForegroundAndBackgroundLocationPermissions()
             if (foregroundAndBackgroundLocationPermissionApproved()) {
                 geoFencingClient.addGeofences(geofencingRequest, pendingIntent)
                     .addOnSuccessListener {
@@ -188,55 +177,9 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
             }
         } else {
             requestForegroundAndBackgroundLocationPermissions()
-            toast(requireContext(), "location is null")
-            log("location is null")
         }
     }
 
-    /* private fun checkPermission() {
-         if (runningQOrLater) {
-             if (ActivityCompat.checkSelfPermission(
-                     requireContext(),
-                     android.Manifest.permission.ACCESS_FINE_LOCATION
-                 ) != PackageManager.PERMISSION_GRANTED &&
-                 ActivityCompat.checkSelfPermission(
-                     requireContext(),
-                     android.Manifest.permission.ACCESS_COARSE_LOCATION
-                 ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                     requireContext(),
-                     android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                 ) != PackageManager.PERMISSION_GRANTED
-             ) {
-                 requestPermissions(
-                     arrayOf(
-                         android.Manifest.permission.ACCESS_FINE_LOCATION,
-                         android.Manifest.permission.ACCESS_COARSE_LOCATION,
-                         android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                     ), PERMISSION_REQUEST_CODE
-                 )
-             } else {
-                 hasLocationPermission = true
-             }
-         } else {
-             if (ActivityCompat.checkSelfPermission(
-                     requireContext(),
-                     android.Manifest.permission.ACCESS_FINE_LOCATION
-                 ) != PackageManager.PERMISSION_GRANTED &&
-                 ActivityCompat.checkSelfPermission(
-                     requireContext(),
-                     android.Manifest.permission.ACCESS_COARSE_LOCATION
-                 ) != PackageManager.PERMISSION_GRANTED
-             ) {
-                 requestPermissions(
-                     arrayOf(
-                         android.Manifest.permission.ACCESS_FINE_LOCATION,
-                         android.Manifest.permission.ACCESS_COARSE_LOCATION
-                     ), PERMISSION_REQUEST_CODE
-                 )
-             } else
-                 hasLocationPermission = true
-         }
-     }*/
 
     private fun onGPS() {
         val builder = AlertDialog.Builder(requireContext())
@@ -279,49 +222,6 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
     }
 
 
-
-    /*override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if (
-            grantResults.isEmpty() ||
-            grantResults[LOCATION_PERMISSION_INDEX] == PackageManager.PERMISSION_DENIED ||
-            (requestCode == REQUEST_FOREGROUND_AND_BACKGROUND_PERMISSION_RESULT_CODE &&
-                    grantResults[BACKGROUND_LOCATION_PERMISSION_INDEX] ==
-                    PackageManager.PERMISSION_DENIED)
-        ) {
-
-            // Permission denied.
-            val alertDialog: AlertDialog.Builder = AlertDialog.Builder(requireContext())
-            alertDialog.setMessage("You need to provide location permission to access this feature. Kindly enable it from settings")
-            alertDialog.setCancelable(true)
-            alertDialog.setPositiveButton(
-                "Ok", DialogInterface.OnClickListener { _, _ ->
-                    val intent =
-                        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    val uri: Uri =
-                        Uri.fromParts("package", activity?.packageName, null)
-                    intent.data = uri
-                    startActivity(intent)
-                }
-            )
-            alertDialog.setNegativeButton(
-                "Cancel", DialogInterface.OnClickListener { dialog, _ ->
-                    dialog.cancel()
-                }
-            )
-            val alert = alertDialog.create()
-            alert.show()
-        } else {
-            hasLocationPermission = true
-        }
-    }*/
-
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -338,7 +238,8 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
         ) {
 
             // Permission denied.
-            val alertDialog: AlertDialog.Builder = AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
+            val alertDialog: AlertDialog.Builder =
+                AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
             alertDialog.setMessage("You need to provide location permission to access this feature. Kindly enable it from settings")
             alertDialog.setCancelable(true)
             alertDialog.setPositiveButton(
@@ -358,8 +259,6 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
             )
             val alert = alertDialog.create()
             alert.show()
-        } else {
-            hasLocationPermission = true
         }
 
     }
@@ -405,9 +304,9 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
             else -> REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE
         }
 
-        Log.d(TAG, "Request foreground only location permission")
-         requestPermissions(
-            permissionsArray,resultCode)
+        requestPermissions(
+            permissionsArray, resultCode
+        )
     }
 
 
@@ -421,8 +320,3 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
         activityViewModel.clearData()
     }
 }
-
-private const val REQUEST_TURN_DEVICE_LOCATION_ON = 29
-private const val TAG = "HuntMainActivity"
-private const val LOCATION_PERMISSION_INDEX = 0
-private const val BACKGROUND_LOCATION_PERMISSION_INDEX = 1
