@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.FragmentNotesBinding
 import tech.jhavidit.remindme.model.NotesModel
@@ -39,7 +40,8 @@ class NotesFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
         adapter = NotesListAdapter()
         binding.recyclerView.adapter = adapter
-        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        val staggeredGridLayoutManager = StaggeredGridLayoutManager(2,LinearLayoutManager.VERTICAL)
+        binding.recyclerView.layoutManager = staggeredGridLayoutManager
         viewModel.readAllData.observe(viewLifecycleOwner, Observer {
             adapter.setNotes(it)
         })

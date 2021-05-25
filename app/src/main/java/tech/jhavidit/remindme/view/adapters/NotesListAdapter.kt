@@ -32,12 +32,6 @@ class NotesListAdapter : RecyclerView.Adapter<NotesListAdapter.MyViewHolder>() {
         val currentNotes = notes[position]
         holder.itemView.title.text = currentNotes.title
         holder.itemView.description.text = currentNotes.description
-        if (currentNotes.timeReminder) {
-            holder.itemView.time.visibility = VISIBLE
-        }
-        if (currentNotes.locationReminder) {
-            holder.itemView.location.visibility = VISIBLE
-        }
 
         val notes = NotesModel(
             id = currentNotes.id,

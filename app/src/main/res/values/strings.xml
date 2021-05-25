@@ -25,4 +25,6 @@
     </string>
     <string name="permission_denied_explanation">
     You need to grant location permission in order to use location reminder.</string>
+    <string name="notes_image">Notes Image</string>
+    <string name="search_your_notes">Search your notes</string>
 </resources>

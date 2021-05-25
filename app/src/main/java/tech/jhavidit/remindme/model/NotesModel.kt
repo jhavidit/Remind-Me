@@ -20,4 +20,6 @@ data class NotesModel(
     val locationName: String? = null,
     val radius: String? = null,
     val repeatAlarmIndex: Int = -1
+
+
 ) : Parcelable

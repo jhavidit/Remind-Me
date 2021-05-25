@@ -40,10 +40,12 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/search_bar"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_width="match_parent"
+            android:layout_marginStart="@dimen/dimen_16"
+            android:layout_marginEnd="@dimen/dimen_16"
+            android:layout_height="@dimen/dimen_50"
             app:cardElevation="10dp"
-            app:cardCornerRadius="10dp"
+            app:cardCornerRadius="6dp"
             app:cardBackgroundColor="#EEF5F6"
             app:layout_constraintEnd_toEndOf="@id/endGuideline"
             app:layout_constraintStart_toStartOf="@id/startGuideline"
@@ -72,22 +74,24 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="@id/startSearchGuideline"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:hint="Search your notes"
+                    android:hint="@string/search_your_notes"
+                    android:fontFamily="@font/alata_regular"
                     android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="@id/endSearchGuideline"
                     android:background="@null"
-                    android:textColorHint="@color/purple_200"
+                    android:textColor="@color/purple_200"
+                    android:textColorHint="#B31E40AF"
                     app:layout_constraintBottom_toBottomOf="parent" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_baseline_search_24"
+                    android:src="@drawable/ic_search"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@id/endSearchGuideline"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:tint="@color/purple_200"/>
+                    android:tint="@color/purple_200" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -100,9 +104,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="@dimen/dimen_16"
             android:paddingBottom="?android:actionBarSize"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@id/startGuideline"
+            app:layout_constraintEnd_toEndOf="@id/endGuideline"
             app:layout_constraintTop_toBottomOf="@id/search_bar"
             tools:listitem="@layout/notes_item" />
 
@@ -112,14 +117,11 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:contentDescription="@string/notes_add"
-            android:src="@drawable/ic_baseline_add_24"
-            android:tint="@color/white"
-            app:backgroundTint="@color/purple_200"
-            app:backgroundTintMode="add"
-            app:fabSize="normal"
+            android:src="@drawable/ic_plus"
+            app:backgroundTint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:tint="@color/white" />
+            app:tint="@color/purple_200" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
