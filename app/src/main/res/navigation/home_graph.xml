@@ -32,7 +32,7 @@
 
     <fragment
         android:id="@+id/eventsFragment"
-        android:name="tech.jhavidit.remindme.view.fragments.EventsFragment"
+        android:name="tech.jhavidit.remindme.view.fragments.ReminderFragment"
         android:label="EventsFragment" />
 
     <fragment
