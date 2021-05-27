@@ -2,7 +2,6 @@ package tech.jhavidit.remindme.view.adapters
 
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -15,13 +14,14 @@ class NotesListAdapter : RecyclerView.Adapter<NotesListAdapter.MyViewHolder>() {
 
     private var notes = emptyList<NotesModel>()
 
-    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.notes_item, parent, false)
         )
-
     }
 
     override fun getItemCount(): Int {
@@ -44,7 +44,8 @@ class NotesListAdapter : RecyclerView.Adapter<NotesListAdapter.MyViewHolder>() {
             locationName = currentNotes.locationName,
             longitude = currentNotes.longitude,
             radius = currentNotes.radius,
-            repeatAlarmIndex = currentNotes.repeatAlarmIndex
+            repeatAlarmIndex = currentNotes.repeatAlarmIndex,
+            backgroundColor = currentNotes.backgroundColor
 
         )
         holder.itemView.notes.setOnClickListener {

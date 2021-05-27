@@ -18,6 +18,7 @@ import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.FragmentNotesBinding
 import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.view.adapters.NotesListAdapter
+import tech.jhavidit.remindme.view.adapters.SelectBackgroundColorAdapter
 import tech.jhavidit.remindme.view.fragments.CreateNotesFragmentDirections.notesList
 import tech.jhavidit.remindme.viewModel.MainActivityViewModel
 import tech.jhavidit.remindme.viewModel.NotesViewModel

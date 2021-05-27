@@ -3,10 +3,8 @@ package tech.jhavidit.remindme.view.fragments
 import android.Manifest
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Context.LOCATION_SERVICE
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
@@ -14,7 +12,6 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -32,7 +29,6 @@ import com.google.android.gms.location.GeofencingClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.FragmentLocationReminderBinding
 import tech.jhavidit.remindme.model.LocationModel
 import tech.jhavidit.remindme.model.NotesModel
@@ -99,7 +95,8 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
                 locationReminder = false,
                 timeReminder = notesModel.timeReminder,
                 repeatAlarmIndex = notesModel.repeatAlarmIndex,
-                reminderTime = notesModel.reminderTime
+                reminderTime = notesModel.reminderTime,
+                backgroundColor = notesModel.backgroundColor
             )
             viewModel.updateNotes(notesModel)
             findNavController().navigate(LocationReminderFragmentDirections.homeScreen())
@@ -129,7 +126,8 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
                     radius = binding.radius.text.toString(),
                     repeatAlarmIndex = notesModel.repeatAlarmIndex,
                     reminderTime = notesModel.reminderTime,
-                    locationName = location?.name
+                    locationName = location?.name,
+                    backgroundColor = notesModel.backgroundColor
                 )
                 viewModel.updateNotes(notesModel)
                 findNavController().navigate(LocationReminderFragmentDirections.homeScreen())
