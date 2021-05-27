@@ -39,4 +39,6 @@
     <string name="delete_note">Delete note</string>
     <string name="pin_note">pin note</string>
     <string name="close_bottom_sheet_button">close bottom sheet button</string>
+    <string name="reminder_image">reminder image</string>
+    <string name="set_reminder">Set Reminder</string>
 </resources>
