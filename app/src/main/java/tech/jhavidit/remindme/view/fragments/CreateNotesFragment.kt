@@ -1,5 +1,6 @@
 package tech.jhavidit.remindme.view.fragments
 
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -16,7 +17,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.android.synthetic.main.activity_time_reminder.*
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.FragmentCreateNotesBinding
 import tech.jhavidit.remindme.model.NotesModel
@@ -29,7 +29,7 @@ class CreateNotesFragment : Fragment() {
     private lateinit var notesViewModel: NotesViewModel
     private lateinit var notes: NotesModel
     private lateinit var navController: NavController
-    private  var isPinned = false
+    private var isPinned = false
     private val args: CreateNotesFragmentArgs by navArgs()
     private var updated = false
     private var notesId = 0
@@ -42,9 +42,10 @@ class CreateNotesFragment : Fragment() {
         binding = FragmentCreateNotesBinding.inflate(inflater, container, false)
         navController = Navigation.findNavController(requireActivity(), R.id.NavHostFragment)
         notesViewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
+        binding.note.setBackgroundColor(Color.parseColor(args.currentNotes.backgroundColor))
         notes = args.currentNotes
         notesId = args.currentNotes.id
-        val bottomNavigation : BottomNavigationView? = activity?.findViewById(R.id.bottom_nav)
+        val bottomNavigation: BottomNavigationView? = activity?.findViewById(R.id.bottom_nav)
         bottomNavigation?.visibility = GONE
         if (args.update == "update") {
             updated = true
@@ -59,10 +60,10 @@ class CreateNotesFragment : Fragment() {
         }
 
         binding.pinBtn.setOnClickListener {
-            if(isPinned) {
+            if (isPinned) {
                 isPinned = false
                 binding.pinBtn.setImageResource(R.drawable.ic_unpin)
-            }else{
+            } else {
                 isPinned = true
                 binding.pinBtn.setImageResource(R.drawable.ic_pin)
             }
@@ -80,12 +81,15 @@ class CreateNotesFragment : Fragment() {
                 .setNegativeButton(
                     "Cancel"
                 ) { dialogInterface, _ ->
-                  dialogInterface.dismiss()
+                    dialogInterface.dismiss()
                 }
                 .show()
 
         }
 
+        binding.uploadImageBtn.setOnClickListener {
+            findNavController().navigate(CreateNotesFragmentDirections.uploadImage())
+        }
 
         binding.reminderBtn.setOnClickListener {
             val notes = NotesModel(
@@ -99,7 +103,8 @@ class CreateNotesFragment : Fragment() {
                 longitude = args.currentNotes.longitude,
                 radius = args.currentNotes.radius,
                 repeatAlarmIndex = args.currentNotes.repeatAlarmIndex,
-                locationName = args.currentNotes.locationName
+                locationName = args.currentNotes.locationName,
+                backgroundColor = args.currentNotes.backgroundColor
             )
             navController.navigate(CreateNotesFragmentDirections.addReminder(notes))
         }

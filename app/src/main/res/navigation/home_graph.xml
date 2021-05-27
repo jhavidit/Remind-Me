@@ -41,6 +41,10 @@
         android:label="CreateNotesFragment">
 
         <action
+            android:id="@+id/uploadImage"
+            app:destination="@id/addImageBottomSheet"/>
+
+        <action
             android:id="@+id/addReminder"
             app:destination="@id/reminderSelectBottomSheet">
 
@@ -50,9 +54,6 @@
 
 
         </action>
-
-
-
 
 
         <argument
@@ -86,11 +87,11 @@
     <dialog
         android:id="@+id/locationReminderFragment"
         android:name="tech.jhavidit.remindme.view.fragments.LocationReminderFragment"
-        android:label="LocationReminderFragment" >
+        android:label="LocationReminderFragment">
 
         <action
             android:id="@+id/homeScreen"
-            app:destination="@id/notesFragment"/>
+            app:destination="@id/notesFragment" />
 
         <argument
             android:name="currentNotes"
@@ -101,7 +102,7 @@
     <dialog
         android:id="@+id/reminderSelectBottomSheet"
         android:name="tech.jhavidit.remindme.view.fragments.ReminderSelectBottomSheet"
-        android:label="ReminderSelectBottomSheet" >
+        android:label="ReminderSelectBottomSheet">
 
         <argument
             android:name="currentNotes"
@@ -131,6 +132,11 @@
 
 
     </dialog>
+
+    <dialog
+        android:id="@+id/addImageBottomSheet"
+        android:name="tech.jhavidit.remindme.view.fragments.AddImageBottomSheet"
+        android:label="AddImageBottomSheet" />
 
 
 </navigation>
