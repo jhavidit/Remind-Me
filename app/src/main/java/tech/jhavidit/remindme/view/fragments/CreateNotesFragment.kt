@@ -3,18 +3,20 @@ package tech.jhavidit.remindme.view.fragments
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.SurfaceControl
 import android.view.View
+import android.view.View.GONE
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.android.synthetic.main.activity_time_reminder.*
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.FragmentCreateNotesBinding
 import tech.jhavidit.remindme.model.NotesModel
@@ -27,6 +29,7 @@ class CreateNotesFragment : Fragment() {
     private lateinit var notesViewModel: NotesViewModel
     private lateinit var notes: NotesModel
     private lateinit var navController: NavController
+    private  var isPinned = false
     private val args: CreateNotesFragmentArgs by navArgs()
     private var updated = false
     private var notesId = 0
@@ -41,14 +44,48 @@ class CreateNotesFragment : Fragment() {
         notesViewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
         notes = args.currentNotes
         notesId = args.currentNotes.id
+        val bottomNavigation : BottomNavigationView? = activity?.findViewById(R.id.bottom_nav)
+        bottomNavigation?.visibility = GONE
         if (args.update == "update") {
             updated = true
         }
         if (updated) {
-            binding.notesEditHeading.text = "Update"
             binding.title.setText(notes.title)
             binding.description.setText(notes.description)
         }
+
+        binding.backBtn.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
+        binding.pinBtn.setOnClickListener {
+            if(isPinned) {
+                isPinned = false
+                binding.pinBtn.setImageResource(R.drawable.ic_unpin)
+            }else{
+                isPinned = true
+                binding.pinBtn.setImageResource(R.drawable.ic_pin)
+            }
+        }
+
+        binding.deleteBtn.setOnClickListener {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Are you sure want to delete this note?")
+                .setPositiveButton(
+                    "Delete"
+                ) { _, _ ->
+                    notesViewModel.deleteNotes(notes)
+                    navController.navigateUp()
+                }
+                .setNegativeButton(
+                    "Cancel"
+                ) { dialogInterface, _ ->
+                  dialogInterface.dismiss()
+                }
+                .show()
+
+        }
+
 
         binding.btnLocation.setOnClickListener {
             val notes = NotesModel(
@@ -83,10 +120,7 @@ class CreateNotesFragment : Fragment() {
             )
             navController.navigate(CreateNotesFragmentDirections.timeReminder(notes))
         }
-//        binding.btnLocation.setOnClickListener {
-//            notesViewModel.deleteNotes(notes)
-//            navController.navigateUp()
-//        }
+
         binding.title.addTextChangedListener(textWatcher)
         binding.description.addTextChangedListener(textWatcher)
 

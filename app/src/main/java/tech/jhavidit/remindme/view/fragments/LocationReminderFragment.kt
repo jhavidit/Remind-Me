@@ -31,6 +31,7 @@ import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.FragmentLocationReminderBinding
 import tech.jhavidit.remindme.model.LocationModel
@@ -237,13 +238,12 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
                     PackageManager.PERMISSION_DENIED)
         ) {
 
-            // Permission denied.
-            val alertDialog: AlertDialog.Builder =
-                AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
-            alertDialog.setMessage("You need to provide location permission to access this feature. Kindly enable it from settings")
-            alertDialog.setCancelable(true)
-            alertDialog.setPositiveButton(
-                "Ok", DialogInterface.OnClickListener { _, _ ->
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Location Permission Required")
+                .setMessage("You need to provide location permission to access this feature. Kindly enable it from settings")
+                .setPositiveButton(
+                    "Ok"
+                ) { dialogInterface, i ->
                     val intent =
                         Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                     val uri: Uri =
@@ -251,14 +251,12 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
                     intent.data = uri
                     startActivity(intent)
                 }
-            )
-            alertDialog.setNegativeButton(
-                "Cancel", DialogInterface.OnClickListener { dialog, _ ->
-                    dialog.cancel()
+                .setNegativeButton(
+                    "Cancel"
+                ) { dialogInterface, i ->
+                    dialogInterface.dismiss()
                 }
-            )
-            val alert = alertDialog.create()
-            alert.show()
+                .show()
         }
 
     }

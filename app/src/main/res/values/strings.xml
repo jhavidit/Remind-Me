@@ -31,4 +31,12 @@
     <string name="time">Time</string>
     <string name="location">Location</string>
     <string name="reminder_image">reminder image</string>
+    <string name="back_button">back button</string>
+    <string name="add_background_color">Add background color</string>
+    <string name="add_reminder">Add Reminder</string>
+    <string name="add_image">Add Image</string>
+    <string name="share_note">share note</string>
+    <string name="delete_note">Delete note</string>
+    <string name="pin_note">pin note</string>
+    <string name="close_bottom_sheet_button">close bottom sheet button</string>
 </resources>
