@@ -249,7 +249,7 @@
 
                     <ImageView
 
-                        android:id="@+id/btn_time"
+                        android:id="@+id/reminder_btn"
                         android:layout_width="@dimen/dimen_28"
                         android:layout_height="@dimen/dimen_28"
                         android:background="?selectableItemBackgroundBorderless"
@@ -269,7 +269,7 @@
 
 
                     <ImageView
-                        android:id="@+id/btn_location"
+                        android:id="@+id/color_btn"
                         android:layout_width="@dimen/dimen_28"
                         android:layout_height="@dimen/dimen_28"
                         app:layout_constraintStart_toStartOf="@id/reminder_guidline"

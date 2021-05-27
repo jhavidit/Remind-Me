@@ -172,7 +172,6 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
                         log("Granted Geofencing successfully")
                     }
                     .addOnFailureListener {
-                        // toast(requireContext(), it.message.toString())
                         log("error in geofence " + it.cause)
                     }
             }
@@ -183,16 +182,20 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
 
 
     private fun onGPS() {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setMessage("Enable GPS").setCancelable(false)
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Enable GPS")
             .setPositiveButton(
-                "Yes"
-            ) { dialog, which -> startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)) }
+                "Delete"
+            ) { _, _ ->
+                startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+            }
             .setNegativeButton(
-                "No"
-            ) { dialog, which -> dialog.cancel() }
-        val alertDialog = builder.create()
-        alertDialog.show()
+                "Cancel"
+            ) { dialogInterface, _ ->
+                dialogInterface.dismiss()
+            }
+            .show()
     }
 
 
