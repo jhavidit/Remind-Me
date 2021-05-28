@@ -1,5 +1,6 @@
 package tech.jhavidit.remindme.view.fragments
 
+import android.content.Intent
 import android.graphics.Color
 import android.media.Image
 import android.os.Bundle
@@ -121,6 +122,17 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                 }
                 .show()
 
+        }
+
+        binding.shareBtn.setOnClickListener {
+            val sendIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, "${binding.title.text}\n${binding.description.text}")
+                type = "text/plain"
+            }
+
+            val shareIntent = Intent.createChooser(sendIntent, null)
+            startActivity(shareIntent)
         }
 
         binding.colorBtn.setOnClickListener {
