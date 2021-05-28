@@ -30,7 +30,7 @@ import tech.jhavidit.remindme.view.adapters.SelectBackgroundColorAdapter
 import tech.jhavidit.remindme.viewModel.NotesViewModel
 
 
-class CreateNotesFragment : Fragment() {
+class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInterface {
 
     private lateinit var binding: FragmentCreateNotesBinding
     private lateinit var bind: BottomSheetAddColorBinding
@@ -135,7 +135,7 @@ class CreateNotesFragment : Fragment() {
             bottomSheetDialogs.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.color_recycler_view)
         val closeButton = bottomSheetDialogs.findViewById<ImageView>(R.id.close_btn_color)
 
-        val adapter = SelectBackgroundColorAdapter()
+        val adapter = SelectBackgroundColorAdapter(this)
         recyclerView?.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         recyclerView?.adapter = adapter
@@ -182,6 +182,29 @@ class CreateNotesFragment : Fragment() {
         notesViewModel.createdId.observe(viewLifecycleOwner, Observer {
             notesId = it ?: 0
         })
+    }
+
+    override fun clickListener(color: String) {
+        changeBackground(color)
+    }
+
+    private fun changeBackground(color: String) {
+        binding.note.setBackgroundColor(Color.parseColor(color))
+        val notes = NotesModel(
+            id = notesId,
+            title = binding.title.text.toString(),
+            description = binding.description.text.toString(),
+            locationReminder = args.currentNotes.locationReminder,
+            timeReminder = args.currentNotes.timeReminder,
+            reminderTime = args.currentNotes.reminderTime,
+            latitude = args.currentNotes.latitude,
+            longitude = args.currentNotes.longitude,
+            radius = args.currentNotes.radius,
+            repeatAlarmIndex = args.currentNotes.repeatAlarmIndex,
+            locationName = args.currentNotes.locationName,
+            backgroundColor = color
+        )
+        notesViewModel.updateNotes(notes)
     }
 
 

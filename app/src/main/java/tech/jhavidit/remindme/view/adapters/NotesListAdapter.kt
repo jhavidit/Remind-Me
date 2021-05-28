@@ -1,11 +1,15 @@
 package tech.jhavidit.remindme.view.adapters
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.notes_item.view.*
+import kotlinx.android.synthetic.main.notes_item.view.description
+import kotlinx.android.synthetic.main.notes_item.view.title
+import kotlinx.android.synthetic.main.reminder_item.view.*
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.view.fragments.NotesFragmentDirections
@@ -14,7 +18,7 @@ class NotesListAdapter : RecyclerView.Adapter<NotesListAdapter.MyViewHolder>() {
 
     private var notes = emptyList<NotesModel>()
 
-    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     }
 
@@ -32,6 +36,7 @@ class NotesListAdapter : RecyclerView.Adapter<NotesListAdapter.MyViewHolder>() {
         val currentNotes = notes[position]
         holder.itemView.title.text = currentNotes.title
         holder.itemView.description.text = currentNotes.description
+        holder.itemView.notes.setCardBackgroundColor(Color.parseColor(currentNotes.backgroundColor))
 
         val notes = NotesModel(
             id = currentNotes.id,

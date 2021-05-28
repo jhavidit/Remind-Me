@@ -1,5 +1,6 @@
 package tech.jhavidit.remindme.view.adapters
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +31,7 @@ class LocationReminderListAdapter : RecyclerView.Adapter<LocationReminderListAda
             holder.itemView.description.text = currentNotes.description
             holder.itemView.time.text = currentNotes.locationName
             holder.itemView.reminder_repeat.text = currentNotes.repeatAlarmIndex.toString()
+            holder.itemView.reminder.setCardBackgroundColor(Color.parseColor(currentNotes.backgroundColor))
         }
     }
 
