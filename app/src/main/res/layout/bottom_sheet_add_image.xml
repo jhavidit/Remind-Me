@@ -64,6 +64,37 @@
                     app:layout_constraintTop_toBottomOf="@id/close_btn" />
             </LinearLayout>
 
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/image_card"
+                android:layout_width="80dp"
+                android:visibility="gone"
+                android:layout_height="80dp"
+                android:layout_marginTop="@dimen/dimen_16"
+                app:cardCornerRadius="@dimen/dimen_8"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/set_image_ll"
+                app:strokeColor="@color/purple_200"
+                app:strokeWidth="1dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </com.google.android.material.card.MaterialCardView>
+
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/camera_card"
@@ -73,7 +104,7 @@
                 app:cardCornerRadius="@dimen/dimen_8"
                 app:layout_constraintEnd_toStartOf="@id/gallery_card"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/set_image_ll"
+                app:layout_constraintTop_toBottomOf="@id/image_card"
                 app:strokeColor="@color/purple_200"
                 app:strokeWidth="1dp">
 
@@ -119,7 +150,7 @@
                 app:cardCornerRadius="@dimen/dimen_8"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/camera_card"
-                app:layout_constraintTop_toBottomOf="@id/set_image_ll"
+                app:layout_constraintTop_toBottomOf="@id/image_card"
                 app:strokeColor="@color/purple_200"
                 app:strokeWidth="1dp">
 
