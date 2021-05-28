@@ -148,6 +148,7 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
                 description = args.currentNotes.description,
                 timeReminder = true,
                 reminderTime = alarmTime,
+                isPinned = args.currentNotes.isPinned,
                 repeatAlarmIndex = repeatingIndex,
                 locationReminder = args.currentNotes.locationReminder,
                 latitude = args.currentNotes.latitude,

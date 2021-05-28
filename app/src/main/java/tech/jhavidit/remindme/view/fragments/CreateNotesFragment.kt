@@ -54,6 +54,15 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
         binding.note.setBackgroundColor(Color.parseColor(args.currentNotes.backgroundColor))
         notes = args.currentNotes
         notesId = args.currentNotes.id
+
+        if (notes.isPinned) {
+            isPinned = true
+            binding.pinBtn.setImageResource(R.drawable.ic_pin)
+        } else {
+            isPinned = false
+            binding.pinBtn.setImageResource(R.drawable.ic_unpin)
+        }
+
         val bottomNavigation: BottomNavigationView? = activity?.findViewById(R.id.bottom_nav)
         bottomNavigation?.visibility = GONE
         if (args.update == "update") {
@@ -68,6 +77,8 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
             findNavController().navigateUp()
         }
 
+
+
         binding.pinBtn.setOnClickListener {
             if (isPinned) {
                 isPinned = false
@@ -76,6 +87,22 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                 isPinned = true
                 binding.pinBtn.setImageResource(R.drawable.ic_pin)
             }
+            val notes = NotesModel(
+                id = notesId,
+                title = binding.title.text.toString(),
+                description = binding.description.text.toString(),
+                locationReminder = args.currentNotes.locationReminder,
+                timeReminder = args.currentNotes.timeReminder,
+                reminderTime = args.currentNotes.reminderTime,
+                latitude = args.currentNotes.latitude,
+                isPinned = isPinned,
+                longitude = args.currentNotes.longitude,
+                radius = args.currentNotes.radius,
+                repeatAlarmIndex = args.currentNotes.repeatAlarmIndex,
+                locationName = args.currentNotes.locationName,
+                backgroundColor = args.currentNotes.backgroundColor
+            )
+            notesViewModel.updateNotes(notes)
         }
 
         binding.deleteBtn.setOnClickListener {
@@ -112,6 +139,7 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                 locationReminder = args.currentNotes.locationReminder,
                 timeReminder = args.currentNotes.timeReminder,
                 reminderTime = args.currentNotes.reminderTime,
+                isPinned = args.currentNotes.isPinned,
                 latitude = args.currentNotes.latitude,
                 longitude = args.currentNotes.longitude,
                 radius = args.currentNotes.radius,
@@ -199,6 +227,7 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
             reminderTime = args.currentNotes.reminderTime,
             latitude = args.currentNotes.latitude,
             longitude = args.currentNotes.longitude,
+            isPinned = args.currentNotes.isPinned,
             radius = args.currentNotes.radius,
             repeatAlarmIndex = args.currentNotes.repeatAlarmIndex,
             locationName = args.currentNotes.locationName,

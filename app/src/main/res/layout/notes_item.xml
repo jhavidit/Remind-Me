@@ -29,6 +29,16 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.95" />
 
+        <ImageView
+            android:id="@+id/pinned_note"
+            android:layout_width="@dimen/dimen_16"
+            android:layout_height="@dimen/dimen_16"
+            app:layout_constraintEnd_toEndOf="@id/endGuideline"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="@dimen/dimen_12"
+            android:visibility="gone"
+            android:src="@drawable/ic_pin"/>
+
 
         <ImageView
             android:id="@+id/notes_image"

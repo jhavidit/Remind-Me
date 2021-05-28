@@ -3,6 +3,8 @@ package tech.jhavidit.remindme.view.adapters
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -18,9 +20,7 @@ class NotesListAdapter : RecyclerView.Adapter<NotesListAdapter.MyViewHolder>() {
 
     private var notes = emptyList<NotesModel>()
 
-    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-    }
+    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder(
@@ -37,6 +37,10 @@ class NotesListAdapter : RecyclerView.Adapter<NotesListAdapter.MyViewHolder>() {
         holder.itemView.title.text = currentNotes.title
         holder.itemView.description.text = currentNotes.description
         holder.itemView.notes.setCardBackgroundColor(Color.parseColor(currentNotes.backgroundColor))
+        if(currentNotes.isPinned)
+            holder.itemView.pinned_note.visibility = VISIBLE
+        else
+            holder.itemView.pinned_note.visibility = GONE
 
         val notes = NotesModel(
             id = currentNotes.id,
@@ -46,6 +50,7 @@ class NotesListAdapter : RecyclerView.Adapter<NotesListAdapter.MyViewHolder>() {
             timeReminder = currentNotes.timeReminder,
             reminderTime = currentNotes.reminderTime,
             latitude = currentNotes.latitude,
+            isPinned = currentNotes.isPinned,
             locationName = currentNotes.locationName,
             longitude = currentNotes.longitude,
             radius = currentNotes.radius,
