@@ -243,7 +243,8 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
             radius = args.currentNotes.radius,
             repeatAlarmIndex = args.currentNotes.repeatAlarmIndex,
             locationName = args.currentNotes.locationName,
-            backgroundColor = color
+            backgroundColor = color,
+            lastUpdated = args.currentNotes.lastUpdated
         )
         notesViewModel.updateNotes(notes)
     }

@@ -55,7 +55,9 @@ class NotesListAdapter : RecyclerView.Adapter<NotesListAdapter.MyViewHolder>() {
             longitude = currentNotes.longitude,
             radius = currentNotes.radius,
             repeatAlarmIndex = currentNotes.repeatAlarmIndex,
-            backgroundColor = currentNotes.backgroundColor
+            backgroundColor = currentNotes.backgroundColor,
+            image = currentNotes.image,
+            lastUpdated = currentNotes.lastUpdated
 
         )
         holder.itemView.notes.setOnClickListener {

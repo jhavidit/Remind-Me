@@ -129,7 +129,9 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
                 longitude = args.currentNotes.longitude,
                 radius = args.currentNotes.radius,
                 locationName = args.currentNotes.locationName,
-                backgroundColor = args.currentNotes.backgroundColor
+                backgroundColor = args.currentNotes.backgroundColor,
+                image = args.currentNotes.image,
+                lastUpdated = args.currentNotes.lastUpdated
 
             )
             viewModel.updateNotes(notesModel)
@@ -155,7 +157,9 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
                 longitude = args.currentNotes.longitude,
                 radius = args.currentNotes.radius,
                 locationName = args.currentNotes.locationName,
-                backgroundColor = args.currentNotes.backgroundColor
+                backgroundColor = args.currentNotes.backgroundColor,
+                image = args.currentNotes.image,
+                lastUpdated = args.currentNotes.lastUpdated
             )
             viewModel.updateNotes(notes)
             alarmReceiver.scheduleAlarm(requireContext(), notes)

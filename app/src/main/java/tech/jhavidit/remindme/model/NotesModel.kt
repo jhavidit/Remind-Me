@@ -21,7 +21,9 @@ data class NotesModel(
     val locationName: String? = null,
     val radius: String? = null,
     val repeatAlarmIndex: Int = -1,
-    val isPinned : Boolean = false,
+    val isPinned: Boolean = false,
+    val image: String? = null,
+    val lastUpdated: String? = null,
     val backgroundColor: String = "#FFFFFF"
 
 

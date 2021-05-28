@@ -97,7 +97,9 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
                 timeReminder = notesModel.timeReminder,
                 repeatAlarmIndex = notesModel.repeatAlarmIndex,
                 reminderTime = notesModel.reminderTime,
-                backgroundColor = notesModel.backgroundColor
+                backgroundColor = notesModel.backgroundColor,
+                image = notesModel.image,
+                lastUpdated = notesModel.lastUpdated
             )
             viewModel.updateNotes(notesModel)
             findNavController().navigate(LocationReminderFragmentDirections.homeScreen())
@@ -246,7 +248,7 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
                 .setMessage("You need to provide location permission to access this feature. Kindly enable it from settings")
                 .setPositiveButton(
                     "Ok"
-                ) { dialogInterface, i ->
+                ) { _, _ ->
                     val intent =
                         Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                     val uri: Uri =
@@ -256,7 +258,7 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
                 }
                 .setNegativeButton(
                     "Cancel"
-                ) { dialogInterface, i ->
+                ) { dialogInterface, _ ->
                     dialogInterface.dismiss()
                 }
                 .show()
