@@ -23,9 +23,7 @@ class SelectBackgroundColorAdapter(private val clickListen: AdapterInterface) :
     RecyclerView.Adapter<SelectBackgroundColorAdapter.MyViewHolder>() {
     var isSelected = -1
 
-    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-    }
+    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     interface AdapterInterface {
         fun clickListener(color: String)

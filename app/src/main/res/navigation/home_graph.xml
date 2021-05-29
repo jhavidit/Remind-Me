@@ -42,7 +42,14 @@
 
         <action
             android:id="@+id/uploadImage"
-            app:destination="@id/addImageBottomSheet"/>
+            app:destination="@id/addImageBottomSheet">
+
+            <argument
+                android:name="currentNotes"
+                app:argType="tech.jhavidit.remindme.model.NotesModel" />
+
+
+        </action>
 
         <action
             android:id="@+id/addReminder"
@@ -136,7 +143,13 @@
     <dialog
         android:id="@+id/addImageBottomSheet"
         android:name="tech.jhavidit.remindme.view.fragments.AddImageBottomSheet"
-        android:label="AddImageBottomSheet" />
+        android:label="AddImageBottomSheet" >
+
+    <argument
+        android:name="currentNotes"
+        app:argType="tech.jhavidit.remindme.model.NotesModel" />
+
+    </dialog>
 
 
 </navigation>

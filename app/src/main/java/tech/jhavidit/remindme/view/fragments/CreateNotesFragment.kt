@@ -1,8 +1,8 @@
 package tech.jhavidit.remindme.view.fragments
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
-import android.media.Image
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -22,13 +22,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.android.synthetic.main.bottom_sheet_add_color.*
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.BottomSheetAddColorBinding
 import tech.jhavidit.remindme.databinding.FragmentCreateNotesBinding
 import tech.jhavidit.remindme.model.NotesModel
+import tech.jhavidit.remindme.util.getPeriod
+import tech.jhavidit.remindme.util.log
+import tech.jhavidit.remindme.util.toDateFormat
 import tech.jhavidit.remindme.view.adapters.SelectBackgroundColorAdapter
 import tech.jhavidit.remindme.viewModel.NotesViewModel
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.math.log
 
 
 class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInterface {
@@ -55,6 +60,13 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
         binding.note.setBackgroundColor(Color.parseColor(args.currentNotes.backgroundColor))
         notes = args.currentNotes
         notesId = args.currentNotes.id
+        val lastUpdated = args.currentNotes.lastUpdated?.toDateFormat()?.let { getPeriod(it) }
+
+        lastUpdated?.let { binding.lastUpdated.text = "Last edit : ${lastUpdated}" }
+            ?: kotlin.run {
+                binding.lastUpdated.text = "Last edit : recently"
+            }
+
 
         if (notes.isPinned) {
             isPinned = true
@@ -136,14 +148,35 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
         }
 
         binding.colorBtn.setOnClickListener {
+            if (!updated)
+                insertDataToDatabase()
             showColorBottomSheet()
         }
 
         binding.uploadImageBtn.setOnClickListener {
-            findNavController().navigate(CreateNotesFragmentDirections.uploadImage())
+            if (!updated)
+                insertDataToDatabase()
+            val notes = NotesModel(
+                id = notesId,
+                title = binding.title.text.toString(),
+                description = binding.description.text.toString(),
+                locationReminder = args.currentNotes.locationReminder,
+                timeReminder = args.currentNotes.timeReminder,
+                reminderTime = args.currentNotes.reminderTime,
+                isPinned = args.currentNotes.isPinned,
+                latitude = args.currentNotes.latitude,
+                longitude = args.currentNotes.longitude,
+                radius = args.currentNotes.radius,
+                repeatAlarmIndex = args.currentNotes.repeatAlarmIndex,
+                locationName = args.currentNotes.locationName,
+                backgroundColor = args.currentNotes.backgroundColor
+            )
+            findNavController().navigate(CreateNotesFragmentDirections.uploadImage(notes))
         }
 
         binding.reminderBtn.setOnClickListener {
+            if (!updated)
+                insertDataToDatabase()
             val notes = NotesModel(
                 id = notesId,
                 title = binding.title.text.toString(),
@@ -205,12 +238,32 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun updateData() {
         val title = binding.title.text.toString()
         val description = binding.description.text.toString()
-        val notesModel = NotesModel(notesId, title, description)
-        notesViewModel.updateNotes(notesModel)
 
+        val calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+        val formattedDate: String = dateFormat.format(calendar.time)
+
+        val notesModel = NotesModel(
+            id = notesId,
+            title = title,
+            description = description,
+            locationReminder = args.currentNotes.locationReminder,
+            timeReminder = args.currentNotes.timeReminder,
+            reminderTime = args.currentNotes.reminderTime,
+            latitude = args.currentNotes.latitude,
+            longitude = args.currentNotes.longitude,
+            isPinned = args.currentNotes.isPinned,
+            radius = args.currentNotes.radius,
+            repeatAlarmIndex = args.currentNotes.repeatAlarmIndex,
+            locationName = args.currentNotes.locationName,
+            backgroundColor = args.currentNotes.backgroundColor,
+            lastUpdated = formattedDate
+        )
+        notesViewModel.updateNotes(notesModel)
     }
 
     private fun insertDataToDatabase() {

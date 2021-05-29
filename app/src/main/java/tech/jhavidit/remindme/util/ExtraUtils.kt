@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
+import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
 import android.widget.Toast
@@ -30,20 +32,13 @@ fun errorMessage(context: Context, errorCode: Int): String {
     }
 }
 
-fun bitmapToString(bitmap: Bitmap): String {
-    val baos = ByteArrayOutputStream()
-    bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
-    val b: ByteArray = baos.toByteArray()
-    return Base64.encodeToString(b, Base64.DEFAULT)
+fun stringToUri(image: String): Uri? {
+    return Uri.parse(image)
 }
 
-fun stringToBitmap(encodedString : String):Bitmap?{
-    return try {
-        val encodeByte =
-            Base64.decode(encodedString, Base64.DEFAULT)
-        BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
-    } catch (e: Exception) {
-        e.message
-        null
-    }
+fun bitmapToUri(inContext: Context, inImage: Bitmap): Uri? {
+    val bytes = ByteArrayOutputStream()
+    inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+    val path = MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, "Title", null)
+    return Uri.parse(path)
 }
