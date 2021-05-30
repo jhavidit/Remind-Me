@@ -1,12 +1,17 @@
 package tech.jhavidit.remindme.view.adapters
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.notes_item.view.*
+import kotlinx.android.synthetic.main.notes_item.view.description
+import kotlinx.android.synthetic.main.notes_item.view.title
+import kotlinx.android.synthetic.main.reminder_item.view.*
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.view.fragments.NotesFragmentDirections
@@ -21,7 +26,6 @@ class NotesListAdapter : RecyclerView.Adapter<NotesListAdapter.MyViewHolder>() {
         return MyViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.notes_item, parent, false)
         )
-
     }
 
     override fun getItemCount(): Int {
@@ -32,12 +36,11 @@ class NotesListAdapter : RecyclerView.Adapter<NotesListAdapter.MyViewHolder>() {
         val currentNotes = notes[position]
         holder.itemView.title.text = currentNotes.title
         holder.itemView.description.text = currentNotes.description
-        if (currentNotes.timeReminder) {
-            holder.itemView.time.visibility = VISIBLE
-        }
-        if (currentNotes.locationReminder) {
-            holder.itemView.location.visibility = VISIBLE
-        }
+        holder.itemView.notes.setCardBackgroundColor(Color.parseColor(currentNotes.backgroundColor))
+        if(currentNotes.isPinned)
+            holder.itemView.pinned_note.visibility = VISIBLE
+        else
+            holder.itemView.pinned_note.visibility = GONE
 
         val notes = NotesModel(
             id = currentNotes.id,
@@ -47,10 +50,14 @@ class NotesListAdapter : RecyclerView.Adapter<NotesListAdapter.MyViewHolder>() {
             timeReminder = currentNotes.timeReminder,
             reminderTime = currentNotes.reminderTime,
             latitude = currentNotes.latitude,
+            isPinned = currentNotes.isPinned,
             locationName = currentNotes.locationName,
             longitude = currentNotes.longitude,
             radius = currentNotes.radius,
-            repeatAlarmIndex = currentNotes.repeatAlarmIndex
+            repeatAlarmIndex = currentNotes.repeatAlarmIndex,
+            backgroundColor = currentNotes.backgroundColor,
+            image = currentNotes.image,
+            lastUpdated = currentNotes.lastUpdated
 
         )
         holder.itemView.notes.setOnClickListener {

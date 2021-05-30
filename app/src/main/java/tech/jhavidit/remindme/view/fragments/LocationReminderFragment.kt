@@ -3,10 +3,8 @@ package tech.jhavidit.remindme.view.fragments
 import android.Manifest
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Context.LOCATION_SERVICE
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
@@ -14,7 +12,6 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -31,7 +28,7 @@ import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import tech.jhavidit.remindme.R
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import tech.jhavidit.remindme.databinding.FragmentLocationReminderBinding
 import tech.jhavidit.remindme.model.LocationModel
 import tech.jhavidit.remindme.model.NotesModel
@@ -96,9 +93,13 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
                 title = notesModel.title,
                 description = notesModel.description,
                 locationReminder = false,
+                isPinned = notesModel.isPinned,
                 timeReminder = notesModel.timeReminder,
                 repeatAlarmIndex = notesModel.repeatAlarmIndex,
-                reminderTime = notesModel.reminderTime
+                reminderTime = notesModel.reminderTime,
+                backgroundColor = notesModel.backgroundColor,
+                image = notesModel.image,
+                lastUpdated = notesModel.lastUpdated
             )
             viewModel.updateNotes(notesModel)
             findNavController().navigate(LocationReminderFragmentDirections.homeScreen())
@@ -122,13 +123,15 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
                     title = notesModel.title,
                     description = notesModel.description,
                     locationReminder = true,
+                    isPinned = notesModel.isPinned,
                     timeReminder = notesModel.timeReminder,
                     latitude = location?.latitude.toString(),
                     longitude = location?.longitude?.toString(),
                     radius = binding.radius.text.toString(),
                     repeatAlarmIndex = notesModel.repeatAlarmIndex,
                     reminderTime = notesModel.reminderTime,
-                    locationName = location?.name
+                    locationName = location?.name,
+                    backgroundColor = notesModel.backgroundColor
                 )
                 viewModel.updateNotes(notesModel)
                 findNavController().navigate(LocationReminderFragmentDirections.homeScreen())
@@ -171,7 +174,6 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
                         log("Granted Geofencing successfully")
                     }
                     .addOnFailureListener {
-                        // toast(requireContext(), it.message.toString())
                         log("error in geofence " + it.cause)
                     }
             }
@@ -182,16 +184,20 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
 
 
     private fun onGPS() {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setMessage("Enable GPS").setCancelable(false)
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Enable GPS")
             .setPositiveButton(
-                "Yes"
-            ) { dialog, which -> startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)) }
+                "Delete"
+            ) { _, _ ->
+                startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+            }
             .setNegativeButton(
-                "No"
-            ) { dialog, which -> dialog.cancel() }
-        val alertDialog = builder.create()
-        alertDialog.show()
+                "Cancel"
+            ) { dialogInterface, _ ->
+                dialogInterface.dismiss()
+            }
+            .show()
     }
 
 
@@ -237,13 +243,12 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
                     PackageManager.PERMISSION_DENIED)
         ) {
 
-            // Permission denied.
-            val alertDialog: AlertDialog.Builder =
-                AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme)
-            alertDialog.setMessage("You need to provide location permission to access this feature. Kindly enable it from settings")
-            alertDialog.setCancelable(true)
-            alertDialog.setPositiveButton(
-                "Ok", DialogInterface.OnClickListener { _, _ ->
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Location Permission Required")
+                .setMessage("You need to provide location permission to access this feature. Kindly enable it from settings")
+                .setPositiveButton(
+                    "Ok"
+                ) { _, _ ->
                     val intent =
                         Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                     val uri: Uri =
@@ -251,14 +256,12 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
                     intent.data = uri
                     startActivity(intent)
                 }
-            )
-            alertDialog.setNegativeButton(
-                "Cancel", DialogInterface.OnClickListener { dialog, _ ->
-                    dialog.cancel()
+                .setNegativeButton(
+                    "Cancel"
+                ) { dialogInterface, _ ->
+                    dialogInterface.dismiss()
                 }
-            )
-            val alert = alertDialog.create()
-            alert.show()
+                .show()
         }
 
     }

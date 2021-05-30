@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -11,10 +12,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.FragmentNotesBinding
 import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.view.adapters.NotesListAdapter
+import tech.jhavidit.remindme.view.adapters.SelectBackgroundColorAdapter
 import tech.jhavidit.remindme.view.fragments.CreateNotesFragmentDirections.notesList
 import tech.jhavidit.remindme.viewModel.MainActivityViewModel
 import tech.jhavidit.remindme.viewModel.NotesViewModel
@@ -33,13 +37,15 @@ class NotesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-
+        val bottomNavigation : BottomNavigationView? = activity?.findViewById(R.id.bottom_nav)
+        bottomNavigation?.visibility = VISIBLE
         binding = FragmentNotesBinding.inflate(inflater, container, false)
         navController = Navigation.findNavController(requireActivity(), R.id.NavHostFragment)
         viewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
         adapter = NotesListAdapter()
         binding.recyclerView.adapter = adapter
-        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        val staggeredGridLayoutManager = StaggeredGridLayoutManager(2,LinearLayoutManager.VERTICAL)
+        binding.recyclerView.layoutManager = staggeredGridLayoutManager
         viewModel.readAllData.observe(viewLifecycleOwner, Observer {
             adapter.setNotes(it)
         })

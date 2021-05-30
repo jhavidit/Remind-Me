@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.FragmentSettingsBinding
 
@@ -17,7 +18,10 @@ class SettingsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding =  FragmentSettingsBinding.inflate(inflater, container, false)
+        val bottomNavigation : BottomNavigationView? = activity?.findViewById(R.id.bottom_nav)
+        bottomNavigation?.visibility = View.VISIBLE
         return binding.root
+
     }
 
 }

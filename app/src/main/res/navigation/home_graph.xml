@@ -32,7 +32,7 @@
 
     <fragment
         android:id="@+id/eventsFragment"
-        android:name="tech.jhavidit.remindme.view.fragments.EventsFragment"
+        android:name="tech.jhavidit.remindme.view.fragments.ReminderFragment"
         android:label="EventsFragment" />
 
     <fragment
@@ -41,8 +41,8 @@
         android:label="CreateNotesFragment">
 
         <action
-            android:id="@+id/timeReminder"
-            app:destination="@id/timeReminderFragment">
+            android:id="@+id/uploadImage"
+            app:destination="@id/addImageBottomSheet">
 
             <argument
                 android:name="currentNotes"
@@ -52,8 +52,8 @@
         </action>
 
         <action
-            android:id="@+id/locationReminder"
-            app:destination="@id/locationReminderFragment">
+            android:id="@+id/addReminder"
+            app:destination="@id/reminderSelectBottomSheet">
 
             <argument
                 android:name="currentNotes"
@@ -61,6 +61,7 @@
 
 
         </action>
+
 
         <argument
             android:name="update"
@@ -93,15 +94,60 @@
     <dialog
         android:id="@+id/locationReminderFragment"
         android:name="tech.jhavidit.remindme.view.fragments.LocationReminderFragment"
-        android:label="LocationReminderFragment" >
+        android:label="LocationReminderFragment">
 
         <action
             android:id="@+id/homeScreen"
-            app:destination="@id/notesFragment"/>
+            app:destination="@id/notesFragment" />
 
         <argument
             android:name="currentNotes"
             app:argType="tech.jhavidit.remindme.model.NotesModel" />
+
+    </dialog>
+
+    <dialog
+        android:id="@+id/reminderSelectBottomSheet"
+        android:name="tech.jhavidit.remindme.view.fragments.ReminderSelectBottomSheet"
+        android:label="ReminderSelectBottomSheet">
+
+        <argument
+            android:name="currentNotes"
+            app:argType="tech.jhavidit.remindme.model.NotesModel" />
+
+        <action
+            android:id="@+id/timeReminder"
+            app:destination="@id/timeReminderFragment">
+
+            <argument
+                android:name="currentNotes"
+                app:argType="tech.jhavidit.remindme.model.NotesModel" />
+
+
+        </action>
+
+        <action
+            android:id="@+id/locationReminder"
+            app:destination="@id/locationReminderFragment">
+
+            <argument
+                android:name="currentNotes"
+                app:argType="tech.jhavidit.remindme.model.NotesModel" />
+
+
+        </action>
+
+
+    </dialog>
+
+    <dialog
+        android:id="@+id/addImageBottomSheet"
+        android:name="tech.jhavidit.remindme.view.fragments.AddImageBottomSheet"
+        android:label="AddImageBottomSheet" >
+
+    <argument
+        android:name="currentNotes"
+        app:argType="tech.jhavidit.remindme.model.NotesModel" />
 
     </dialog>
 

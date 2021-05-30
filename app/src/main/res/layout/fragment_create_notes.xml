@@ -3,11 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/note"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -38,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.05" />
+                app:layout_constraintGuide_percent="0.025" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/bottomGuideline"
@@ -47,79 +45,251 @@
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent="0.95" />
 
-            <TextView
-                android:id="@+id/notes_edit_heading"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
-                android:text="Create"
-                android:textColor="#373A42"
-                android:textSize="28sp"
-                android:textStyle="bold"
+            <ImageView
+                android:id="@+id/back_btn"
+                android:layout_width="@dimen/dimen_24"
+                android:background="?selectableItemBackgroundBorderless"
+                android:layout_height="@dimen/dimen_24"
+                android:contentDescription="@string/back_button"
+                android:src="@drawable/ic_back_button"
                 app:layout_constraintStart_toStartOf="@id/startGuideline"
                 app:layout_constraintTop_toTopOf="@id/topGuideline" />
+
+            <ImageView
+                android:id="@+id/delete_btn"
+                android:layout_width="@dimen/dimen_24"
+                android:layout_height="@dimen/dimen_24"
+                android:layout_marginStart="10dp"
+                android:background="?selectableItemBackgroundBorderless"
+                android:contentDescription="@string/delete_note"
+                android:src="@drawable/ic_delete"
+                app:layout_constraintEnd_toEndOf="@id/endGuideline"
+                app:layout_constraintTop_toTopOf="@id/topGuideline" />
+
+            <ImageView
+                android:id="@+id/share_btn"
+                android:layout_width="@dimen/dimen_24"
+                android:layout_height="@dimen/dimen_24"
+                android:layout_marginStart="10dp"
+                android:background="?selectableItemBackgroundBorderless"
+                android:layout_marginEnd="10dp"
+                android:contentDescription="@string/share_note"
+                android:src="@drawable/ic_share"
+                app:layout_constraintEnd_toStartOf="@id/delete_btn"
+                app:layout_constraintTop_toTopOf="@id/topGuideline" />
+
+
+            <ImageView
+                android:id="@+id/pin_btn"
+                android:layout_width="@dimen/dimen_24"
+                android:layout_height="@dimen/dimen_24"
+                android:layout_marginStart="10dp"
+                android:background="?selectableItemBackgroundBorderless"
+                android:layout_marginEnd="10dp"
+                android:contentDescription="@string/pin_note"
+                android:src="@drawable/ic_unpin"
+                app:layout_constraintEnd_toStartOf="@id/share_btn"
+                app:layout_constraintTop_toTopOf="@id/topGuideline" />
+
+            <ScrollView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/dimen_12"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                app:layout_constraintEnd_toEndOf="@id/endGuideline"
+                app:layout_constraintTop_toBottomOf="@id/back_btn"
+                android:layout_marginTop="@dimen/dimen_8">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/dimen_12"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                app:layout_constraintEnd_toEndOf="@id/endGuideline"
+                app:layout_constraintTop_toBottomOf="@id/back_btn"
+                android:layout_marginTop="@dimen/dimen_8">
 
             <EditText
                 android:id="@+id/title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:fontFamily="sans-serif"
+                android:fontFamily="@font/alata_regular"
+                android:background="@null"
                 android:hint="@string/title"
-                android:textColor="#373A42"
-                android:textSize="28sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@id/endGuideline"
-                app:layout_constraintStart_toStartOf="@id/startGuideline"
-                app:layout_constraintTop_toBottomOf="@id/notes_edit_heading" />
+                android:textColor="@color/title_color"
+                android:textSize="@dimen/dimen_text_20"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
                 android:id="@+id/description"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:fontFamily="sans-serif"
+                android:layout_marginTop="@dimen/dimen_8"
+                android:background="@null"
+                android:fontFamily="@font/alata_regular"
                 android:hint="@string/description"
                 android:textColor="#373A42"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@id/endGuideline"
-                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/title" />
 
-            <Button
-                android:id="@+id/btn_time"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:text="Time\n Reminder"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textAllCaps="false"
-                app:layout_constraintEnd_toEndOf="@id/middleGuideline"
-                app:layout_constraintStart_toStartOf="@id/startGuideline"
-                app:layout_constraintTop_toBottomOf="@id/description"
-                android:layout_marginTop="200dp"
-                android:layout_marginEnd="10dp"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            </ScrollView>
 
-            <Button
-                android:id="@+id/btn_location"
-                android:layout_width="0dp"
-                android:text="Location Reminder"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textAllCaps="false"
-                android:layout_height="60dp"
-                app:layout_constraintEnd_toEndOf="@id/endGuideline"
-                app:layout_constraintStart_toStartOf="@id/middleGuideline"
-                app:layout_constraintTop_toBottomOf="@id/description"
-                android:layout_marginTop="200dp"
-                android:layout_marginStart="10dp"/>
+<!--            <Button-->
+<!--                android:visibility="gone"-->
+<!--                android:id="@+id/btn_time"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="60dp"-->
+<!--                android:layout_marginTop="200dp"-->
+<!--                android:layout_marginEnd="10dp"-->
+<!--                android:text="Time\n Reminder"-->
+<!--                android:textAllCaps="false"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="16sp"-->
+<!--                app:layout_constraintEnd_toEndOf="@id/middleGuideline"-->
+<!--                app:layout_constraintStart_toStartOf="@id/startGuideline"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/description" />-->
+
+<!--            <Button-->
+<!--                android:id="@+id/btn_location"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:visibility="gone"-->
+<!--                android:layout_height="60dp"-->
+<!--                android:layout_marginStart="10dp"-->
+<!--                android:layout_marginTop="200dp"-->
+<!--                android:text="Location Reminder"-->
+<!--                android:textAllCaps="false"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="16sp"-->
+<!--                app:layout_constraintEnd_toEndOf="@id/endGuideline"-->
+<!--                app:layout_constraintStart_toStartOf="@id/middleGuideline"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/description" />-->
 
 
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_50"
+                app:cardBackgroundColor="@color/purple_light"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/purple_200"
+                app:cardElevation="@dimen/dimen_8"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/last_updated_guidline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.6" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/image_guidline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.733" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/reminder_guidline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.867" />
+
+
+                    <TextView
+                        android:id="@+id/last_updated"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/dimen_text_16"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="@id/last_updated_guidline"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:text="Last edit : 12/05/21"
+                        android:fontFamily="@font/alata_regular"
+                        android:textColor="@color/purple_200"/>
+
+                    <View
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/purple_200"
+                        app:layout_constraintStart_toStartOf="@id/last_updated_guidline"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <ImageView
+                        android:id="@+id/upload_image_btn"
+                        android:layout_width="@dimen/dimen_28"
+                        android:contentDescription="@string/add_image"
+                        android:layout_height="@dimen/dimen_28"
+                        android:background="?selectableItemBackgroundBorderless"
+                        app:layout_constraintStart_toStartOf="@id/last_updated_guidline"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:src="@drawable/ic_upload"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@id/image_guidline"/>
+
+                    <View
+                        android:layout_width="2dp"
+                        android:layout_height="wrap_content"
+                        android:background="@color/purple_200"
+                        app:layout_constraintStart_toStartOf="@id/image_guidline"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <ImageView
+
+                        android:id="@+id/reminder_btn"
+                        android:layout_width="@dimen/dimen_28"
+                        android:layout_height="@dimen/dimen_28"
+                        android:background="?selectableItemBackgroundBorderless"
+                        app:layout_constraintStart_toStartOf="@id/image_guidline"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:contentDescription="@string/add_reminder"
+                        android:src="@drawable/ic_add_reminder"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@id/reminder_guidline"/>
+
+                    <View
+                        android:layout_width="2dp"
+                        android:layout_height="wrap_content"
+                        android:background="@color/purple_200"
+                        app:layout_constraintStart_toStartOf="@id/reminder_guidline"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <ImageView
+                        android:id="@+id/color_btn"
+                        android:layout_width="@dimen/dimen_28"
+                        android:layout_height="@dimen/dimen_28"
+                        app:layout_constraintStart_toStartOf="@id/reminder_guidline"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:src="@drawable/ic_color"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:contentDescription="@string/add_background_color"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.core.widget.NestedScrollView>
+
 
 </layout>

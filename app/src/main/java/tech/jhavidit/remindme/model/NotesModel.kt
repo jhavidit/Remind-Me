@@ -1,5 +1,6 @@
 package tech.jhavidit.remindme.model
 
+import android.graphics.Color
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -19,5 +20,11 @@ data class NotesModel(
     val longitude: String? = null,
     val locationName: String? = null,
     val radius: String? = null,
-    val repeatAlarmIndex: Int = -1
+    val repeatAlarmIndex: Int = -1,
+    val isPinned: Boolean = false,
+    val image: String? = null,
+    val lastUpdated: String? = null,
+    val backgroundColor: String = "#FFFFFF"
+
+
 ) : Parcelable
