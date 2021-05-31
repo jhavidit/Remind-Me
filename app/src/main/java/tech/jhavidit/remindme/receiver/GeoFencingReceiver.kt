@@ -9,8 +9,6 @@ import com.google.android.gms.location.GeofenceStatusCodes
 import com.google.android.gms.location.GeofencingEvent
 import tech.jhavidit.remindme.util.log
 import tech.jhavidit.remindme.util.notification
-import tech.jhavidit.remindme.util.showNotification
-import tech.jhavidit.remindme.util.toast
 import tech.jhavidit.remindme.view.activity.MainActivity
 
 class GeoFencingReceiver : BroadcastReceiver() {
