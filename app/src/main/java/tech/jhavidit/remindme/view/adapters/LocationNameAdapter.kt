@@ -7,10 +7,14 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.saved_location_item.view.*
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.model.LocationModel
-import tech.jhavidit.remindme.util.toast
 
-class LocationNameAdapter : RecyclerView.Adapter<LocationNameAdapter.MyViewHolder>() {
+class LocationNameAdapter(private val clickListen : LocationNameInterface) :
+    RecyclerView.Adapter<LocationNameAdapter.MyViewHolder>() {
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
+    interface LocationNameInterface {
+        fun clickListener(location: LocationModel)
+    }
 
     private var location = emptyList<LocationModel>()
 
@@ -21,14 +25,14 @@ class LocationNameAdapter : RecyclerView.Adapter<LocationNameAdapter.MyViewHolde
     }
 
     override fun getItemCount(): Int {
-       return location.size
+        return location.size
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-      val locationName = location[position]
+        val locationName = location[position]
         holder.itemView.location_name.text = locationName.name
         holder.itemView.location_name.setOnClickListener {
-        toast(holder.itemView.context,"Clicked")
+           clickListen.clickListener(locationName)
         }
     }
 
