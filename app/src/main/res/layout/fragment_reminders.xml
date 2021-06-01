@@ -50,7 +50,7 @@
 
         <RadioGroup
             android:id="@+id/rb_reminder"
-            android:layout_width="0dp"
+            android:layout_width="220dp"
             android:layout_height="@dimen/dimen_40"
             android:layout_marginTop="@dimen/dimen_12"
             android:background="@drawable/rb_background"

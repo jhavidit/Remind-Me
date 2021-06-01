@@ -25,7 +25,7 @@ fun toast(context: Context, message: String) {
 fun errorMessage(context: Context, errorCode: Int): String {
     val resources = context.resources
     return when (errorCode) {
-        GeofenceStatusCodes.GEOFENCE_NOT_AVAILABLE -> ">Geofence service is not available now"
+        GeofenceStatusCodes.GEOFENCE_NOT_AVAILABLE -> "Geofence service is not available now"
         GeofenceStatusCodes.GEOFENCE_TOO_MANY_GEOFENCES -> "Your app has registered too many geofences"
         GeofenceStatusCodes.GEOFENCE_TOO_MANY_PENDING_INTENTS -> "You have provided too many PendingIntents to the addGeofences() call"
         else -> "Unknown error: the Geofence service is not available now"
