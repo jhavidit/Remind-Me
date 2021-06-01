@@ -6,6 +6,7 @@ import android.content.ContextWrapper
 import android.content.Intent
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingRequest
+import com.google.android.gms.location.LocationServices
 import tech.jhavidit.remindme.receiver.GeoFencingReceiver
 
 
@@ -35,11 +36,11 @@ class GeoFencingHelper(context: Context) : ContextWrapper(context) {
             .build()
     }
 
-    fun getPendingIntent(): PendingIntent? {
+    fun getPendingIntent(id: Int): PendingIntent? {
 
         val intent = Intent(this, GeoFencingReceiver::class.java)
         pendingIntent =
-            PendingIntent.getBroadcast(this, 200, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            PendingIntent.getBroadcast(this, id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         return pendingIntent
     }
 
