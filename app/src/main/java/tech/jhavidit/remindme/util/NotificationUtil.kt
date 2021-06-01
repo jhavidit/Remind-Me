@@ -36,7 +36,7 @@ fun notification(context: Context, title: String, pendingIntent: PendingIntent) 
         notificationChannel.enableVibration(false)
         notificationManager.createNotificationChannel(notificationChannel)
         builder = Notification.Builder(context, channelId)
-            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setSmallIcon(R.drawable.notification_icon)
             .setLargeIcon(
                 BitmapFactory.decodeResource(
                     context.resources,
@@ -48,7 +48,7 @@ fun notification(context: Context, title: String, pendingIntent: PendingIntent) 
     } else {
 
         builder = Notification.Builder(context)
-            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setSmallIcon(R.drawable.notification_icon)
             .setLargeIcon(
                 BitmapFactory.decodeResource(
                     context.resources,

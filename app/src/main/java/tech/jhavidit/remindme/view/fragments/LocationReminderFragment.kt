@@ -62,8 +62,7 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
     private lateinit var notesModel: NotesModel
     private lateinit var geoFencingHelper: GeoFencingHelper
     private lateinit var geoFencingReceiver: GeoFencingReceiver
-    private val runningQOrLater =
-        android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -285,51 +284,10 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
                     grantResults[BACKGROUND_LOCATION_PERMISSION_INDEX] ==
                     PackageManager.PERMISSION_DENIED)
         ) {
-
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Location Permission Required")
-                .setMessage("You need to provide location permission to access this feature. Kindly enable it from settings")
-                .setPositiveButton(
-                    "Ok"
-                ) { _, _ ->
-                    val intent =
-                        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    val uri: Uri =
-                        Uri.fromParts("package", activity?.packageName, null)
-                    intent.data = uri
-                    startActivity(intent)
-                }
-                .setNegativeButton(
-                    "Cancel"
-                ) { dialogInterface, _ ->
-                    dialogInterface.dismiss()
-                }
-                .show()
+            showLocationPermissionAlertDialog(requireContext())
         }
 
     }
-
-    /* @TargetApi(29)
-     private fun foregroundAndBackgroundLocationPermissionApproved(): Boolean {
-         val foregroundLocationApproved = (
-                 PackageManager.PERMISSION_GRANTED ==
-                         ActivityCompat.checkSelfPermission(
-                             requireContext(),
-                             Manifest.permission.ACCESS_FINE_LOCATION
-                         ))
-         val backgroundPermissionApproved =
-             if (runningQOrLater) {
-                 PackageManager.PERMISSION_GRANTED ==
-                         ActivityCompat.checkSelfPermission(
-                             requireContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                         )
-             } else {
-                 true
-             }
-
-         return foregroundLocationApproved && backgroundPermissionApproved
-     }*/
-
 
     @TargetApi(29)
     private fun requestForegroundAndBackgroundLocationPermissions() {

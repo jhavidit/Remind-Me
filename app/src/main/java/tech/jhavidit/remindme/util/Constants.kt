@@ -9,3 +9,5 @@ const val BACKGROUND_LOCATION_PERMISSION_INDEX = 1
 const val PICK_IMAGE = 101
 const val PICK_IMAGE_FROM_CAMERA = 102
 const val CAMERA_PERMISSION_CODE = 203
+val runningQOrLater =
+    android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q

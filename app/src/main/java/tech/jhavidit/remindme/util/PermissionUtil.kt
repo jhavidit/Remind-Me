@@ -7,9 +7,7 @@ import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 
 @TargetApi(29)
- fun foregroundAndBackgroundLocationPermissionApproved(context: Context): Boolean {
-   val runningQOrLater =
-       android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q
+fun foregroundAndBackgroundLocationPermissionApproved(context: Context): Boolean {
     val foregroundLocationApproved = (
             PackageManager.PERMISSION_GRANTED ==
                     ActivityCompat.checkSelfPermission(

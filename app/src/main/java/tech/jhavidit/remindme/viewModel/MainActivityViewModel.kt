@@ -2,6 +2,9 @@ package tech.jhavidit.remindme.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import tech.jhavidit.remindme.model.LocationModel
 import tech.jhavidit.remindme.model.NotesModel
 
@@ -10,11 +13,15 @@ class MainActivityViewModel : ViewModel() {
      val notesModel = MutableLiveData<NotesModel>()
 
     fun getLocation(location: LocationModel) {
-        locationModel.value = location
+        viewModelScope.launch(Dispatchers.IO) {
+            locationModel.value = location
+        }
     }
 
     fun getNotes(note: NotesModel) {
-        notesModel.value = note
+        viewModelScope.launch(Dispatchers.IO) {
+            notesModel.value = note
+        }
     }
 
     fun clearData()

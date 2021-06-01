@@ -24,7 +24,7 @@ fun getPeriod(past: Date): String {
             "$hours hour ${minutes % 60} min ago"
         }
         else -> {
-            SimpleDateFormat("dd/MM/yy, hh:mm:ss").format(past).toString()
+            SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(past).toString()
         }
     }
 }
