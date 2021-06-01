@@ -73,9 +73,17 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
         adapter = LocationNameAdapter()
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
+        binding.radiusValue.text = minRadius.toInt().toString()
+        binding.minRadius.text = "${minRadius.toInt()} m"
+        binding.maxRadius.text = "${maxRadius.toInt()} m"
         locationViewModel.readAllData.observe(viewLifecycleOwner, Observer {
             adapter.setLocation(it)
         })
+
+        binding.closeBtn.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
         binding.downBtn.setOnClickListener {
             if (!showLocation) {
                 TransitionManager.beginDelayedTransition(binding.selectedLocationCard)
@@ -126,18 +134,18 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
              findNavController().navigate(LocationReminderFragmentDirections.homeScreen())
          }*/
 
-        binding.saveLocationReminder.setOnClickListener {
+        binding.saveLocationCard.setOnClickListener {
             if (!hasLocation)
                 Toast.makeText(
                     requireContext(),
-                    "Invalid Location or Radius",
+                    "Invalid Location",
                     Toast.LENGTH_SHORT
                 ).show()
             else {
                 addGeofence(
                     latitude = location?.latitude,
                     longitude = location?.longitude,
-                    radius = 100.0
+                    radius = getRadius(minRadius, maxRadius, binding.radius.progress)
                 )
                 val notesModel = NotesModel(
                     id = notesModel.id,
@@ -148,7 +156,7 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
                     timeReminder = notesModel.timeReminder,
                     latitude = location?.latitude.toString(),
                     longitude = location?.longitude?.toString(),
-                    radius = 1000.0,
+                    radius =  getRadius(minRadius, maxRadius, binding.radius.progress),
                     repeatAlarmIndex = notesModel.repeatAlarmIndex,
                     reminderTime = notesModel.reminderTime,
                     locationName = location?.name,
@@ -163,7 +171,8 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
 
                 seekBar?.let {
-                    binding.radiusValue.text = progress.toString()
+                    binding.radiusValue.text =
+                        getRadius(minRadius, maxRadius, progress).toInt().toString()
                     val width = seekBar.width - seekBar.paddingLeft - seekBar.paddingRight
                     val thumbPos = seekBar.paddingLeft + width * seekBar.progress / seekBar.max
 
