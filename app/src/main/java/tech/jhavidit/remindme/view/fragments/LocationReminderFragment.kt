@@ -12,11 +12,13 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.SeekBar
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.activityViewModels
@@ -24,6 +26,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingClient
 import com.google.android.gms.location.LocationServices
@@ -34,6 +37,8 @@ import tech.jhavidit.remindme.model.LocationModel
 import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.util.*
 import tech.jhavidit.remindme.view.activity.LocationSearchActivity
+import tech.jhavidit.remindme.view.adapters.LocationNameAdapter
+import tech.jhavidit.remindme.viewModel.LocationViewModel
 import tech.jhavidit.remindme.viewModel.MainActivityViewModel
 import tech.jhavidit.remindme.viewModel.NotesViewModel
 
@@ -41,12 +46,17 @@ import tech.jhavidit.remindme.viewModel.NotesViewModel
 class LocationReminderFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentLocationReminderBinding
     private lateinit var viewModel: NotesViewModel
+    private lateinit var adapter: LocationNameAdapter
     private lateinit var geoFencingClient: GeofencingClient
+    private var minRadius: Double = 100.0
+    private var maxRadius: Double = 1000.0
+    private lateinit var locationViewModel: LocationViewModel
     private val activityViewModel: MainActivityViewModel by activityViewModels()
     private val args: LocationReminderFragmentArgs by navArgs()
     private lateinit var locationManager: LocationManager
     private var hasLocation = false
     private var location: LocationModel? = null
+    private var showLocation = false
     private lateinit var notesModel: NotesModel
     private lateinit var geoFencingHelper: GeoFencingHelper
     private val runningQOrLater =
@@ -59,12 +69,28 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
 
         binding = FragmentLocationReminderBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
-
+        locationViewModel = ViewModelProvider(this).get(LocationViewModel::class.java)
+        adapter = LocationNameAdapter()
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerView.adapter = adapter
+        locationViewModel.readAllData.observe(viewLifecycleOwner, Observer {
+            adapter.setLocation(it)
+        })
+        binding.downBtn.setOnClickListener {
+            if (!showLocation) {
+                TransitionManager.beginDelayedTransition(binding.selectedLocationCard)
+                showLocation = true
+                binding.recyclerView.visibility = VISIBLE
+            } else {
+                showLocation = false
+                binding.recyclerView.visibility = GONE
+            }
+        }
         activityViewModel.locationModel.observe(viewLifecycleOwner, Observer {
             it?.let {
                 hasLocation = true
                 location = it
-                binding.location.text = location?.name
+                binding.selectedLocation.text = location?.name
             }
         })
 
@@ -73,40 +99,35 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
                 notesModel = it
             } ?: run {
                 notesModel = args.currentNotes
-                binding.location.text = notesModel.locationName
-                binding.radius.setText(notesModel.radius)
-            }
-            if (notesModel.locationReminder) {
-                binding.cancelReminder.visibility = VISIBLE
-                hasLocation = true
-            } else {
-                binding.cancelReminder.visibility = GONE
-                binding.location.text = "No location selected"
+                binding.selectedLocation.text = notesModel.locationName
+                binding.radius.progress = notesModel.radius?.toInt() ?: 0
             }
         })
 
+
+
         geoFencingClient = LocationServices.getGeofencingClient(requireContext())
         geoFencingHelper = GeoFencingHelper(requireContext())
-        binding.cancelReminder.setOnClickListener {
-            val notesModel = NotesModel(
-                id = notesModel.id,
-                title = notesModel.title,
-                description = notesModel.description,
-                locationReminder = false,
-                isPinned = notesModel.isPinned,
-                timeReminder = notesModel.timeReminder,
-                repeatAlarmIndex = notesModel.repeatAlarmIndex,
-                reminderTime = notesModel.reminderTime,
-                backgroundColor = notesModel.backgroundColor,
-                image = notesModel.image,
-                lastUpdated = notesModel.lastUpdated
-            )
-            viewModel.updateNotes(notesModel)
-            findNavController().navigate(LocationReminderFragmentDirections.homeScreen())
-        }
+        /* binding.cancelReminder.setOnClickListener {
+             val notesModel = NotesModel(
+                 id = notesModel.id,
+                 title = notesModel.title,
+                 description = notesModel.description,
+                 locationReminder = false,
+                 isPinned = notesModel.isPinned,
+                 timeReminder = notesModel.timeReminder,
+                 repeatAlarmIndex = notesModel.repeatAlarmIndex,
+                 reminderTime = notesModel.reminderTime,
+                 backgroundColor = notesModel.backgroundColor,
+                 image = notesModel.image,
+                 lastUpdated = notesModel.lastUpdated
+             )
+             viewModel.updateNotes(notesModel)
+             findNavController().navigate(LocationReminderFragmentDirections.homeScreen())
+         }*/
 
         binding.saveLocationReminder.setOnClickListener {
-            if (!hasLocation && binding.radius.text.length < 3)
+            if (!hasLocation)
                 Toast.makeText(
                     requireContext(),
                     "Invalid Location or Radius",
@@ -116,7 +137,7 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
                 addGeofence(
                     latitude = location?.latitude,
                     longitude = location?.longitude,
-                    radius = binding.radius.text.toString().toDouble()
+                    radius = 100.0
                 )
                 val notesModel = NotesModel(
                     id = notesModel.id,
@@ -127,7 +148,7 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
                     timeReminder = notesModel.timeReminder,
                     latitude = location?.latitude.toString(),
                     longitude = location?.longitude?.toString(),
-                    radius = binding.radius.text.toString(),
+                    radius = 1000.0,
                     repeatAlarmIndex = notesModel.repeatAlarmIndex,
                     reminderTime = notesModel.reminderTime,
                     locationName = location?.name,
@@ -138,6 +159,31 @@ class LocationReminderFragment : BottomSheetDialogFragment() {
             }
         }
 
+        binding.radius.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+
+                seekBar?.let {
+                    binding.radiusValue.text = progress.toString()
+                    val width = seekBar.width - seekBar.paddingLeft - seekBar.paddingRight
+                    val thumbPos = seekBar.paddingLeft + width * seekBar.progress / seekBar.max
+
+                    binding.radiusMarker.measure(0, 0)
+                    val txtW: Int = binding.radiusMarker.measuredWidth
+                    val delta = txtW / 2
+                    binding.radiusMarker.x = seekBar.x + thumbPos - delta
+                }
+
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+
+            }
+
+        })
 
         binding.locationPicker.setOnClickListener {
             if (foregroundAndBackgroundLocationPermissionApproved()) {

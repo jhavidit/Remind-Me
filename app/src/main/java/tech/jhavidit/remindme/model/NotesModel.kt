@@ -19,7 +19,7 @@ data class NotesModel(
     val latitude: String? = null,
     val longitude: String? = null,
     val locationName: String? = null,
-    val radius: String? = null,
+    val radius: Double? = null,
     val repeatAlarmIndex: Int = -1,
     val isPinned: Boolean = false,
     val image: String? = null,
