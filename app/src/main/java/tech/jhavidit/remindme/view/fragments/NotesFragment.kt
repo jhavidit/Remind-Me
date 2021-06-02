@@ -17,6 +17,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.FragmentNotesBinding
 import tech.jhavidit.remindme.model.NotesModel
+import tech.jhavidit.remindme.util.CREATE
 import tech.jhavidit.remindme.view.adapters.NotesListAdapter
 import tech.jhavidit.remindme.view.adapters.SelectBackgroundColorAdapter
 import tech.jhavidit.remindme.view.fragments.CreateNotesFragmentDirections.notesList
@@ -37,14 +38,14 @@ class NotesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val bottomNavigation : BottomNavigationView? = activity?.findViewById(R.id.bottom_nav)
+        val bottomNavigation: BottomNavigationView? = activity?.findViewById(R.id.bottom_nav)
         bottomNavigation?.visibility = VISIBLE
         binding = FragmentNotesBinding.inflate(inflater, container, false)
         navController = Navigation.findNavController(requireActivity(), R.id.NavHostFragment)
         viewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
         adapter = NotesListAdapter()
         binding.recyclerView.adapter = adapter
-        val staggeredGridLayoutManager = StaggeredGridLayoutManager(2,LinearLayoutManager.VERTICAL)
+        val staggeredGridLayoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
         binding.recyclerView.layoutManager = staggeredGridLayoutManager
         viewModel.readAllData.observe(viewLifecycleOwner, Observer {
             adapter.setNotes(it)
@@ -55,7 +56,7 @@ class NotesFragment : Fragment() {
 
         binding.fabAddNotes.setOnClickListener {
             val notes = NotesModel(notesCount + 1, "", "")
-            navController.navigate(NotesFragmentDirections.updateNotes("created", notes))
+            navController.navigate(NotesFragmentDirections.updateNotes(CREATE, notes))
         }
         return binding.root
     }

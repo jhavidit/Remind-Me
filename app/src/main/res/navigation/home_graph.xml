@@ -31,9 +31,27 @@
         android:label="SettingsFragment" />
 
     <fragment
-        android:id="@+id/eventsFragment"
+        android:id="@+id/reminderFragment"
         android:name="tech.jhavidit.remindme.view.fragments.ReminderFragment"
-        android:label="EventsFragment" />
+        android:label="EventsFragment">
+
+        <action
+            android:id="@+id/editReminder"
+            app:destination="@id/createNotesFragment">
+
+            <argument
+                android:name="update"
+                app:argType="string" />
+
+            <argument
+                android:name="currentNotes"
+                app:argType="tech.jhavidit.remindme.model.NotesModel" />
+
+
+        </action>
+
+
+    </fragment>
 
     <fragment
         android:id="@+id/createNotesFragment"
@@ -122,6 +140,10 @@
             app:destination="@id/activeReminderBottomSheet">
 
             <argument
+                android:name="reminderType"
+                app:argType="string" />
+
+            <argument
                 android:name="currentNotes"
                 app:argType="tech.jhavidit.remindme.model.NotesModel" />
 
@@ -194,6 +216,10 @@
         <argument
             android:name="currentNotes"
             app:argType="tech.jhavidit.remindme.model.NotesModel" />
+
+        <argument
+            android:name="reminderType"
+            app:argType="string" />
 
     </dialog>
 

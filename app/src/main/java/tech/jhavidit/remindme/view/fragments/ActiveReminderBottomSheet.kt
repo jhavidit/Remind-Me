@@ -16,6 +16,8 @@ import tech.jhavidit.remindme.databinding.BottomSheetActiveReminderBinding
 import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.receiver.AlarmReceiver
 import tech.jhavidit.remindme.receiver.GeoFencingReceiver
+import tech.jhavidit.remindme.util.LOCATION
+import tech.jhavidit.remindme.util.TIME
 import tech.jhavidit.remindme.viewModel.NotesViewModel
 
 class ActiveReminderBottomSheet : BottomSheetDialogFragment() {
@@ -37,9 +39,9 @@ class ActiveReminderBottomSheet : BottomSheetDialogFragment() {
             findNavController().navigateUp()
         }
         viewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
-        if (!args.currentNotes.locationReminder)
+        if (args.reminderType == TIME)
             binding.locationReminderCard.visibility = GONE
-        else if (!args.currentNotes.timeReminder)
+        else if (args.reminderType == LOCATION)
             binding.timeReminderCard.visibility = GONE
         binding.editLocationReminder.setOnClickListener {
             findNavController().navigate(
@@ -65,7 +67,7 @@ class ActiveReminderBottomSheet : BottomSheetDialogFragment() {
                         id = args.currentNotes.id,
                         title = args.currentNotes.title,
                         description = args.currentNotes.description,
-                        locationReminder = false,
+                        locationReminder = null,
                         timeReminder = args.currentNotes.timeReminder,
                         reminderTime = args.currentNotes.reminderTime,
                         isPinned = args.currentNotes.isPinned,
@@ -78,7 +80,7 @@ class ActiveReminderBottomSheet : BottomSheetDialogFragment() {
                     )
                     viewModel.updateNotes(notes)
                     findNavController().popBackStack()
-                    findNavController().navigate(R.id.homeScreen)
+                    findNavController().navigate(R.id.notesFragment)
                 }
                 .setNegativeButton(
                     "Cancel"
@@ -102,7 +104,7 @@ class ActiveReminderBottomSheet : BottomSheetDialogFragment() {
                         title = args.currentNotes.title,
                         description = args.currentNotes.description,
                         locationReminder = args.currentNotes.locationReminder,
-                        timeReminder = false,
+                        timeReminder = null,
                         reminderTime = null,
                         latitude = args.currentNotes.latitude,
                         longitude = args.currentNotes.longitude,
@@ -115,7 +117,7 @@ class ActiveReminderBottomSheet : BottomSheetDialogFragment() {
                     )
                     viewModel.updateNotes(notes)
                     findNavController().popBackStack()
-                    findNavController().navigate(R.id.homeScreen)
+                    findNavController().navigate(R.id.notesFragment)
                 }
                 .setNegativeButton(
                     "Cancel"

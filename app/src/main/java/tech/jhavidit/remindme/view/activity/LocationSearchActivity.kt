@@ -84,22 +84,7 @@ class LocationSearchActivity : AppCompatActivity(), OnMapReadyCallback,
 
         binding.selectLocation.setOnClickListener {
 
-          /*  val latLng = map?.cameraPosition?.target
-            latLng?.let {
-                val locationModel = LocationModel(
-                    id = 0,
-                    latitude = it.latitude,
-                    longitude = it.longitude,
-                    placeId = locationId,
-                    name = locationPlace
-                )
-                viewModel.addLocation(locationModel)
-                val intent = Intent(this, MainActivity::class.java)
-                intent.putExtra("notes", notesModel)
-                intent.putExtra("location", locationModel)
-                startActivity(intent)
 
-            }*/
             showDialog()
         }
 

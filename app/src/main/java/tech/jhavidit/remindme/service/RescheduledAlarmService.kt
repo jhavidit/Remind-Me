@@ -54,11 +54,11 @@ class RescheduledAlarmService : LifecycleService() {
         val geoFencingReceiver = GeoFencingReceiver()
         notesRepository.readAllData.observe(this, Observer { notes ->
             notes?.forEach { currentNote ->
-                if (currentNote.timeReminder) {
+                if (currentNote.timeReminder == true) {
                     alarmReceiver.scheduleAlarm(applicationContext, currentNote)
                 }
                 if (foregroundAndBackgroundLocationPermissionApproved(applicationContext)) {
-                    if (currentNote.locationReminder) {
+                    if (currentNote.locationReminder == true) {
                         if (currentNote.latitude != null && currentNote.longitude != null && currentNote.radius != null)
                             geoFencingReceiver.addLocationReminder(
                                 context = applicationContext,

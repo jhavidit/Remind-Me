@@ -8,6 +8,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import tech.jhavidit.remindme.databinding.BottomSheetReminderBinding
+import tech.jhavidit.remindme.util.LOCATION
+import tech.jhavidit.remindme.util.TIME
 
 class ReminderSelectBottomSheet : BottomSheetDialogFragment() {
     private lateinit var binding: BottomSheetReminderBinding
@@ -21,15 +23,25 @@ class ReminderSelectBottomSheet : BottomSheetDialogFragment() {
         binding = BottomSheetReminderBinding.inflate(inflater, container, false)
 
         binding.timeReminderCard.setOnClickListener {
-            if (args.currentNotes.timeReminder)
-                findNavController().navigate(ReminderSelectBottomSheetDirections.activeReminder(args.currentNotes))
+            if (args.currentNotes.timeReminder!=null)
+                findNavController().navigate(
+                    ReminderSelectBottomSheetDirections.activeReminder(
+                        TIME,
+                        args.currentNotes
+                    )
+                )
             else
                 findNavController().navigate(ReminderSelectBottomSheetDirections.timeReminder(args.currentNotes))
         }
 
+
         binding.locationReminderCard.setOnClickListener {
-            if (args.currentNotes.locationReminder)
-                findNavController().navigate(ReminderSelectBottomSheetDirections.activeReminder(args.currentNotes))
+            if (args.currentNotes.locationReminder!=null)
+                findNavController().navigate(
+                    ReminderSelectBottomSheetDirections.activeReminder(
+                        LOCATION, args.currentNotes
+                    )
+                )
             else
                 findNavController().navigate(
                     ReminderSelectBottomSheetDirections.locationReminder(
