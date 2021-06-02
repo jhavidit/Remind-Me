@@ -53,16 +53,6 @@
 
 
         <action
-            android:id="@+id/activeReminder"
-            app:destination="@id/activeReminderBottomSheet">
-
-            <argument
-                android:name="currentNotes"
-                app:argType="tech.jhavidit.remindme.model.NotesModel" />
-
-        </action>
-
-        <action
             android:id="@+id/addReminder"
             app:destination="@id/reminderSelectBottomSheet">
 
@@ -126,6 +116,18 @@
             android:name="currentNotes"
             app:argType="tech.jhavidit.remindme.model.NotesModel" />
 
+
+        <action
+            android:id="@+id/activeReminder"
+            app:destination="@id/activeReminderBottomSheet">
+
+            <argument
+                android:name="currentNotes"
+                app:argType="tech.jhavidit.remindme.model.NotesModel" />
+
+
+        </action>
+
         <action
             android:id="@+id/timeReminder"
             app:destination="@id/timeReminderFragment">
@@ -180,7 +182,7 @@
 
         <action
             android:id="@+id/editLocationReminder"
-            app:destination="@id/locationReminder">
+            app:destination="@id/locationReminderFragment">
 
             <argument
                 android:name="currentNotes"

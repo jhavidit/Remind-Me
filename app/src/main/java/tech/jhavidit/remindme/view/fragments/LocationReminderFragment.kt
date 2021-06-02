@@ -56,7 +56,6 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
     private val activityViewModel: MainActivityViewModel by activityViewModels()
     private val args: LocationReminderFragmentArgs by navArgs()
     private lateinit var locationManager: LocationManager
-    private var hasLocation = false
     private var selectedLocation: LocationModel? = null
     private var showLocation = false
     private lateinit var notesModel: NotesModel
@@ -77,151 +76,11 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
         binding.radiusValue.text = minRadius.toInt().toString()
-        binding.minRadius.text = "${minRadius.toInt()} m"
-        binding.maxRadius.text = "${maxRadius.toInt()} m"
-        locationViewModel.readAllData.observe(viewLifecycleOwner, Observer {
-            adapter.setLocation(it)
-        })
-
-        binding.closeBtn.setOnClickListener {
-            findNavController().navigateUp()
-        }
-
-        binding.downBtn.setOnClickListener {
-            if (!showLocation) {
-                TransitionManager.beginDelayedTransition(binding.selectedLocationCard)
-                showLocation = true
-                binding.recyclerView.visibility = VISIBLE
-            } else {
-                showLocation = false
-                binding.recyclerView.visibility = GONE
-            }
-        }
-        activityViewModel.locationModel.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                hasLocation = true
-                selectedLocation = it
-                binding.selectedLocation.text = selectedLocation?.name
-            }
-        })
-
-        activityViewModel.notesModel.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                notesModel = it
-            } ?: run {
-                notesModel = args.currentNotes
-                binding.selectedLocation.text = notesModel.locationName
-                // binding.radius.progress = notesModel.radius?.toInt() ?: 0
-            }
-        })
-
-
-
+        binding.minRadius.text = "${minRadius.toInt()}m"
+        binding.maxRadius.text = "${maxRadius.toInt()}m"
         geoFencingClient = LocationServices.getGeofencingClient(requireContext())
         geoFencingHelper = GeoFencingHelper(requireContext())
-        /* binding.cancelReminder.setOnClickListener {
-             val notesModel = NotesModel(
-                 id = notesModel.id,
-                 title = notesModel.title,
-                 description = notesModel.description,
-                 locationReminder = false,
-                 isPinned = notesModel.isPinned,
-                 timeReminder = notesModel.timeReminder,
-                 repeatAlarmIndex = notesModel.repeatAlarmIndex,
-                 reminderTime = notesModel.reminderTime,
-                 backgroundColor = notesModel.backgroundColor,
-                 image = notesModel.image,
-                 lastUpdated = notesModel.lastUpdated
-             )
-             viewModel.updateNotes(notesModel)
-             findNavController().navigate(LocationReminderFragmentDirections.homeScreen())
-         }*/
 
-        binding.saveLocationCard.setOnClickListener {
-            if (!hasLocation)
-                Toast.makeText(
-                    requireContext(),
-                    "Invalid Location",
-                    Toast.LENGTH_SHORT
-                ).show()
-            else {
-                val latitude = selectedLocation?.latitude
-                val longitude = selectedLocation?.longitude
-                if (latitude == null || longitude == null) {
-                    toast(requireContext(), "Select Location is invalid")
-                } else if (!foregroundAndBackgroundLocationPermissionApproved(requireContext())) {
-                    geoFencingReceiver.addLocationReminder(
-                        context = requireContext(),
-                        id = notesModel.id,
-                        latitude = latitude,
-                        longitude = longitude,
-                        radius = getRadius(minRadius, maxRadius, binding.radius.progress)
-                    )
-                    val notesModel = NotesModel(
-                        id = notesModel.id,
-                        title = notesModel.title,
-                        description = notesModel.description,
-                        locationReminder = true,
-                        isPinned = notesModel.isPinned,
-                        timeReminder = notesModel.timeReminder,
-                        latitude = selectedLocation?.latitude.toString(),
-                        longitude = selectedLocation?.longitude?.toString(),
-                        radius = getRadius(minRadius, maxRadius, binding.radius.progress),
-                        repeatAlarmIndex = notesModel.repeatAlarmIndex,
-                        reminderTime = notesModel.reminderTime,
-                        locationName = selectedLocation?.name,
-                        backgroundColor = notesModel.backgroundColor
-                    )
-
-                    viewModel.updateNotes(notesModel)
-                    findNavController().navigate(LocationReminderFragmentDirections.homeScreen())
-
-                } else {
-                    requestForegroundAndBackgroundLocationPermissions()
-                }
-            }
-        }
-
-        binding.radius.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-
-                seekBar?.let {
-                    binding.radiusValue.text =
-                        getRadius(minRadius, maxRadius, progress).toInt().toString()
-                    val width = seekBar.width - seekBar.paddingLeft - seekBar.paddingRight
-                    val thumbPos = seekBar.paddingLeft + width * seekBar.progress / seekBar.max
-
-                    binding.radiusMarker.measure(0, 0)
-                    val txtW: Int = binding.radiusMarker.measuredWidth
-                    val delta = txtW / 2
-                    binding.radiusMarker.x = seekBar.x + thumbPos - delta
-                }
-
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-
-            }
-
-        })
-
-        binding.locationPicker.setOnClickListener {
-            if (foregroundAndBackgroundLocationPermissionApproved(requireContext())) {
-                locationManager =
-                    context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-                if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    onGPS()
-                } else {
-                    getLastKnownLocation()
-                }
-
-            } else
-                requestForegroundAndBackgroundLocationPermissions()
-        }
         return binding.root
     }
 
@@ -327,5 +186,134 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
     override fun clickListener(location: LocationModel) {
         selectedLocation = location
         binding.selectedLocation.text = location.name
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        locationViewModel.readAllData.observe(viewLifecycleOwner, Observer {
+            adapter.setLocation(it)
+        })
+
+        binding.closeBtn.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
+        binding.downBtn.setOnClickListener {
+            if (!showLocation) {
+                TransitionManager.beginDelayedTransition(binding.selectedLocationCard)
+                showLocation = true
+                binding.recyclerView.visibility = VISIBLE
+            } else {
+                showLocation = false
+                binding.recyclerView.visibility = GONE
+            }
+        }
+        activityViewModel.locationModel.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                selectedLocation = it
+                binding.selectedLocation.text = selectedLocation?.name
+            }
+        })
+
+        activityViewModel.notesModel.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                notesModel = it
+            } ?: run {
+                notesModel = args.currentNotes
+                binding.selectedLocation.text = notesModel.locationName
+                //   binding.radius.progress = notesModel.radius?.toInt() ?: 0
+            }
+        })
+
+
+
+        binding.saveLocationCard.setOnClickListener {
+            if (selectedLocation == null)
+                Toast.makeText(
+                    requireContext(),
+                    "Invalid Location",
+                    Toast.LENGTH_SHORT
+                ).show()
+            else {
+                val latitude = selectedLocation?.latitude
+                val longitude = selectedLocation?.longitude
+                if (latitude == null || longitude == null) {
+                    toast(requireContext(), "Select Location is invalid")
+                } else if (foregroundAndBackgroundLocationPermissionApproved(requireContext())) {
+                    geoFencingReceiver.addLocationReminder(
+                        context = requireContext(),
+                        id = notesModel.id,
+                        latitude = latitude,
+                        longitude = longitude,
+                        radius = getRadius(minRadius, maxRadius, binding.radius.progress)
+                    )
+                    val notesModel = NotesModel(
+                        id = notesModel.id,
+                        title = notesModel.title,
+                        description = notesModel.description,
+                        locationReminder = true,
+                        isPinned = notesModel.isPinned,
+                        timeReminder = notesModel.timeReminder,
+                        latitude = selectedLocation?.latitude.toString(),
+                        longitude = selectedLocation?.longitude?.toString(),
+                        radius = getRadius(minRadius, maxRadius, binding.radius.progress),
+                        repeatAlarmIndex = notesModel.repeatAlarmIndex,
+                        reminderTime = notesModel.reminderTime,
+                        locationName = selectedLocation?.name,
+                        backgroundColor = notesModel.backgroundColor
+                    )
+
+                    viewModel.updateNotes(notesModel)
+                    findNavController().navigate(LocationReminderFragmentDirections.homeScreen())
+
+                } else {
+                    requestForegroundAndBackgroundLocationPermissions()
+                }
+            }
+        }
+
+        binding.radius.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+
+                seekBar?.let {
+                    binding.radiusValue.text =
+                        getRadius(minRadius, maxRadius, progress).toInt().toString()
+                    val width = seekBar.width - seekBar.paddingLeft - seekBar.paddingRight
+                    val thumbPos = seekBar.paddingLeft + width * seekBar.progress / seekBar.max
+
+                    binding.radiusMarker.measure(0, 0)
+                    val txtW: Int = binding.radiusMarker.measuredWidth
+                    val delta = txtW / 2
+                    binding.radiusMarker.x = seekBar.x + thumbPos - delta
+                }
+
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+
+            }
+
+        })
+
+        binding.locationPicker.setOnClickListener {
+            if (foregroundAndBackgroundLocationPermissionApproved(requireContext())) {
+                locationManager =
+                    context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    onGPS()
+                } else {
+                    getLastKnownLocation()
+                }
+
+            } else
+                requestForegroundAndBackgroundLocationPermissions()
+        }
+
+
     }
 }

@@ -9,23 +9,18 @@ import tech.jhavidit.remindme.model.LocationModel
 import tech.jhavidit.remindme.model.NotesModel
 
 class MainActivityViewModel : ViewModel() {
-     val locationModel = MutableLiveData<LocationModel>()
-     val notesModel = MutableLiveData<NotesModel>()
+    val locationModel = MutableLiveData<LocationModel>()
+    val notesModel = MutableLiveData<NotesModel>()
 
     fun getLocation(location: LocationModel) {
-        viewModelScope.launch(Dispatchers.IO) {
-            locationModel.value = location
-        }
+        locationModel.value = location
     }
 
     fun getNotes(note: NotesModel) {
-        viewModelScope.launch(Dispatchers.IO) {
-            notesModel.value = note
-        }
+        notesModel.value = note
     }
 
-    fun clearData()
-    {
+    fun clearData() {
         locationModel.value = null
         notesModel.value = null
     }

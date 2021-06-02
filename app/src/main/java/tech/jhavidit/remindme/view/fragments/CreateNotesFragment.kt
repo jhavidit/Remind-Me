@@ -192,10 +192,7 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                 locationName = args.currentNotes.locationName,
                 backgroundColor = args.currentNotes.backgroundColor
             )
-            if (!notes.timeReminder && !notes.locationReminder)
-                navController.navigate(CreateNotesFragmentDirections.addReminder(notes))
-            else
-                navController.navigate(CreateNotesFragmentDirections.activeReminder(notes))
+            navController.navigate(CreateNotesFragmentDirections.addReminder(notes))
         }
 
         binding.title.addTextChangedListener(textWatcher)

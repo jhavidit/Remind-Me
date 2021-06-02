@@ -21,11 +21,21 @@ class ReminderSelectBottomSheet : BottomSheetDialogFragment() {
         binding = BottomSheetReminderBinding.inflate(inflater, container, false)
 
         binding.timeReminderCard.setOnClickListener {
-            findNavController().navigate(ReminderSelectBottomSheetDirections.timeReminder(args.currentNotes))
+            if (args.currentNotes.timeReminder)
+                findNavController().navigate(ReminderSelectBottomSheetDirections.activeReminder(args.currentNotes))
+            else
+                findNavController().navigate(ReminderSelectBottomSheetDirections.timeReminder(args.currentNotes))
         }
 
         binding.locationReminderCard.setOnClickListener {
-            findNavController().navigate(ReminderSelectBottomSheetDirections.locationReminder(args.currentNotes))
+            if (args.currentNotes.locationReminder)
+                findNavController().navigate(ReminderSelectBottomSheetDirections.activeReminder(args.currentNotes))
+            else
+                findNavController().navigate(
+                    ReminderSelectBottomSheetDirections.locationReminder(
+                        args.currentNotes
+                    )
+                )
         }
 
         binding.closeBtn.setOnClickListener {

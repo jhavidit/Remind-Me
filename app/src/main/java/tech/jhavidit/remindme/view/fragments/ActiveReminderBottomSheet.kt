@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.BottomSheetActiveReminderBinding
 import tech.jhavidit.remindme.model.NotesModel
@@ -51,43 +52,78 @@ class ActiveReminderBottomSheet : BottomSheetDialogFragment() {
             findNavController().navigate(ActiveReminderBottomSheetDirections.editTimeReminder(args.currentNotes))
         }
         binding.deleteLocationReminder.setOnClickListener {
-            geoFencingReceiver.cancelLocationReminder(requireContext(), args.currentNotes.id)
-            val notes = NotesModel(
-                id = args.currentNotes.id,
-                title = args.currentNotes.title,
-                description = args.currentNotes.description,
-                locationReminder = false,
-                timeReminder = args.currentNotes.timeReminder,
-                reminderTime = args.currentNotes.reminderTime,
-                isPinned = args.currentNotes.isPinned,
-                latitude = null,
-                longitude = null,
-                radius = null,
-                repeatAlarmIndex = args.currentNotes.repeatAlarmIndex,
-                locationName = null,
-                backgroundColor = args.currentNotes.backgroundColor
-            )
-            viewModel.updateNotes(notes)
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Are you sure want to delete this location reminder?")
+                .setPositiveButton(
+                    "Delete"
+                ) { _, _ ->
+                    geoFencingReceiver.cancelLocationReminder(
+                        requireContext(),
+                        args.currentNotes.id
+                    )
+                    val notes = NotesModel(
+                        id = args.currentNotes.id,
+                        title = args.currentNotes.title,
+                        description = args.currentNotes.description,
+                        locationReminder = false,
+                        timeReminder = args.currentNotes.timeReminder,
+                        reminderTime = args.currentNotes.reminderTime,
+                        isPinned = args.currentNotes.isPinned,
+                        latitude = null,
+                        longitude = null,
+                        radius = null,
+                        repeatAlarmIndex = args.currentNotes.repeatAlarmIndex,
+                        locationName = null,
+                        backgroundColor = args.currentNotes.backgroundColor
+                    )
+                    viewModel.updateNotes(notes)
+                    findNavController().popBackStack()
+                    findNavController().navigate(R.id.homeScreen)
+                }
+                .setNegativeButton(
+                    "Cancel"
+                ) { dialogInterface, _ ->
+                    dialogInterface.dismiss()
+                }
+                .show()
+
+
         }
         binding.deleteTimeReminder.setOnClickListener {
-            alarmReceiver.cancelAlarm(requireContext(), args.currentNotes.id)
-            val notes = NotesModel(
-                id = args.currentNotes.id,
-                title = args.currentNotes.title,
-                description = args.currentNotes.description,
-                locationReminder = args.currentNotes.locationReminder,
-                timeReminder = false,
-                reminderTime = null,
-                latitude = args.currentNotes.latitude,
-                longitude = args.currentNotes.longitude,
-                isPinned = args.currentNotes.isPinned,
-                radius = args.currentNotes.radius,
-                repeatAlarmIndex = -1,
-                locationName = args.currentNotes.locationName,
-                backgroundColor = args.currentNotes.backgroundColor,
-                lastUpdated = args.currentNotes.lastUpdated
-            )
-            viewModel.updateNotes(notes)
+
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Are you sure want to delete this time reminder?")
+                .setPositiveButton(
+                    "Delete"
+                ) { _, _ ->
+                    alarmReceiver.cancelAlarm(requireContext(), args.currentNotes.id)
+                    val notes = NotesModel(
+                        id = args.currentNotes.id,
+                        title = args.currentNotes.title,
+                        description = args.currentNotes.description,
+                        locationReminder = args.currentNotes.locationReminder,
+                        timeReminder = false,
+                        reminderTime = null,
+                        latitude = args.currentNotes.latitude,
+                        longitude = args.currentNotes.longitude,
+                        isPinned = args.currentNotes.isPinned,
+                        radius = args.currentNotes.radius,
+                        repeatAlarmIndex = -1,
+                        locationName = args.currentNotes.locationName,
+                        backgroundColor = args.currentNotes.backgroundColor,
+                        lastUpdated = args.currentNotes.lastUpdated
+                    )
+                    viewModel.updateNotes(notes)
+                    findNavController().popBackStack()
+                    findNavController().navigate(R.id.homeScreen)
+                }
+                .setNegativeButton(
+                    "Cancel"
+                ) { dialogInterface, _ ->
+                    dialogInterface.dismiss()
+                }
+                .show()
+
         }
         return binding.root
 
