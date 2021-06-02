@@ -18,6 +18,7 @@ import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.FragmentNotesBinding
 import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.util.CREATE
+import tech.jhavidit.remindme.util.toast
 import tech.jhavidit.remindme.view.adapters.NotesListAdapter
 import tech.jhavidit.remindme.view.adapters.SelectBackgroundColorAdapter
 import tech.jhavidit.remindme.view.fragments.CreateNotesFragmentDirections.notesList
@@ -48,6 +49,13 @@ class NotesFragment : Fragment() {
         val staggeredGridLayoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
         binding.recyclerView.layoutManager = staggeredGridLayoutManager
         viewModel.readAllData.observe(viewLifecycleOwner, Observer {
+            it.forEach { note ->
+                if (note.locationReminder == null && note.timeReminder == null && note.description.isEmpty() && note.title.isEmpty()) {
+                    viewModel.deleteNotes(note)
+                    toast(requireContext(), "empty note discarded")
+                }
+            }
+
             adapter.setNotes(it)
         })
         viewModel.notesCount.observe(viewLifecycleOwner, Observer {
