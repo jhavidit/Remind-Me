@@ -89,7 +89,7 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Enable GPS")
             .setPositiveButton(
-                "Delete"
+                "Enable"
             ) { _, _ ->
                 startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
             }
@@ -186,6 +186,7 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
     override fun clickListener(location: LocationModel) {
         selectedLocation = location
         binding.selectedLocation.text = location.name
+        binding.selectedLocation.alpha = 1F
 
     }
 
@@ -213,8 +214,10 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
             it?.let {
                 selectedLocation = it
                 binding.selectedLocation.text = selectedLocation?.name
+                binding.selectedLocation.alpha = 1F
             }
         })
+
 
         activityViewModel.notesModel.observe(viewLifecycleOwner, Observer {
             it?.let {

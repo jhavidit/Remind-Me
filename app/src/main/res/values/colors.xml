@@ -11,4 +11,5 @@
     <color name="title_color">#212121</color>
     <color name="description_color">#616161</color>
     <color name="red">#FB4F4F</color>
+    <color name="grey_toggle">#B0B0B0</color>
 </resources>

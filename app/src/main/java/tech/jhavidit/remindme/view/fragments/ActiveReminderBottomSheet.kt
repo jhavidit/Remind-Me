@@ -16,8 +16,7 @@ import tech.jhavidit.remindme.databinding.BottomSheetActiveReminderBinding
 import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.receiver.AlarmReceiver
 import tech.jhavidit.remindme.receiver.GeoFencingReceiver
-import tech.jhavidit.remindme.util.LOCATION
-import tech.jhavidit.remindme.util.TIME
+import tech.jhavidit.remindme.util.*
 import tech.jhavidit.remindme.viewModel.NotesViewModel
 
 class ActiveReminderBottomSheet : BottomSheetDialogFragment() {
@@ -39,10 +38,17 @@ class ActiveReminderBottomSheet : BottomSheetDialogFragment() {
             findNavController().navigateUp()
         }
         viewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
-        if (args.reminderType == TIME)
+        if (args.reminderType == TIME) {
             binding.locationReminderCard.visibility = GONE
-        else if (args.reminderType == LOCATION)
+            binding.timeReminderSwitch.isChecked = args.currentNotes.timeReminder ?: false
+            binding.reminderTime.text = args.currentNotes.reminderTime.toString()
+            binding.reminderRepeat.text = args.currentNotes.repeatAlarmIndex.toString()
+        } else if (args.reminderType == LOCATION) {
             binding.timeReminderCard.visibility = GONE
+            binding.locationReminderSwitch.isChecked = args.currentNotes.locationReminder ?: false
+            binding.locationName.text = args.currentNotes.locationName
+            binding.locationRadius.text = "Radius - ${args.currentNotes.radius?.toInt()}m"
+        }
         binding.editLocationReminder.setOnClickListener {
             findNavController().navigate(
                 ActiveReminderBottomSheetDirections.editLocationReminder(
@@ -91,6 +97,102 @@ class ActiveReminderBottomSheet : BottomSheetDialogFragment() {
 
 
         }
+        binding.timeReminderSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                alarmReceiver.scheduleAlarm(requireContext(), args.currentNotes)
+                val notes = NotesModel(
+                    id = args.currentNotes.id,
+                    title = args.currentNotes.title,
+                    description = args.currentNotes.description,
+                    locationReminder = args.currentNotes.locationReminder,
+                    timeReminder = true,
+                    reminderTime = args.currentNotes.reminderTime,
+                    latitude = args.currentNotes.latitude,
+                    longitude = args.currentNotes.longitude,
+                    isPinned = args.currentNotes.isPinned,
+                    radius = args.currentNotes.radius,
+                    repeatAlarmIndex = args.currentNotes.repeatAlarmIndex,
+                    locationName = args.currentNotes.locationName,
+                    backgroundColor = args.currentNotes.backgroundColor,
+                    lastUpdated = args.currentNotes.lastUpdated
+                )
+                viewModel.updateNotes(notes)
+            } else {
+                alarmReceiver.cancelAlarm(requireContext(), args.currentNotes.id)
+                val notes = NotesModel(
+                    id = args.currentNotes.id,
+                    title = args.currentNotes.title,
+                    description = args.currentNotes.description,
+                    locationReminder = args.currentNotes.locationReminder,
+                    timeReminder = false,
+                    reminderTime = args.currentNotes.reminderTime,
+                    latitude = args.currentNotes.latitude,
+                    longitude = args.currentNotes.longitude,
+                    isPinned = args.currentNotes.isPinned,
+                    radius = args.currentNotes.radius,
+                    repeatAlarmIndex = args.currentNotes.repeatAlarmIndex,
+                    locationName = args.currentNotes.locationName,
+                    backgroundColor = args.currentNotes.backgroundColor,
+                    lastUpdated = args.currentNotes.lastUpdated
+                )
+                viewModel.updateNotes(notes)
+            }
+        }
+
+        binding.locationReminderSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                if (foregroundAndBackgroundLocationPermissionApproved(requireContext())) {
+                    geoFencingReceiver.addLocationReminder(
+                        context = requireContext(),
+                        id = args.currentNotes.id,
+                        latitude = args.currentNotes.latitude!!,
+                        longitude = args.currentNotes.longitude!!,
+                        radius = args.currentNotes.radius!!
+                    )
+                    val notes = NotesModel(
+                        id = args.currentNotes.id,
+                        title = args.currentNotes.title,
+                        description = args.currentNotes.description,
+                        locationReminder = args.currentNotes.locationReminder,
+                        timeReminder = true,
+                        reminderTime = args.currentNotes.reminderTime,
+                        latitude = args.currentNotes.latitude,
+                        longitude = args.currentNotes.longitude,
+                        isPinned = args.currentNotes.isPinned,
+                        radius = args.currentNotes.radius,
+                        repeatAlarmIndex = args.currentNotes.repeatAlarmIndex,
+                        locationName = args.currentNotes.locationName,
+                        backgroundColor = args.currentNotes.backgroundColor,
+                        lastUpdated = args.currentNotes.lastUpdated
+                    )
+                    viewModel.updateNotes(notes)
+                } else {
+                    showLocationPermissionAlertDialog(requireContext())
+                }
+            } else {
+                geoFencingReceiver.cancelLocationReminder(requireContext(), args.currentNotes.id)
+                val notes = NotesModel(
+                    id = args.currentNotes.id,
+                    title = args.currentNotes.title,
+                    description = args.currentNotes.description,
+                    locationReminder = args.currentNotes.locationReminder,
+                    timeReminder = false,
+                    reminderTime = args.currentNotes.reminderTime,
+                    latitude = args.currentNotes.latitude,
+                    longitude = args.currentNotes.longitude,
+                    isPinned = args.currentNotes.isPinned,
+                    radius = args.currentNotes.radius,
+                    repeatAlarmIndex = args.currentNotes.repeatAlarmIndex,
+                    locationName = args.currentNotes.locationName,
+                    backgroundColor = args.currentNotes.backgroundColor,
+                    lastUpdated = args.currentNotes.lastUpdated
+                )
+                viewModel.updateNotes(notes)
+
+            }
+
+        }
+
         binding.deleteTimeReminder.setOnClickListener {
 
             MaterialAlertDialogBuilder(requireContext())

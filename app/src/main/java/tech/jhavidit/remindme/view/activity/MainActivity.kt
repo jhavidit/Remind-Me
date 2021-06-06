@@ -3,6 +3,7 @@ package tech.jhavidit.remindme.view.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -11,6 +12,8 @@ import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.ActivityMainBinding
 import tech.jhavidit.remindme.model.LocationModel
 import tech.jhavidit.remindme.model.NotesModel
+import tech.jhavidit.remindme.view.fragments.LocationReminderFragment
+import tech.jhavidit.remindme.view.fragments.LocationReminderFragmentArgs
 import tech.jhavidit.remindme.viewModel.MainActivityViewModel
 import tech.jhavidit.remindme.viewModel.NotesViewModel
 
@@ -30,7 +33,7 @@ class MainActivity : AppCompatActivity() {
             val locationModel = intent.getParcelableExtra<LocationModel>("location")
             locationModel?.let { activityViewModel.getLocation(it) }
             notesModel?.let { activityViewModel.getNotes(it) }
-            navController.navigate(R.id.locationReminderFragment)
+           navController.navigate(R.id.locationReminderFragment)
         }
         bottomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {

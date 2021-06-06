@@ -62,6 +62,7 @@
             android:id="@+id/uploadImage"
             app:destination="@id/addImageBottomSheet">
 
+
             <argument
                 android:name="currentNotes"
                 app:argType="tech.jhavidit.remindme.model.NotesModel" />

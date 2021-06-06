@@ -25,6 +25,8 @@ private val channelName = "Remind Me"
 
 fun notification(context: Context, title: String, pendingIntent: PendingIntent) {
 
+
+
     val notificationManager =
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     // checking if android version is greater than oreo(API 26) or not

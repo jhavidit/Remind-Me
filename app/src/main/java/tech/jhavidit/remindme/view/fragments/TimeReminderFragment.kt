@@ -163,7 +163,7 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
             )
             viewModel.updateNotes(notes)
             alarmReceiver.scheduleAlarm(requireContext(), notes)
-            findNavController().navigateUp()
+            findNavController().navigate(R.id.notesFragment)
 
         }
 
