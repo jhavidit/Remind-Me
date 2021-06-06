@@ -154,13 +154,11 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
             return
         }
 
-        // Else request the permission
-        // this provides the result[LOCATION_PERMISSION_INDEX]
         var permissionsArray = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
 
         val resultCode = when {
             runningQOrLater -> {
-                // this provides the result[BACKGROUND_LOCATION_PERMISSION_INDEX]
+
                 permissionsArray += Manifest.permission.ACCESS_BACKGROUND_LOCATION
                 REQUEST_FOREGROUND_AND_BACKGROUND_PERMISSION_RESULT_CODE
             }
@@ -187,7 +185,8 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
         selectedLocation = location
         binding.selectedLocation.text = location.name
         binding.selectedLocation.alpha = 1F
-
+        binding.recyclerView.visibility = GONE
+        showLocation = false
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -215,6 +214,8 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
                 selectedLocation = it
                 binding.selectedLocation.text = selectedLocation?.name
                 binding.selectedLocation.alpha = 1F
+            } ?: kotlin.run {
+                binding.selectedLocation.alpha = 0.2F
             }
         })
 
@@ -242,7 +243,7 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
                 val latitude = selectedLocation?.latitude
                 val longitude = selectedLocation?.longitude
                 if (latitude == null || longitude == null) {
-                    toast(requireContext(), "Select Location is invalid")
+                    toast(requireContext(), "Selected Location is invalid")
                 } else if (foregroundAndBackgroundLocationPermissionApproved(requireContext())) {
                     geoFencingReceiver.addLocationReminder(
                         context = requireContext(),
@@ -302,6 +303,9 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
             }
 
         })
+
+        if (binding.locationReminderText.text.isEmpty())
+            binding.locationReminderText.text = "Select or Add Location using Google Maps"
 
         binding.locationPicker.setOnClickListener {
             if (foregroundAndBackgroundLocationPermissionApproved(requireContext())) {

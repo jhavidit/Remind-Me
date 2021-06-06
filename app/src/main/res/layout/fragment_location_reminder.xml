@@ -121,7 +121,6 @@
                             android:layout_weight="9"
                             android:alpha="0.2"
                             android:fontFamily="@font/alata_regular"
-                            android:text="Select"
                             android:textColor="#323232"
                             android:textSize="@dimen/dimen_text_20"
                             app:layout_constraintStart_toStartOf="parent"

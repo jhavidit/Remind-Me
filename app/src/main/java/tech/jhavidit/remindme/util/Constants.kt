@@ -13,5 +13,6 @@ const val TIME = "time"
 const val LOCATION = "location"
 const val UPDATE = "update"
 const val CREATE = "created"
+const val AUTOCOMPLETE_REQUEST_CODE = 1
 val runningQOrLater =
     android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q
