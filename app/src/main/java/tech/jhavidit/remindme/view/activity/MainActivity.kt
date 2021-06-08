@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var navController: NavController
-    private lateinit var viewModel : NotesViewModel
+    private lateinit var viewModel: NotesViewModel
     private val activityViewModel: MainActivityViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,10 +32,8 @@ class MainActivity : AppCompatActivity() {
         if (intent.hasExtra("notes") && intent.hasExtra("location")) {
             val notesModel = intent.getParcelableExtra<NotesModel>("notes")
             val locationModel = intent.getParcelableExtra<LocationModel>("location")
-            locationModel?.let { activityViewModel.getLocation(it) }
-            notesModel?.let { activityViewModel.getNotes(it) }
-            val args = bundleOf("currentNotes" to notesModel)
-           navController.navigate(R.id.locationReminderFragment,args)
+            val args = bundleOf("currentNotes" to notesModel, "location" to locationModel)
+            navController.navigate(R.id.locationReminderFragment, args)
         }
         bottomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {

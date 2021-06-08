@@ -1,5 +1,6 @@
 package tech.jhavidit.remindme.viewModel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,23 +8,29 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import tech.jhavidit.remindme.model.LocationModel
 import tech.jhavidit.remindme.model.NotesModel
+import tech.jhavidit.remindme.repository.MainActivityRepository
 
 class MainActivityViewModel : ViewModel() {
-    val locationModel = MutableLiveData<LocationModel>()
-    val notesModel = MutableLiveData<NotesModel>()
+    val locationModel: LiveData<LocationModel>
+    val notesModel: LiveData<NotesModel>
+    private val repository: MainActivityRepository = MainActivityRepository()
+
+    init {
+        this.locationModel = repository.locationModel
+        this.notesModel = repository.notesModel
+    }
+
 
     fun getLocation(location: LocationModel) {
-        locationModel.value = location
+        repository.getLocation(location)
     }
 
     fun getNotes(note: NotesModel) {
-        notesModel.value = note
+        repository.getNotes(note)
     }
 
     fun clearData() {
-        locationModel.value = null
-        notesModel.value = null
+        repository.clearData()
     }
-
 
 }

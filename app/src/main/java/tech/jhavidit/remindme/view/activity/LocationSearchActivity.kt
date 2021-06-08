@@ -210,7 +210,7 @@ class LocationSearchActivity : AppCompatActivity(), OnMapReadyCallback,
                     latitude = it.latitude,
                     longitude = it.longitude,
                     placeId = locationId,
-                    name = locationPlace
+                    name = locationName?.text.toString()
                 )
                 viewModel.addLocation(locationModel)
                 val intent = Intent(this, MainActivity::class.java)
