@@ -9,7 +9,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
-import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.transition.TransitionManager
@@ -20,14 +19,12 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -66,7 +63,7 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = FragmentLocationReminderBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
@@ -119,7 +116,7 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
             val lat = bestLocation?.latitude
             val lon = bestLocation?.longitude
             val intent = Intent(requireContext(), LocationSearchActivity::class.java)
-            val notesModel = args.currentNotes
+            //  val notesModel = args.currentNotes
             intent.putExtra("latitude", lat)
             intent.putExtra("longitude", lon)
             intent.putExtra("notes", notesModel)
@@ -214,22 +211,21 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
                 selectedLocation = it
                 binding.selectedLocation.text = selectedLocation?.name
                 binding.selectedLocation.alpha = 1F
-            } ?: kotlin.run {
+            } ?: run {
                 binding.selectedLocation.alpha = 0.2F
             }
         })
 
 
-        activityViewModel.notesModel.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                notesModel = it
+        activityViewModel.notesModel.observeForever(Observer { notes ->
+            notes?.let {
+                notesModel = notes
             } ?: run {
                 notesModel = args.currentNotes
                 binding.selectedLocation.text = notesModel.locationName
                 //   binding.radius.progress = notesModel.radius?.toInt() ?: 0
             }
         })
-
 
 
         binding.saveLocationCard.setOnClickListener {

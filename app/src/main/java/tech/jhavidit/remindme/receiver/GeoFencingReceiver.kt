@@ -49,17 +49,17 @@ class GeoFencingReceiver : BroadcastReceiver() {
             Geofence.GEOFENCE_TRANSITION_DWELL -> {
                 // Log the error.
                 log("GEOFENCE_TRANSITION_DWELL")
-               /* context?.let {
-                    val intentNotification = Intent(context, TimeReminderActivity::class.java)
-                    val pendingIntent =
-                        PendingIntent.getActivity(
-                            context,
-                            0,
-                            intentNotification,
-                            PendingIntent.FLAG_UPDATE_CURRENT
-                        )
-                    notification(context, "GEOFENCE_TRANSITION_DWELL ", pendingIntent)
-                }*/
+                /* context?.let {
+                     val intentNotification = Intent(context, TimeReminderActivity::class.java)
+                     val pendingIntent =
+                         PendingIntent.getActivity(
+                             context,
+                             0,
+                             intentNotification,
+                             PendingIntent.FLAG_UPDATE_CURRENT
+                         )
+                     notification(context, "GEOFENCE_TRANSITION_DWELL ", pendingIntent)
+                 }*/
             }
             Geofence.GEOFENCE_TRANSITION_EXIT -> {
 
@@ -105,9 +105,11 @@ class GeoFencingReceiver : BroadcastReceiver() {
         geoFencingClient.addGeofences(geofencingRequest, pendingIntent)
             .addOnSuccessListener {
                 log("Granted Geofencing successfully")
+                toast(context, "Location Reminder Added")
             }
             .addOnFailureListener {
                 log("error in geofence " + it.cause)
+                toast(context, "Unable to add Location Reminder")
             }
     }
 
@@ -121,6 +123,7 @@ class GeoFencingReceiver : BroadcastReceiver() {
                 toast(context, "Location Reminder Removed")
             }
             addOnFailureListener {
+                log("error in geofence " + it.cause)
                 toast(context, "Failed to remove location reminder")
             }
         }

@@ -14,6 +14,7 @@ import tech.jhavidit.remindme.model.LocationModel
 import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.view.fragments.LocationReminderFragment
 import tech.jhavidit.remindme.view.fragments.LocationReminderFragmentArgs
+import tech.jhavidit.remindme.view.fragments.NotesFragmentDirections
 import tech.jhavidit.remindme.viewModel.MainActivityViewModel
 import tech.jhavidit.remindme.viewModel.NotesViewModel
 
@@ -33,7 +34,8 @@ class MainActivity : AppCompatActivity() {
             val locationModel = intent.getParcelableExtra<LocationModel>("location")
             locationModel?.let { activityViewModel.getLocation(it) }
             notesModel?.let { activityViewModel.getNotes(it) }
-           navController.navigate(R.id.locationReminderFragment)
+            val args = bundleOf("currentNotes" to notesModel)
+           navController.navigate(R.id.locationReminderFragment,args)
         }
         bottomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
