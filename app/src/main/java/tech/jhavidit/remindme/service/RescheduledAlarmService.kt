@@ -4,7 +4,6 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
-import android.os.VibrationEffect
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
@@ -16,7 +15,7 @@ import tech.jhavidit.remindme.repository.NotesRepository
 import tech.jhavidit.remindme.room.NotesDatabase
 import tech.jhavidit.remindme.util.foregroundAndBackgroundLocationPermissionApproved
 import tech.jhavidit.remindme.util.showLocationPermissionAlertDialog
-import tech.jhavidit.remindme.view.activity.TimeReminderActivity
+import tech.jhavidit.remindme.view.activity.ReminderScreenActivity
 
 class RescheduledAlarmService : LifecycleService() {
 
@@ -25,7 +24,7 @@ class RescheduledAlarmService : LifecycleService() {
 
         val channelId = "default"
         val channelName = "Remind Me"
-        val notificationIntent = Intent(this, TimeReminderActivity::class.java)
+        val notificationIntent = Intent(this, ReminderScreenActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0)
         val notification =
             NotificationCompat.Builder(this, channelId)
@@ -65,7 +64,8 @@ class RescheduledAlarmService : LifecycleService() {
                                 id = currentNote.id,
                                 latitude = currentNote.longitude.toDouble(),
                                 longitude = currentNote.longitude.toDouble(),
-                                radius = currentNote.radius
+                                radius = currentNote.radius,
+                                notesModel = currentNote
                             )
                     }
                 } else {

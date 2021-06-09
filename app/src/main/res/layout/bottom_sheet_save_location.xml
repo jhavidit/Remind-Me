@@ -96,25 +96,26 @@
                 android:id="@+id/location_name_card"
                 android:layout_width="@dimen/dimen_0"
                 android:layout_height="@dimen/dimen_40"
-                app:layout_constraintStart_toStartOf="@id/startGuideline"
-                app:layout_constraintEnd_toEndOf="@id/endGuideline"
-                app:strokeColor="@color/purple_200"
-                app:strokeWidth="1dp"
+                android:layout_marginTop="@dimen/dimen_10"
                 app:cardBackgroundColor="@color/purple_light"
+                app:layout_constraintEnd_toEndOf="@id/endGuideline"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
                 app:layout_constraintTop_toBottomOf="@id/select_radius"
-                android:layout_marginTop="@dimen/dimen_10">
+                app:strokeColor="@color/purple_200"
+                app:strokeWidth="1dp">
 
                 <EditText
                     android:id="@+id/location_name_save_location"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/dimen_10"
+                    android:layout_marginEnd="@dimen/dimen_10"
                     android:background="@null"
                     android:fontFamily="@font/alata_regular"
+                    android:maxLines="1"
                     android:textColor="@color/purple_200"
                     android:textSize="@dimen/dimen_text_20"
-                    tools:text="KDMA WORLD"
-                    android:layout_marginStart="@dimen/dimen_10"
-                    android:layout_marginEnd="@dimen/dimen_10"/>
+                    tools:text="KDMA WORLD" />
 
 
             </com.google.android.material.card.MaterialCardView>
@@ -123,34 +124,33 @@
                 android:id="@id/save_location_card"
                 android:layout_width="@dimen/dimen_0"
                 android:layout_height="@dimen/dimen_40"
-                app:layout_constraintStart_toStartOf="@id/startGuideline"
-                app:layout_constraintEnd_toEndOf="@id/endGuideline"
-                app:layout_constraintTop_toBottomOf="@id/location_name_card"
                 android:layout_marginTop="@dimen/dimen_16"
                 app:cardBackgroundColor="@color/purple_200"
-                app:cardCornerRadius="8dp">
+                app:cardCornerRadius="8dp"
+                app:layout_constraintEnd_toEndOf="@id/endGuideline"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                app:layout_constraintTop_toBottomOf="@id/location_name_card">
 
-               <androidx.constraintlayout.widget.ConstraintLayout
-                   android:layout_width="match_parent"
-                   android:layout_height="match_parent">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                   <TextView
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:text="Save"
-                       app:layout_constraintStart_toStartOf="parent"
-                       app:layout_constraintEnd_toEndOf="parent"
-                       android:textColor="@color/white"
-                       android:fontFamily="@font/alata_regular"
-                       android:textSize="@dimen/dimen_text_20"
-                       app:layout_constraintTop_toTopOf="parent"
-                       app:layout_constraintBottom_toBottomOf="parent"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/alata_regular"
+                        android:text="Save"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/dimen_text_20"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-               </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             </com.google.android.material.card.MaterialCardView>
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

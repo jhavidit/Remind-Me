@@ -19,7 +19,7 @@ class LocationNameAdapter(private val clickListen : LocationNameInterface) :
     private var location = emptyList<LocationModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        return LocationNameAdapter.MyViewHolder(
+        return MyViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.saved_location_item, parent, false)
         )
     }

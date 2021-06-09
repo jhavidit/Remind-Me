@@ -147,7 +147,8 @@ class ActiveReminderBottomSheet : BottomSheetDialogFragment() {
                         id = args.currentNotes.id,
                         latitude = args.currentNotes.latitude!!,
                         longitude = args.currentNotes.longitude!!,
-                        radius = args.currentNotes.radius!!
+                        radius = args.currentNotes.radius!!,
+                        notesModel = args.currentNotes
                     )
                     val notes = NotesModel(
                         id = args.currentNotes.id,

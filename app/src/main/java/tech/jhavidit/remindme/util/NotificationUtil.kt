@@ -5,17 +5,10 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
-import android.media.RingtoneManager
 import android.os.Build
-import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import tech.jhavidit.remindme.R
-import tech.jhavidit.remindme.view.activity.MainActivity
-import tech.jhavidit.remindme.view.activity.TimeReminderActivity
 
 lateinit var notificationManager: NotificationManager
 lateinit var notificationChannel: NotificationChannel

@@ -168,17 +168,6 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
         )
     }
 
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        activityViewModel.clearData()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        activityViewModel.clearData()
-    }
-
     override fun clickListener(location: LocationModel) {
         selectedLocation = location
         binding.selectedLocation.text = location.name
@@ -200,6 +189,13 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
             binding.selectedLocation.text = selectedLocation?.name
             binding.selectedLocation.alpha = 1F
         } else if (notesValue.locationName != null) {
+            selectedLocation = LocationModel(
+                id = 0,
+                latitude = notesValue.latitude!!,
+                longitude = notesValue.longitude!!,
+                name = notesValue.locationName!!,
+                placeId = ""
+            )
             binding.selectedLocation.text = notesValue.locationName
             binding.selectedLocation.alpha = 1F
         } else {
@@ -222,9 +218,6 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
             }
         }
 
-        //   log(notesModel.toString() + "  " + args.toString())
-
-
         binding.saveLocationCard.setOnClickListener {
             if (selectedLocation == null)
                 Toast.makeText(
@@ -243,7 +236,8 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
                         id = notesValue.id,
                         latitude = latitude,
                         longitude = longitude,
-                        radius = getRadius(minRadius, maxRadius, binding.radius.progress)
+                        radius = getRadius(minRadius, maxRadius, binding.radius.progress),
+                        notesModel = notesValue
                     )
                     val notesModel = NotesModel(
                         id = notesValue.id,
@@ -297,7 +291,6 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
 
         })
 
-
         binding.locationPicker.setOnClickListener {
             if (foregroundAndBackgroundLocationPermissionApproved(requireContext())) {
                 locationManager =
@@ -311,7 +304,5 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
             } else
                 requestForegroundAndBackgroundLocationPermissions()
         }
-
-
     }
 }

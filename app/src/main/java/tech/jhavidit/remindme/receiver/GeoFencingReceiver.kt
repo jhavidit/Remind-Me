@@ -10,17 +10,19 @@ import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofenceStatusCodes
 import com.google.android.gms.location.GeofencingEvent
 import com.google.android.gms.location.LocationServices
+import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.service.AlarmService
 import tech.jhavidit.remindme.util.GeoFencingHelper
 import tech.jhavidit.remindme.util.log
-import tech.jhavidit.remindme.util.notification
 import tech.jhavidit.remindme.util.toast
-import tech.jhavidit.remindme.view.activity.MainActivity
-import tech.jhavidit.remindme.view.activity.TimeReminderActivity
 
 class GeoFencingReceiver : BroadcastReceiver() {
+    private var notesModel: NotesModel? = null
     override fun onReceive(context: Context?, intent: Intent?) {
         val geofencingEvent = GeofencingEvent.fromIntent(intent)
+        val bundle = intent?.getBundleExtra("notes")
+
+        //intent?.putExtra("notes", notesModel)
         if (geofencingEvent.hasError()) {
             val errorMessage = GeofenceStatusCodes
                 .getStatusCodeString(geofencingEvent.errorCode)
@@ -34,16 +36,16 @@ class GeoFencingReceiver : BroadcastReceiver() {
                 log("GEOFENCE_TRANSITION_ENTER")
                 context?.let {
                     intent?.let { it1 -> startGeoFencingService(it, it1) }
-//                    val intentNotification = Intent(context, TimeReminderActivity::class.java)
-//                    val pendingIntent =
-//                        PendingIntent.getActivity(
-//                            context,
-//                            0,
-//                            intentNotification,
-//                            PendingIntent.FLAG_UPDATE_CURRENT
-//                        )
-//                    notification(context, "geofencing reached", pendingIntent)
-//                }
+/*                    val intentNotification = Intent(context, TimeReminderActivity::class.java)
+                    val pendingIntent =
+                        PendingIntent.getActivity(
+                            context,
+                            0,
+                            intentNotification,
+                            PendingIntent.FLAG_UPDATE_CURRENT
+                        )
+                    notification(context, "geofencing reached", pendingIntent)
+                }*/
                 }
             }
             Geofence.GEOFENCE_TRANSITION_DWELL -> {
@@ -76,6 +78,7 @@ class GeoFencingReceiver : BroadcastReceiver() {
                 }
             }*/
                     val intentService = Intent(it, AlarmService::class.java)
+                    intentService.putExtra("notes", notesModel)
                     it.stopService(intentService)
                 }
 
@@ -89,7 +92,8 @@ class GeoFencingReceiver : BroadcastReceiver() {
         id: Int,
         latitude: Double,
         longitude: Double,
-        radius: Double
+        radius: Double,
+        notesModel: NotesModel
     ) {
         val geoFencingHelper = GeoFencingHelper(context)
         val geoFencingClient = LocationServices.getGeofencingClient(context)
@@ -101,7 +105,7 @@ class GeoFencingReceiver : BroadcastReceiver() {
             transitionTypes = Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_DWELL or Geofence.GEOFENCE_TRANSITION_EXIT
         )
         val geofencingRequest = geoFencingHelper.getGeoFencingRequest(geofence)
-        val pendingIntent = geoFencingHelper.getPendingIntent(id)
+        val pendingIntent = geoFencingHelper.getPendingIntent(id, notesModel)
         geoFencingClient.addGeofences(geofencingRequest, pendingIntent)
             .addOnSuccessListener {
                 log("Granted Geofencing successfully")
@@ -134,9 +138,10 @@ class GeoFencingReceiver : BroadcastReceiver() {
         intent: Intent
     ) {
         val intentService = Intent(context, AlarmService::class.java)
+        log("Service start ${intent.getBundleExtra("notes")}")
+
         intentService.putExtra(
-            "title",
-            intent.getStringExtra("title") ?: ""
+            "notes",intent.getBundleExtra("notes")
         )
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(intentService)
