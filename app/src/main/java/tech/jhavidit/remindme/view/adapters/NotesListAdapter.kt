@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.notes_item.view.title
 import kotlinx.android.synthetic.main.reminder_item.view.*
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.model.NotesModel
+import tech.jhavidit.remindme.util.UPDATE
 import tech.jhavidit.remindme.view.fragments.NotesFragmentDirections
 
 class NotesListAdapter : RecyclerView.Adapter<NotesListAdapter.MyViewHolder>() {
@@ -62,7 +63,7 @@ class NotesListAdapter : RecyclerView.Adapter<NotesListAdapter.MyViewHolder>() {
         )
         holder.itemView.notes.setOnClickListener {
             holder.itemView.findNavController()
-                .navigate(NotesFragmentDirections.updateNotes("update", notes))
+                .navigate(NotesFragmentDirections.updateNotes(UPDATE, notes))
         }
     }
 

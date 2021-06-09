@@ -16,12 +16,16 @@ import androidx.core.content.ContextCompat
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.service.AlarmService
+import tech.jhavidit.remindme.util.log
 import tech.jhavidit.remindme.view.activity.MainActivity
 import java.util.*
 
 class AlarmReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
+
+        log("time ${intent?.getStringExtra("reminder")}")
+        log("note  ${intent?.getStringExtra("notes")}")
         context?.let {
             intent?.let { it1 -> startAlarmService(context, it1) }
         }
@@ -33,9 +37,13 @@ class AlarmReceiver : BroadcastReceiver() {
     ) {
         val intentService = Intent(context, AlarmService::class.java)
         intentService.putExtra(
-            "title",
-            intent.getStringExtra("title") ?: ""
+            "notes",
+            intent.getParcelableExtra<NotesModel>("notes")
         )
+        log("Time Note ${intent.extras?.getParcelable<NotesModel>("notes")}")
+        log("Time note ${intent.getParcelableExtra<NotesModel>("notes")}")
+        log("reminder  ${intent.getStringExtra("reminder")}")
+        intentService.putExtra("reminder", "time")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(intentService)
         } else {
@@ -43,7 +51,7 @@ class AlarmReceiver : BroadcastReceiver() {
         }
     }
 
-    private fun showNotification(context: Context, title: String) {
+    /*private fun showNotification(context: Context, title: String) {
         val intent = Intent(context, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(
@@ -58,7 +66,7 @@ class AlarmReceiver : BroadcastReceiver() {
             .setSmallIcon(R.drawable.notification_icon)
             .setContentTitle("We are here to remind you about")
             .setContentText(title)
-            .setAutoCancel(false)
+            .setAutoCancel(true)
             .setVibrate(longArrayOf(1000, 500, 1000, 500, 1000, 500))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setSound(defaultSoundUri)
@@ -78,9 +86,9 @@ class AlarmReceiver : BroadcastReceiver() {
         }
 
         notificationManager.notify(0, notificationBuilder.build())
-    }
+    }*/
 
-    @RequiresApi(Build.VERSION_CODES.M)
+
     fun scheduleAlarm(context: Context, notes: NotesModel) {
         val alarmManager =
             context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -88,17 +96,26 @@ class AlarmReceiver : BroadcastReceiver() {
         val alarmTime = notes.reminderTime ?: 0L
         val currentTime = Calendar.getInstance().timeInMillis
         if (currentTime < alarmTime) {
+            log("notes ${notes}")
             val intent = Intent(context, AlarmReceiver::class.java)
-            val title = notes.title + "\n" + notes.description
-            intent.putExtra("title", title)
+            intent.putExtra("notes", notes)
+            intent.putExtra("reminder","time")
             val pendingIntent =
-                PendingIntent.getBroadcast(context, notes.id, intent, 0)
+                PendingIntent.getBroadcast(context, notes.id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
             when (notes.repeatAlarmIndex) {
-                0 -> alarmManager.setExactAndAllowWhileIdle(
-                    AlarmManager.RTC_WAKEUP,
-                    alarmTime,
-                    pendingIntent
-                )
+                0 -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    alarmManager.setExactAndAllowWhileIdle(
+                        AlarmManager.RTC_WAKEUP,
+                        alarmTime,
+                        pendingIntent
+                    )
+                } else {
+                    alarmManager.setExact(
+                        AlarmManager.RTC_WAKEUP,
+                        alarmTime,
+                        pendingIntent
+                    )
+                }
                 1 -> alarmManager.setInexactRepeating(
                     AlarmManager.ELAPSED_REALTIME_WAKEUP,
                     alarmTime,

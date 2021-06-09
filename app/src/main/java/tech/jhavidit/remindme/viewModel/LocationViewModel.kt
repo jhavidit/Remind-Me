@@ -35,13 +35,13 @@ class LocationViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    fun deleteNotes(location: LocationModel) {
+    fun deleteLocation(location: LocationModel) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteLocation(location)
         }
     }
 
-    fun deleteAllNotes() {
+    fun deleteAllLocation() {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteAllLocation()
         }

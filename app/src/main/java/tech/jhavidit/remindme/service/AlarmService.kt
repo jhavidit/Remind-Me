@@ -7,23 +7,31 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
+import android.media.Ringtone
+import android.media.RingtoneManager
+import android.net.Uri
 import android.os.*
 import androidx.core.app.NotificationCompat
 import tech.jhavidit.remindme.R
-import tech.jhavidit.remindme.view.activity.MainActivity
-import tech.jhavidit.remindme.view.activity.TimeReminderActivity
+import tech.jhavidit.remindme.model.NotesModel
+import tech.jhavidit.remindme.view.activity.ReminderScreenActivity
+
 
 class AlarmService : Service() {
-    private lateinit var mediaPlayer : MediaPlayer
+
     private lateinit var vibrator: Vibrator
+    private lateinit var ringtone: Ringtone
     override fun onBind(intent: Intent?): IBinder? {
-       return null
+        return null
     }
 
     override fun onCreate() {
         super.onCreate()
-        mediaPlayer = MediaPlayer.create(this, R.raw.alarm)
+/*        mediaPlayer = MediaPlayer.create(this, R.raw.alarm)
         mediaPlayer.isLooping = true
+        */
+        val notification: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALL)
+        ringtone = RingtoneManager.getRingtone(applicationContext, notification)
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     }
 
@@ -31,20 +39,22 @@ class AlarmService : Service() {
 
         val channelId = "default"
         val channelName = "Remind Me"
-        val dismissIntent = Intent(this,TimeReminderActivity::class.java)
-        dismissIntent.putExtra("dismiss","dismiss")
-        val dismissPendingIntent = PendingIntent.getActivity(this,0,dismissIntent,0)
-        val notificationIntent = Intent(this, TimeReminderActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0)
+        val dismissIntent = Intent(this, ReminderScreenActivity::class.java)
+        dismissIntent.putExtra("dismiss", "dismiss")
+        val dismissPendingIntent = PendingIntent.getActivity(this, 0, dismissIntent, 0)
+        val notificationIntent = Intent(this, ReminderScreenActivity::class.java)
+        val bundle = intent.getBundleExtra("notes")
+        notificationIntent.putExtra("notes",bundle)
+        val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         val alarmTitle =
-            String.format("%s", intent.getStringExtra("title"))
+            String.format("%s", bundle?.getString("title")+"\n"+bundle?.getString("description"))
         val notification =
             NotificationCompat.Builder(this, channelId)
                 .setContentTitle("We are here to remind you about")
                 .setContentText(alarmTitle)
                 .setSmallIcon(R.drawable.notification_icon)
                 .setContentIntent(pendingIntent)
-                .addAction(R.drawable.snooze_icon,"Dismiss",dismissPendingIntent)
+                .addAction(R.drawable.snooze_icon, "Dismiss", dismissPendingIntent)
                 .build()
 
         val notificationManager =
@@ -59,21 +69,22 @@ class AlarmService : Service() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        mediaPlayer.start()
+       ringtone.play()
         val pattern = longArrayOf(0, 100, 1000)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-            vibrator.vibrate(VibrationEffect.createWaveform(pattern,0))
+            vibrator.vibrate(VibrationEffect.createWaveform(pattern, 0))
         else
-            vibrator.vibrate(pattern,0)
+            vibrator.vibrate(pattern, 0)
 
-        startForeground((1+System.currentTimeMillis()).toInt(), notification)
+        startForeground((1 + System.currentTimeMillis()).toInt(), notification)
         return START_STICKY
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer.stop()
+        // mediaPlayer.stop()
+        ringtone.stop()
         vibrator.cancel()
     }
 

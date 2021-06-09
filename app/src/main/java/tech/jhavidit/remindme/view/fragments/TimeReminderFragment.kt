@@ -52,7 +52,7 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
         var alarmYear = c.get(Calendar.YEAR)
         var alarmMonth = c.get(Calendar.MONTH)
         var alarmDay = c.get(Calendar.DAY_OF_MONTH)
-        if (args.currentNotes.timeReminder)
+        if (args.currentNotes.timeReminder == true)
             binding.cancelAlarm.visibility = VISIBLE
         else
             binding.cancelAlarm.visibility = GONE
@@ -163,7 +163,7 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
             )
             viewModel.updateNotes(notes)
             alarmReceiver.scheduleAlarm(requireContext(), notes)
-            findNavController().navigateUp()
+            findNavController().navigate(R.id.notesFragment)
 
         }
 

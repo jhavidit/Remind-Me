@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/reminder_bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/purple_light"
+        app:strokeColor="@color/purple_200"
+        app:strokeWidth="0.5dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/dimen_20">
+
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/topGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="8dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/startGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.1" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/endGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.9" />
+
+            <ImageView
+                android:id="@+id/close_btn"
+                android:layout_width="@dimen/dimen_28"
+                android:layout_height="@dimen/dimen_28"
+                android:background="?selectableItemBackgroundBorderless"
+                android:contentDescription="@string/close_bottom_sheet_button"
+                android:src="@drawable/ic_down"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/topGuideline" />
+
+            <LinearLayout
+                android:id="@+id/set_reminder_ll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_8"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/close_btn">
+
+
+                <ImageView
+                    android:id="@+id/reminder_image"
+                    android:layout_width="@dimen/dimen_24"
+                    android:layout_height="@dimen/dimen_24"
+                    android:layout_marginEnd="@dimen/dimen_12"
+                    android:contentDescription="@string/reminder_image"
+                    android:src="@drawable/ic_add_reminder" />
+
+                <TextView
+                    android:id="@+id/set_reminder_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/alata_regular"
+                    android:text="Active Reminder"
+                    android:textColor="@color/purple_200"
+                    android:textSize="@dimen/dimen_text_16"
+                    app:layout_constraintTop_toBottomOf="@id/close_btn" />
+            </LinearLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/time_reminder_card"
+                android:layout_width="@dimen/dimen_0"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_10"
+                app:layout_constraintEnd_toEndOf="@id/endGuideline"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                app:layout_constraintTop_toBottomOf="@id/set_reminder_ll">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/middleGuideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.5" />
+
+                <TextView
+                    android:id="@+id/reminder_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/alata_regular"
+                    android:text="7:30 AM"
+                    android:textColor="@color/purple_200"
+                    android:textSize="@dimen/dimen_text_16"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/reminder_repeat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/alata_regular"
+                    android:text="Daily"
+                    android:textColor="@color/purple_200"
+                    android:textSize="@dimen/dimen_text_14"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/reminder_time" />
+
+                <Switch
+                    android:id="@+id/time_reminder_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/delete_time_reminder"
+                    android:layout_width="@dimen/dimen_0"
+                    android:layout_height="@dimen/dimen_40"
+                    android:layout_marginTop="@dimen/dimen_10"
+                    android:layout_marginEnd="@dimen/dimen_10"
+                    app:cardBackgroundColor="@color/red"
+                    app:cardCornerRadius="@dimen/dimen_8"
+                    app:layout_constraintEnd_toEndOf="@id/middleGuideline"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/reminder_repeat">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/alata_regular"
+                            android:text="Delete"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/dimen_text_16"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                </com.google.android.material.card.MaterialCardView>
+
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/edit_time_reminder"
+                    android:layout_width="@dimen/dimen_0"
+                    android:layout_height="@dimen/dimen_40"
+                    android:layout_marginStart="@dimen/dimen_10"
+                    android:layout_marginTop="@dimen/dimen_10"
+                    app:cardBackgroundColor="@color/purple_200"
+                    app:cardCornerRadius="@dimen/dimen_8"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/middleGuideline"
+                    app:layout_constraintTop_toBottomOf="@id/reminder_repeat">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/alata_regular"
+                            android:text="Edit"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/dimen_text_16"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                </com.google.android.material.card.MaterialCardView>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/location_reminder_card"
+                android:layout_width="@dimen/dimen_0"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_20"
+                app:layout_constraintEnd_toEndOf="@id/endGuideline"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                app:layout_constraintTop_toBottomOf="@id/time_reminder_card">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/middleGuidelineLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.5" />
+
+                <TextView
+                    android:id="@+id/location_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/alata_regular"
+                    android:text="Keshav Vatika"
+                    android:textColor="@color/purple_200"
+                    android:textSize="@dimen/dimen_text_16"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/location_radius"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/alata_regular"
+                    android:text="Radius - 100m"
+                    android:textColor="@color/purple_200"
+                    android:textSize="@dimen/dimen_text_14"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/location_name" />
+
+                <Switch
+                    android:id="@+id/location_reminder_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/delete_location_reminder"
+                    android:layout_width="@dimen/dimen_0"
+                    android:layout_height="@dimen/dimen_40"
+                    android:layout_marginTop="@dimen/dimen_10"
+                    android:layout_marginEnd="@dimen/dimen_10"
+                    app:cardBackgroundColor="@color/red"
+                    app:cardCornerRadius="@dimen/dimen_8"
+                    app:layout_constraintEnd_toEndOf="@id/middleGuidelineLocation"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/location_radius">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/alata_regular"
+                            android:text="Delete"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/dimen_text_16"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                </com.google.android.material.card.MaterialCardView>
+
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/edit_location_reminder"
+                    android:layout_width="@dimen/dimen_0"
+                    android:layout_height="@dimen/dimen_40"
+                    android:layout_marginStart="@dimen/dimen_10"
+                    android:layout_marginTop="@dimen/dimen_10"
+                    app:cardBackgroundColor="@color/purple_200"
+                    app:cardCornerRadius="@dimen/dimen_8"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/middleGuidelineLocation"
+                    app:layout_constraintTop_toBottomOf="@id/location_radius">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/alata_regular"
+                            android:text="Edit"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/dimen_text_16"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                </com.google.android.material.card.MaterialCardView>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</layout>

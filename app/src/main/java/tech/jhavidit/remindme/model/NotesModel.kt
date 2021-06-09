@@ -13,18 +13,17 @@ data class NotesModel(
     val id: Int = 0,
     var title: String = "",
     val description: String = "",
-    val locationReminder: Boolean = false,
-    val timeReminder: Boolean = false,
+    val locationReminder: Boolean? = null,
+    val timeReminder: Boolean? = null,
     val reminderTime: Long? = null,
-    val latitude: String? = null,
-    val longitude: String? = null,
+    val latitude: Double? = null,
+    val longitude: Double? = null,
     val locationName: String? = null,
-    val radius: String? = null,
+    val radius: Double? = null,
     val repeatAlarmIndex: Int = -1,
     val isPinned: Boolean = false,
     val image: String? = null,
     val lastUpdated: String? = null,
     val backgroundColor: String = "#FFFFFF"
-
 
 ) : Parcelable

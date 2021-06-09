@@ -31,9 +31,27 @@
         android:label="SettingsFragment" />
 
     <fragment
-        android:id="@+id/eventsFragment"
+        android:id="@+id/reminderFragment"
         android:name="tech.jhavidit.remindme.view.fragments.ReminderFragment"
-        android:label="EventsFragment" />
+        android:label="EventsFragment">
+
+        <action
+            android:id="@+id/editReminder"
+            app:destination="@id/createNotesFragment">
+
+            <argument
+                android:name="update"
+                app:argType="string" />
+
+            <argument
+                android:name="currentNotes"
+                app:argType="tech.jhavidit.remindme.model.NotesModel" />
+
+
+        </action>
+
+
+    </fragment>
 
     <fragment
         android:id="@+id/createNotesFragment"
@@ -44,12 +62,14 @@
             android:id="@+id/uploadImage"
             app:destination="@id/addImageBottomSheet">
 
+
             <argument
                 android:name="currentNotes"
                 app:argType="tech.jhavidit.remindme.model.NotesModel" />
 
 
         </action>
+
 
         <action
             android:id="@+id/addReminder"
@@ -115,6 +135,22 @@
             android:name="currentNotes"
             app:argType="tech.jhavidit.remindme.model.NotesModel" />
 
+
+        <action
+            android:id="@+id/activeReminder"
+            app:destination="@id/activeReminderBottomSheet">
+
+            <argument
+                android:name="reminderType"
+                app:argType="string" />
+
+            <argument
+                android:name="currentNotes"
+                app:argType="tech.jhavidit.remindme.model.NotesModel" />
+
+
+        </action>
+
         <action
             android:id="@+id/timeReminder"
             app:destination="@id/timeReminderFragment">
@@ -143,11 +179,48 @@
     <dialog
         android:id="@+id/addImageBottomSheet"
         android:name="tech.jhavidit.remindme.view.fragments.AddImageBottomSheet"
-        android:label="AddImageBottomSheet" >
+        android:label="AddImageBottomSheet">
 
-    <argument
-        android:name="currentNotes"
-        app:argType="tech.jhavidit.remindme.model.NotesModel" />
+        <argument
+            android:name="currentNotes"
+            app:argType="tech.jhavidit.remindme.model.NotesModel" />
+
+    </dialog>
+
+
+    <dialog
+        android:id="@+id/activeReminderBottomSheet"
+        android:name="tech.jhavidit.remindme.view.fragments.ActiveReminderBottomSheet"
+        android:label="ActiveReminderBottomSheet">
+
+        <action
+            android:id="@+id/editTimeReminder"
+            app:destination="@id/timeReminderFragment">
+
+            <argument
+                android:name="currentNotes"
+                app:argType="tech.jhavidit.remindme.model.NotesModel" />
+
+        </action>
+
+        <action
+            android:id="@+id/editLocationReminder"
+            app:destination="@id/locationReminderFragment">
+
+            <argument
+                android:name="currentNotes"
+                app:argType="tech.jhavidit.remindme.model.NotesModel" />
+
+        </action>
+
+
+        <argument
+            android:name="currentNotes"
+            app:argType="tech.jhavidit.remindme.model.NotesModel" />
+
+        <argument
+            android:name="reminderType"
+            app:argType="string" />
 
     </dialog>
 

@@ -93,20 +93,19 @@
 
             <ScrollView
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/dimen_12"
+                android:layout_height="0dp"
+                android:layout_marginBottom="@dimen/dimen_10"
                 app:layout_constraintStart_toStartOf="@id/startGuideline"
                 app:layout_constraintEnd_toEndOf="@id/endGuideline"
                 app:layout_constraintTop_toBottomOf="@id/back_btn"
+                app:layout_constraintBottom_toTopOf="@id/bottom_card"
                 android:layout_marginTop="@dimen/dimen_8">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/dimen_12"
-                app:layout_constraintStart_toStartOf="@id/startGuideline"
-                app:layout_constraintEnd_toEndOf="@id/endGuideline"
-                app:layout_constraintTop_toBottomOf="@id/back_btn"
+                android:layout_marginBottom="@dimen/dimen_50"
                 android:layout_marginTop="@dimen/dimen_8">
 
             <EditText
@@ -122,6 +121,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageView
+                android:id="@+id/notes_image"
+                android:layout_width="@dimen/dimen_0"
+                android:layout_height="280dp"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                android:scaleType="fitXY"/>
+
             <EditText
                 android:id="@+id/description"
                 android:layout_width="0dp"
@@ -134,43 +143,15 @@
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/title" />
+                app:layout_constraintTop_toBottomOf="@id/notes_image" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
             </ScrollView>
 
-<!--            <Button-->
-<!--                android:visibility="gone"-->
-<!--                android:id="@+id/btn_time"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:layout_height="60dp"-->
-<!--                android:layout_marginTop="200dp"-->
-<!--                android:layout_marginEnd="10dp"-->
-<!--                android:text="Time\n Reminder"-->
-<!--                android:textAllCaps="false"-->
-<!--                android:textColor="@color/white"-->
-<!--                android:textSize="16sp"-->
-<!--                app:layout_constraintEnd_toEndOf="@id/middleGuideline"-->
-<!--                app:layout_constraintStart_toStartOf="@id/startGuideline"-->
-<!--                app:layout_constraintTop_toBottomOf="@id/description" />-->
-
-<!--            <Button-->
-<!--                android:id="@+id/btn_location"-->
-<!--                android:layout_width="0dp"-->
-<!--                android:visibility="gone"-->
-<!--                android:layout_height="60dp"-->
-<!--                android:layout_marginStart="10dp"-->
-<!--                android:layout_marginTop="200dp"-->
-<!--                android:text="Location Reminder"-->
-<!--                android:textAllCaps="false"-->
-<!--                android:textColor="@color/white"-->
-<!--                android:textSize="16sp"-->
-<!--                app:layout_constraintEnd_toEndOf="@id/endGuideline"-->
-<!--                app:layout_constraintStart_toStartOf="@id/middleGuideline"-->
-<!--                app:layout_constraintTop_toBottomOf="@id/description" />-->
 
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/bottom_card"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_50"
                 app:cardBackgroundColor="@color/purple_light"

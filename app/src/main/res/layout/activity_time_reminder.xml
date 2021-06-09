@@ -2,31 +2,283 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/purple_200">
 
-        <Button
-            android:id="@+id/dismiss"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:text="DISMISS"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/startGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/endGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95" />
+
+
+        <ImageView
+            android:id="@+id/open_app"
+            android:layout_width="@dimen/dimen_28"
+            android:layout_height="@dimen/dimen_28"
+            android:layout_marginTop="@dimen/dimen_10"
+            android:background="?selectableItemBackgroundBorderless"
+            android:contentDescription="@string/go_to_app"
+            android:src="@drawable/ic_open_app"
+            android:tint="@color/white"
+            app:layout_constraintEnd_toEndOf="@id/endGuideline"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/snooze"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:text="SNOOZE"
-            android:textSize="20sp"
-            android:textStyle="bold"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/reminder_card"
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            android:layout_marginTop="@dimen/dimen_32"
+            app:cardBackgroundColor="@color/purple_200"
+            app:cardCornerRadius="120dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/dismiss" />
+            app:layout_constraintTop_toBottomOf="@id/open_app"
+            app:strokeColor="@color/white"
+            app:strokeWidth="@dimen/dimen_8">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/reminder_icon"
+                    android:layout_width="@dimen/dimen_50"
+                    android:layout_height="@dimen/dimen_50"
+                    android:layout_marginTop="@dimen/dimen_10"
+                    android:src="@drawable/ic_alarm_set"
+                    android:tint="@color/white"
+                    app:layout_constraintBottom_toTopOf="@id/reminder_location_time"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <TextView
+                    android:id="@+id/reminder_location_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dimen_4"
+                    android:layout_marginBottom="@dimen/dimen_10"
+                    android:fontFamily="@font/alata_regular"
+                    android:text="9:50AM"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dimen_text_24"
+                    android:tint="@color/white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/reminder_icon" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/dimen_8"
+            android:paddingBottom="@dimen/dimen_12"
+            app:layout_constraintEnd_toEndOf="@id/endGuideline"
+            app:layout_constraintStart_toStartOf="@id/startGuideline"
+            app:layout_constraintTop_toBottomOf="@id/reminder_card"
+            app:layout_constraintBottom_toTopOf="@id/reminder_off_card">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_8"
+                android:paddingBottom="@dimen/dimen_12">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/alata_regular"
+                    android:text="@string/title"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dimen_text_20"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/description"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_8"
+                    android:fontFamily="@font/alata_regular"
+                    android:text="@string/description"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/title" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/reminder_off_card"
+            android:layout_width="@dimen/dimen_0"
+            android:layout_height="100dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/endGuideline"
+            app:layout_constraintStart_toStartOf="@id/startGuideline">
+
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/reminder_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
+                android:contentDescription="reminder icon"
+                android:src="@drawable/ic_reminder"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/purple_200" />
+
+            <ImageView
+                android:id="@+id/left_arrow_1"
+                android:layout_width="@dimen/dimen_20"
+                android:layout_height="@dimen/dimen_20"
+                android:layout_marginEnd="@dimen/dimen_10"
+                android:alpha="0.75"
+                android:src="@drawable/ic_back_button"
+                android:tint="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/reminder_fab"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/left_arrow_2"
+                android:layout_width="@dimen/dimen_20"
+                android:layout_height="@dimen/dimen_20"
+                android:layout_marginEnd="@dimen/dimen_10"
+                android:alpha="0.5"
+                android:src="@drawable/ic_back_button"
+                android:tint="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/left_arrow_1"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/right_arrow_1"
+                android:layout_width="@dimen/dimen_20"
+                android:layout_height="@dimen/dimen_20"
+                android:layout_marginStart="@dimen/dimen_10"
+                android:alpha="0.75"
+                android:src="@drawable/ic_right_arrow"
+                android:tint="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/reminder_fab"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/right_arrow_2"
+                android:layout_width="@dimen/dimen_20"
+                android:layout_height="@dimen/dimen_20"
+                android:layout_marginStart="@dimen/dimen_10"
+                android:alpha="0.5"
+                android:src="@drawable/ic_right_arrow"
+                android:tint="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/right_arrow_1"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/snooze_reminder"
+                android:layout_width="@dimen/dimen_40"
+                android:layout_height="@dimen/dimen_40"
+                android:layout_marginStart="@dimen/dimen_10"
+                android:src="@drawable/ic_snooze_reminder"
+                android:tint="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/right_arrow_2"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/snooze_reminder_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dimen_10"
+                android:layout_marginTop="@dimen/dimen_4"
+                android:fontFamily="@font/alata_regular"
+                android:text="Snooze"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dimen_text_12"
+                app:layout_constraintStart_toEndOf="@id/right_arrow_2"
+                app:layout_constraintTop_toBottomOf="@id/snooze_reminder" />
+
+
+            <ImageView
+                android:id="@+id/cancel_reminder"
+                android:layout_width="@dimen/dimen_40"
+                android:layout_height="@dimen/dimen_40"
+                android:layout_marginEnd="@dimen/dimen_10"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_reminder_cancel"
+                android:tint="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/left_arrow_2"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/cancel_reminder_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_4"
+                android:layout_marginEnd="@dimen/dimen_10"
+                android:fontFamily="@font/alata_regular"
+                android:text="Turn Off"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dimen_text_12"
+                app:layout_constraintEnd_toStartOf="@id/left_arrow_2"
+                app:layout_constraintTop_toBottomOf="@id/cancel_reminder" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--     <Button
+                 android:id="@+id/dismiss"
+                 android:layout_width="match_parent"
+                 android:layout_height="60dp"
+                 android:text="DISMISS"
+                 android:textSize="20sp"
+                 android:textStyle="bold"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:layout_constraintTop_toTopOf="parent" />
+
+             <Button
+                 android:id="@+id/snooze"
+                 android:layout_width="match_parent"
+                 android:layout_height="60dp"
+                 android:text="SNOOZE"
+                 android:textSize="20sp"
+                 android:textStyle="bold"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:layout_constraintTop_toBottomOf="@id/dismiss" />-->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </layout>

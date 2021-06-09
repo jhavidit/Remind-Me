@@ -4,16 +4,18 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
-import android.os.VibrationEffect
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.Observer
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.receiver.AlarmReceiver
+import tech.jhavidit.remindme.receiver.GeoFencingReceiver
 import tech.jhavidit.remindme.repository.NotesRepository
 import tech.jhavidit.remindme.room.NotesDatabase
-import tech.jhavidit.remindme.view.activity.TimeReminderActivity
+import tech.jhavidit.remindme.util.foregroundAndBackgroundLocationPermissionApproved
+import tech.jhavidit.remindme.util.showLocationPermissionAlertDialog
+import tech.jhavidit.remindme.view.activity.ReminderScreenActivity
 
 class RescheduledAlarmService : LifecycleService() {
 
@@ -22,12 +24,12 @@ class RescheduledAlarmService : LifecycleService() {
 
         val channelId = "default"
         val channelName = "Remind Me"
-        val notificationIntent = Intent(this, TimeReminderActivity::class.java)
+        val notificationIntent = Intent(this, ReminderScreenActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0)
         val notification =
             NotificationCompat.Builder(this, channelId)
                 .setContentTitle("Remind Me")
-                .setContentText("Setting up Time Based Reminder")
+                .setContentText("Rescheduling Reminders")
                 .setSmallIcon(R.drawable.notification_icon)
                 .setContentIntent(pendingIntent)
                 .build()
@@ -44,14 +46,33 @@ class RescheduledAlarmService : LifecycleService() {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
-        val db : NotesDatabase = NotesDatabase.getDatabase(application)
+        val db: NotesDatabase = NotesDatabase.getDatabase(application)
         val notesDao = db.userDao()
         val notesRepository = NotesRepository(notesDao)
         val alarmReceiver = AlarmReceiver()
-        notesRepository.readAllData.observe(this, Observer {
-            for (notes in it) {
-                alarmReceiver.scheduleAlarm(applicationContext, notes)
+        val geoFencingReceiver = GeoFencingReceiver()
+        notesRepository.readAllData.observe(this, Observer { notes ->
+            notes?.forEach { currentNote ->
+                if (currentNote.timeReminder == true) {
+                    alarmReceiver.scheduleAlarm(applicationContext, currentNote)
+                }
+                if (foregroundAndBackgroundLocationPermissionApproved(applicationContext)) {
+                    if (currentNote.locationReminder == true) {
+                        if (currentNote.latitude != null && currentNote.longitude != null && currentNote.radius != null)
+                            geoFencingReceiver.addLocationReminder(
+                                context = applicationContext,
+                                id = currentNote.id,
+                                latitude = currentNote.longitude.toDouble(),
+                                longitude = currentNote.longitude.toDouble(),
+                                radius = currentNote.radius,
+                                notesModel = currentNote
+                            )
+                    }
+                } else {
+                    showLocationPermissionAlertDialog(applicationContext)
+                }
             }
+
             val intentService = Intent(applicationContext, RescheduledAlarmService::class.java)
             applicationContext.stopService(intentService)
         })
@@ -62,7 +83,7 @@ class RescheduledAlarmService : LifecycleService() {
 
 
     override fun onBind(intent: Intent): IBinder? {
-         super.onBind(intent)
+        super.onBind(intent)
         return null
     }
 }
