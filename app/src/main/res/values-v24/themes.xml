@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="MyAppTheme.NumberPicker" parent="@android:style/Widget.Material.NumberPicker">
+        <item name="colorControlNormal">#00000000</item>
+        <item name="android:fontFamily">@font/alata_regular</item>
+        <item name="android:textColorPrimary">@color/purple_200</item>
+        <item name="android:textSize">@dimen/dimen_text_24</item>
+    </style>
+</resources>
