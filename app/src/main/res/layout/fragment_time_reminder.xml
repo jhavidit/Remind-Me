@@ -120,7 +120,7 @@
                 app:layout_constraintStart_toStartOf="@id/time_picker"
                 app:layout_constraintTop_toBottomOf="@id/time_picker" />
 
-            <Switch
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/repeater_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -131,13 +131,115 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/repeat_layout"
                 android:layout_width="@dimen/dimen_0"
+                android:visibility="gone"
                 android:layout_height="wrap_content"
-
-                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                android:layout_marginTop="@dimen/dimen_20"
                 app:layout_constraintEnd_toEndOf="@id/endGuideline"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
                 app:layout_constraintTop_toBottomOf="@id/repeat_text">
 
+                <com.shawnlin.numberpicker.NumberPicker
+                    android:id="@+id/repeat_picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:np_dividerColor="#00000000"
+                    app:np_orientation="horizontal"
+                    app:np_selectedTextColor="@color/purple_200"
+                    app:np_textColor="@color/purple_200"
+                    app:np_wrapSelectorWheel="true" />
 
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/repeat_picker">
+
+
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:id="@+id/hours"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/alata_regular"
+                        android:text="Hours"
+                        android:textColor="@color/purple_200"
+                        android:textSize="@dimen/dimen_text_16"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/hours" />
+
+
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:id="@+id/daily"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dimen_16"
+                        android:checked="true"
+                        app:layout_constraintStart_toEndOf="@id/hours"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/alata_regular"
+                        android:text="Daily"
+                        android:textColor="@color/purple_200"
+                        android:textSize="@dimen/dimen_text_16"
+                        app:layout_constraintStart_toStartOf="@id/daily"
+                        app:layout_constraintTop_toBottomOf="@id/daily" />
+
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:id="@+id/weekly"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dimen_16"
+                        android:checked="true"
+                        app:layout_constraintStart_toEndOf="@id/daily"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/alata_regular"
+                        android:text="Weekly"
+                        android:textColor="@color/purple_200"
+                        android:textSize="@dimen/dimen_text_16"
+                        app:layout_constraintStart_toStartOf="@id/weekly"
+                        app:layout_constraintTop_toBottomOf="@id/weekly" />
+
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:id="@+id/monthly"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dimen_16"
+                        android:checked="true"
+                        app:layout_constraintStart_toEndOf="@id/weekly"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/alata_regular"
+                        android:text="Monthly"
+                        android:textColor="@color/purple_200"
+                        android:textSize="@dimen/dimen_text_16"
+                        app:layout_constraintStart_toStartOf="@id/monthly"
+                        app:layout_constraintTop_toBottomOf="@id/monthly" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -166,11 +268,11 @@
                         android:layout_width="@dimen/dimen_28"
                         android:layout_height="@dimen/dimen_28"
                         android:src="@drawable/ic_select_date"
-                        android:tint="@color/purple_200"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/calendar_text"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/purple_200" />
 
                     <TextView
                         android:id="@+id/calendar_text"
@@ -224,8 +326,6 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </com.google.android.material.card.MaterialCardView>
-
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

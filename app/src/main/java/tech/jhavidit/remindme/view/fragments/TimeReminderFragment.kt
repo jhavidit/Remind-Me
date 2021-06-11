@@ -6,20 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSnapHelper
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import tech.jhavidit.remindme.databinding.FragmentTimeReminderBinding
-import tech.jhavidit.remindme.util.log
-import tech.jhavidit.remindme.view.adapters.TimePickerAdapter
-import tech.jhavidit.remindme.viewModel.TimePickerViewModel
 
 class TimeReminderFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentTimeReminderBinding
-    private lateinit var timeAdapter: TimePickerAdapter
-    private lateinit var selectedViewModel: TimePickerViewModel
+
 /*
     private lateinit var alarmReceiver: AlarmReceiver
     private val args: TimeReminderFragmentArgs by navArgs()
@@ -35,50 +27,6 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentTimeReminderBinding.inflate(inflater, container, false)
-        val linearLayoutManager = LinearLayoutManager(requireContext())
-        selectedViewModel = ViewModelProvider(this).get(TimePickerViewModel::class.java)
-        val time = arrayListOf<String>(
-            "0",
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8",
-            "9",
-            "10",
-            "11",
-            "12",
-            ""
-        )
-
-
-        val padding = binding.timePicker.width / 2
-        binding.recyclerView.setPadding(padding, 0, padding, 0)
-        binding.recyclerView.apply {
-            timeAdapter = TimePickerAdapter(requireContext(), binding.recyclerView)
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = timeAdapter
-            setHasFixedSize(true)
-            smoothScrollToPosition(3)
-        }
-        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                val firstItem = linearLayoutManager.findFirstCompletelyVisibleItemPosition()
-                val lastItem = linearLayoutManager.findLastCompletelyVisibleItemPosition()
-                log("$firstItem   $lastItem")
-                if (time.size == 1) {
-                    timeAdapter.setSelectedItem(0)
-                } else if (lastItem == (time.size - 1)) {
-                    timeAdapter.setSelectedItem(time.size - 2)
-                } else {
-                    timeAdapter.setSelectedItem(firstItem + 1)
-                }
-            }
-        })
 
 
         /*  viewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
