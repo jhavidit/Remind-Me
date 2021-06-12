@@ -1,24 +1,42 @@
 package tech.jhavidit.remindme.view.fragments
 
+import android.app.AlarmManager
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.os.Build
 import android.os.Bundle
+import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.FragmentTimeReminderBinding
+import tech.jhavidit.remindme.model.NotesModel
+import tech.jhavidit.remindme.model.RepeatHourModel
+import tech.jhavidit.remindme.receiver.AlarmReceiver
+import tech.jhavidit.remindme.util.log
+import tech.jhavidit.remindme.util.toast
+import tech.jhavidit.remindme.viewModel.NotesViewModel
+import java.util.*
+import kotlin.collections.ArrayList
 
 class TimeReminderFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentTimeReminderBinding
-
-/*
     private lateinit var alarmReceiver: AlarmReceiver
     private val args: TimeReminderFragmentArgs by navArgs()
-    private var repeatingIndex = 0
+    private var reminderTime = ""
+    private var reminderDate = ""
+    private var repeatingValue: Long = -1
     private var reminderTIme: String = ""
+    private lateinit var repeatList: Array<String>
     private lateinit var viewModel: NotesViewModel
-*/
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreateView(
@@ -28,158 +46,173 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
         // Inflate the layout for this fragment
         binding = FragmentTimeReminderBinding.inflate(inflater, container, false)
 
+        repeatList = RepeatHourModel.getRepeatingHours()
 
-        /*  viewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
-          val mTimePicker: TimePickerDialog
-          alarmReceiver = AlarmReceiver()
-          val c = Calendar.getInstance()
-          val hour = c.get(Calendar.HOUR_OF_DAY)
-          val minute = c.get(Calendar.MINUTE)
-          val year = c.get(Calendar.YEAR)
-          val month = c.get(Calendar.MONTH)
-          val day = c.get(Calendar.DAY_OF_MONTH)
-          var alarmHour = c.get(Calendar.HOUR_OF_DAY)
-          var alarmMinute = c.get(Calendar.MINUTE)
-          var alarmYear = c.get(Calendar.YEAR)
-          var alarmMonth = c.get(Calendar.MONTH)
-          var alarmDay = c.get(Calendar.DAY_OF_MONTH)
-          if (args.currentNotes.timeReminder == true)
-              binding.cancelAlarm.visibility = VISIBLE
-          else
-              binding.cancelAlarm.visibility = GONE
+        binding.closeBtn.setOnClickListener {
+            findNavController().navigateUp()
+        }
 
-          val repeating = resources.getStringArray(R.array.Repeating)
-
-          val datePickerDialog = DatePickerDialog(
-              requireContext(),
-              DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-                  // Display Selected date in textbox
-                  alarmYear = year
-                  alarmMonth = monthOfYear
-                  alarmDay = dayOfMonth
-                  binding.datePickerText.text = "" + dayOfMonth + "/" + monthOfYear + "/" + year
-                  reminderTIme = "" + dayOfMonth + "/" + monthOfYear + "/" + year
-
-              },
-              year,
-              month,
-              day
-          )
+        binding.repeaterSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                binding.repeatLayout.visibility = VISIBLE
+            } else {
+                binding.repeatLayout.visibility = GONE
+            }
+        }
 
 
 
-          mTimePicker = TimePickerDialog(
-              requireContext(),
-              TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-                  alarmHour = hourOfDay
-                  alarmMinute = minute
-                  binding.timePickerText.text = String.format("%d : %d", hourOfDay, minute)
-                  reminderTIme = reminderTIme + " " + String.format("%d : %d", hourOfDay, minute)
-              }, hour, minute, false
-
-          )
-
-          binding.timePicker.setOnClickListener {
-              mTimePicker.show()
-          }
-          binding.datePicker.setOnClickListener {
-              datePickerDialog.show()
-          }
-
-          val spinner = binding.spinner
-          val adapter = ArrayAdapter(
-              requireContext(),
-              android.R.layout.simple_spinner_item, repeating
-          )
-          spinner.adapter = adapter
-
-          spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-              override fun onNothingSelected(parent: AdapterView<*>?) {
-              }
-
-              override fun onItemSelected(
-                  parent: AdapterView<*>?,
-                  view: View?,
-                  position: Int,
-                  id: Long
-              ) {
-                  repeatingIndex = position
-              }
-          }
-
-          binding.cancelAlarm.setOnClickListener {
-              val notesModel = NotesModel(
-                  id = args.currentNotes.id,
-                  title = args.currentNotes.title,
-                  description = args.currentNotes.description,
-                  timeReminder = false,
-                  reminderTime = null,
-                  repeatAlarmIndex = repeatingIndex,
-                  locationReminder = args.currentNotes.locationReminder,
-                  latitude = args.currentNotes.latitude,
-                  longitude = args.currentNotes.longitude,
-                  radius = args.currentNotes.radius,
-                  locationName = args.currentNotes.locationName,
-                  backgroundColor = args.currentNotes.backgroundColor,
-                  image = args.currentNotes.image,
-                  lastUpdated = args.currentNotes.lastUpdated
-
-              )
-              viewModel.updateNotes(notesModel)
-              alarmReceiver.cancelAlarm(requireContext(), args.currentNotes.id)
-              findNavController().navigateUp()
-          }
+        viewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
+        alarmReceiver = AlarmReceiver()
+        val c = Calendar.getInstance()
+        val year = c.get(Calendar.YEAR)
+        val month = c.get(Calendar.MONTH)
+        val day = c.get(Calendar.DAY_OF_MONTH)
+        var alarmHour = c.get(Calendar.HOUR_OF_DAY)
+        var alarmMinute = c.get(Calendar.MINUTE)
+        var alarmYear = 0
+        var alarmMonth = 0
+        var alarmDay = 0
 
 
-          binding.save.setOnClickListener {
-              c.set(alarmYear, alarmMonth, alarmDay, alarmHour, alarmMinute, 0)
-              val alarmTime = c.timeInMillis
+        val datePickerDialog = DatePickerDialog(
+            requireContext(),
+            DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+                // Display Selected date in textbox
+                alarmYear = year
+                alarmMonth = monthOfYear
+                alarmDay = dayOfMonth
+                binding.calendarText.text = "$dayOfMonth/$monthOfYear/$year"
+                reminderDate = "$dayOfMonth/$monthOfYear/$year"
+            },
+            year,
+            month,
+            day
+        )
 
-              val notes = NotesModel(
-                  id = args.currentNotes.id,
-                  title = args.currentNotes.title,
-                  description = args.currentNotes.description,
-                  timeReminder = true,
-                  reminderTime = alarmTime,
-                  isPinned = args.currentNotes.isPinned,
-                  repeatAlarmIndex = repeatingIndex,
-                  locationReminder = args.currentNotes.locationReminder,
-                  latitude = args.currentNotes.latitude,
-                  longitude = args.currentNotes.longitude,
-                  radius = args.currentNotes.radius,
-                  locationName = args.currentNotes.locationName,
-                  backgroundColor = args.currentNotes.backgroundColor,
-                  image = args.currentNotes.image,
-                  lastUpdated = args.currentNotes.lastUpdated
-              )
-              viewModel.updateNotes(notes)
-              alarmReceiver.scheduleAlarm(requireContext(), notes)
-              findNavController().navigate(R.id.notesFragment)
+        binding.timePicker.setOnTimeChangedListener { _, hourOfDay, minute ->
+            alarmHour = hourOfDay
+            alarmMinute = minute
+            if (hourOfDay == 12)
+                reminderTime = "$hourOfDay:$minute PM"
+            else if (hourOfDay < 12)
+                reminderTIme = "$hourOfDay:$minute AM"
+            else
+                reminderTIme = "${hourOfDay - 12}:$minute PM"
+        }
 
-          }
-  */
+        binding.repeatPicker.apply {
+            minValue = 1
+            maxValue = repeatList.size
+            displayedValues = repeatList
+            value = 7
+        }
 
 
+        binding.datePicker.setOnClickListener {
+            datePickerDialog.show()
+        }
 
+        binding.hours.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.repeatPicker.visibility = VISIBLE
+                binding.weekly.isChecked = false
+                binding.daily.isChecked = false
+                binding.monthly.isChecked = false
+            }
+        }
+
+        binding.daily.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.repeatPicker.visibility = GONE
+                binding.weekly.isChecked = false
+                binding.hours.isChecked = false
+                binding.monthly.isChecked = false
+            }
+        }
+
+        binding.weekly.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.repeatPicker.visibility = GONE
+                binding.hours.isChecked = false
+                binding.daily.isChecked = false
+                binding.monthly.isChecked = false
+            }
+        }
+
+        binding.monthly.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.repeatPicker.visibility = GONE
+                binding.weekly.isChecked = false
+                binding.daily.isChecked = false
+                binding.hours.isChecked = false
+            }
+        }
+
+
+        binding.repeaterSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                TransitionManager.beginDelayedTransition(binding.repeatLayout)
+                binding.repeatLayout.visibility = VISIBLE
+                binding.repeatPicker.visibility = VISIBLE
+                binding.weekly.isChecked = false
+                binding.daily.isChecked = false
+                binding.monthly.isChecked = false
+                binding.hours.isChecked = true
+
+            } else {
+                binding.repeatLayout.visibility = GONE
+            }
+        }
+
+        binding.saveReminderCard.setOnClickListener {
+            c.set(alarmYear, alarmMonth, alarmDay, alarmHour, alarmMinute, 0)
+            val alarmTime = c.timeInMillis
+            val currentTime = Calendar.getInstance().timeInMillis
+
+            if (!binding.repeaterSwitch.isChecked)
+                repeatingValue = -1
+            else if (binding.hours.isChecked)
+                repeatingValue =
+                    repeatList[binding.repeatPicker.value].toLong() * AlarmManager.INTERVAL_HOUR
+            else if (binding.weekly.isChecked) {
+                repeatingValue = AlarmManager.INTERVAL_DAY * 7
+            } else if (binding.daily.isChecked) {
+                repeatingValue = AlarmManager.INTERVAL_DAY
+            } else if (binding.monthly.isChecked) {
+                repeatingValue = AlarmManager.INTERVAL_DAY * 30
+            }
+            if (alarmDay == 0 && alarmMonth == 0 && alarmYear == 0) {
+                toast(requireContext(), "Please Select Date")
+            } else if (currentTime > alarmTime) {
+                toast(requireContext(), "Reminder Time cannot be less than current time")
+            } else {
+                val notes = NotesModel(
+                    id = args.currentNotes.id,
+                    title = args.currentNotes.title,
+                    description = args.currentNotes.description,
+                    timeReminder = true,
+                    reminderTime = reminderTime,
+                    reminderWaitTime = alarmTime,
+                    reminderDate = reminderDate,
+                    isPinned = args.currentNotes.isPinned,
+                    repeatValue = repeatingValue,
+                    locationReminder = args.currentNotes.locationReminder,
+                    latitude = args.currentNotes.latitude,
+                    longitude = args.currentNotes.longitude,
+                    radius = args.currentNotes.radius,
+                    locationName = args.currentNotes.locationName,
+                    backgroundColor = args.currentNotes.backgroundColor,
+                    image = args.currentNotes.image,
+                    lastUpdated = args.currentNotes.lastUpdated
+                )
+                viewModel.updateNotes(notes)
+                alarmReceiver.scheduleAlarm(requireContext(), notes)
+                findNavController().navigate(R.id.notesFragment)
+            }
+        }
 
         return binding.root
     }
-//
-//    private fun initializeSelectedMonth() {
-//        if (selectedViewModel.selectedValue.value == null) {
-//            val now = selectedViewModel.selectedValue.value?:""
-//            selectedViewModel.setSelectedValue(now)
-//            scrollToMonth(now)
-//        }
-//    }
-
-//    private fun scrollToMonth(month: String) {
-//        var width = month_list.width
-//
-//        if (width > 0) {
-//            val monthWidth = month_item.width
-//            layoutManager.scrollToPositionWithOffset(mainViewModel.months.indexOf(month), width / 2 - monthWidth / 2)
-//        }
-//    }
 
 }

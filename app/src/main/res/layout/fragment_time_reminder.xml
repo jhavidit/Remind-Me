@@ -131,9 +131,9 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/repeat_layout"
                 android:layout_width="@dimen/dimen_0"
-                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_20"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="@id/endGuideline"
                 app:layout_constraintStart_toStartOf="@id/startGuideline"
                 app:layout_constraintTop_toBottomOf="@id/repeat_text">
@@ -166,7 +166,6 @@
                         android:id="@+id/hours"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:checked="true"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -185,8 +184,7 @@
                         android:id="@+id/daily"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dimen_16"
-                        android:checked="true"
+                        android:layout_marginStart="@dimen/dimen_20"
                         app:layout_constraintStart_toEndOf="@id/hours"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -204,8 +202,7 @@
                         android:id="@+id/weekly"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dimen_16"
-                        android:checked="true"
+                        android:layout_marginStart="@dimen/dimen_20"
                         app:layout_constraintStart_toEndOf="@id/daily"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -223,8 +220,8 @@
                         android:id="@+id/monthly"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dimen_16"
-                        android:checked="true"
+                        android:layout_marginStart="@dimen/dimen_20"
+
                         app:layout_constraintStart_toEndOf="@id/weekly"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -233,6 +230,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/alata_regular"
                         android:text="Monthly"
+
                         android:textColor="@color/purple_200"
                         android:textSize="@dimen/dimen_text_16"
                         app:layout_constraintStart_toStartOf="@id/monthly"
@@ -246,7 +244,7 @@
 
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/location_picker"
+                android:id="@+id/date_picker"
                 android:layout_width="@dimen/dimen_0"
                 android:layout_height="@dimen/dimen_50"
                 android:layout_marginTop="@dimen/dimen_20"

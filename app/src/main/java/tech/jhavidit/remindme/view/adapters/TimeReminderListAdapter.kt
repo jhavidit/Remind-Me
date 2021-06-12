@@ -35,8 +35,12 @@ class TimeReminderListAdapter : RecyclerView.Adapter<TimeReminderListAdapter.MyV
         currentNotes.reminderTime?.let {
             holder.itemView.title.text = currentNotes.title
             holder.itemView.description.text = currentNotes.description
-            holder.itemView.time.text = currentNotes.reminderTime.toString()
-            holder.itemView.reminder_repeat.text = currentNotes.repeatAlarmIndex.toString()
+            holder.itemView.time.text =
+                currentNotes.reminderTime.toString() + "\n" + currentNotes.reminderDate.toString()
+            if (currentNotes.repeatValue == -1L)
+                holder.itemView.reminder_repeat.text = "Not Repeating"
+            else
+                holder.itemView.reminder_repeat.text = "Repeating"
             holder.itemView.reminder.setCardBackgroundColor(Color.parseColor(currentNotes.backgroundColor))
             holder.itemView.reminder.setOnClickListener {
                 holder.itemView.findNavController().navigate(

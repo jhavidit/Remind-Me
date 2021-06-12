@@ -107,11 +107,13 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                 locationReminder = args.currentNotes.locationReminder,
                 timeReminder = args.currentNotes.timeReminder,
                 reminderTime = args.currentNotes.reminderTime,
+                reminderWaitTime = args.currentNotes.reminderWaitTime,
+                reminderDate = args.currentNotes.reminderDate,
                 latitude = args.currentNotes.latitude,
                 isPinned = isPinned,
                 longitude = args.currentNotes.longitude,
                 radius = args.currentNotes.radius,
-                repeatAlarmIndex = args.currentNotes.repeatAlarmIndex,
+                repeatValue = args.currentNotes.repeatValue,
                 locationName = args.currentNotes.locationName,
                 backgroundColor = args.currentNotes.backgroundColor
             )
@@ -163,11 +165,13 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                 locationReminder = args.currentNotes.locationReminder,
                 timeReminder = args.currentNotes.timeReminder,
                 reminderTime = args.currentNotes.reminderTime,
+                reminderWaitTime = args.currentNotes.reminderWaitTime,
+                reminderDate = args.currentNotes.reminderDate,
                 isPinned = args.currentNotes.isPinned,
                 latitude = args.currentNotes.latitude,
                 longitude = args.currentNotes.longitude,
                 radius = args.currentNotes.radius,
-                repeatAlarmIndex = args.currentNotes.repeatAlarmIndex,
+                repeatValue = args.currentNotes.repeatValue,
                 locationName = args.currentNotes.locationName,
                 backgroundColor = args.currentNotes.backgroundColor
             )
@@ -184,11 +188,13 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                 locationReminder = args.currentNotes.locationReminder,
                 timeReminder = args.currentNotes.timeReminder,
                 reminderTime = args.currentNotes.reminderTime,
+                reminderWaitTime = args.currentNotes.reminderWaitTime,
+                reminderDate = args.currentNotes.reminderDate,
                 isPinned = args.currentNotes.isPinned,
                 latitude = args.currentNotes.latitude,
                 longitude = args.currentNotes.longitude,
                 radius = args.currentNotes.radius,
-                repeatAlarmIndex = args.currentNotes.repeatAlarmIndex,
+                repeatValue = args.currentNotes.repeatValue,
                 locationName = args.currentNotes.locationName,
                 backgroundColor = args.currentNotes.backgroundColor
             )
@@ -218,7 +224,6 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
         }
 
         bottomSheetDialogs.show()
-
 
     }
 
@@ -254,11 +259,13 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
             locationReminder = args.currentNotes.locationReminder,
             timeReminder = args.currentNotes.timeReminder,
             reminderTime = args.currentNotes.reminderTime,
+            reminderWaitTime = args.currentNotes.reminderWaitTime,
+            reminderDate = args.currentNotes.reminderDate,
             latitude = args.currentNotes.latitude,
             longitude = args.currentNotes.longitude,
             isPinned = args.currentNotes.isPinned,
             radius = args.currentNotes.radius,
-            repeatAlarmIndex = args.currentNotes.repeatAlarmIndex,
+            repeatValue = args.currentNotes.repeatValue,
             locationName = args.currentNotes.locationName,
             backgroundColor = args.currentNotes.backgroundColor,
             lastUpdated = formattedDate
@@ -290,11 +297,13 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
             locationReminder = args.currentNotes.locationReminder,
             timeReminder = args.currentNotes.timeReminder,
             reminderTime = args.currentNotes.reminderTime,
+            reminderWaitTime = args.currentNotes.reminderWaitTime,
+            reminderDate = args.currentNotes.reminderDate,
             latitude = args.currentNotes.latitude,
             longitude = args.currentNotes.longitude,
             isPinned = args.currentNotes.isPinned,
             radius = args.currentNotes.radius,
-            repeatAlarmIndex = args.currentNotes.repeatAlarmIndex,
+            repeatValue = args.currentNotes.repeatValue,
             locationName = args.currentNotes.locationName,
             backgroundColor = color,
             lastUpdated = args.currentNotes.lastUpdated

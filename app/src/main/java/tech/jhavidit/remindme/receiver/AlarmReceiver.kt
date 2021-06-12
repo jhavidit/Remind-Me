@@ -93,17 +93,22 @@ class AlarmReceiver : BroadcastReceiver() {
         val alarmManager =
             context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        val alarmTime = notes.reminderTime ?: 0L
+        val alarmTime = notes.reminderWaitTime ?: 0L
         val currentTime = Calendar.getInstance().timeInMillis
         if (currentTime < alarmTime) {
             log("notes ${notes}")
             val intent = Intent(context, AlarmReceiver::class.java)
             intent.putExtra("notes", notes)
-            intent.putExtra("reminder","time")
+            intent.putExtra("reminder", "time")
             val pendingIntent =
-                PendingIntent.getBroadcast(context, notes.id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-            when (notes.repeatAlarmIndex) {
-                0 -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                PendingIntent.getBroadcast(
+                    context,
+                    notes.id,
+                    intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT
+                )
+            when (notes.repeatValue) {
+                -1L -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     alarmManager.setExactAndAllowWhileIdle(
                         AlarmManager.RTC_WAKEUP,
                         alarmTime,
@@ -116,38 +121,15 @@ class AlarmReceiver : BroadcastReceiver() {
                         pendingIntent
                     )
                 }
-                1 -> alarmManager.setInexactRepeating(
-                    AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    alarmTime,
-                    AlarmManager.INTERVAL_HOUR,
-                    pendingIntent
-                )
-                2 ->
+                else -> {
                     alarmManager.setInexactRepeating(
                         AlarmManager.ELAPSED_REALTIME_WAKEUP,
                         alarmTime,
-                        AlarmManager.INTERVAL_DAY,
+                        notes.repeatValue!!,
                         pendingIntent
                     )
-                3 -> alarmManager.setInexactRepeating(
-                    AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    alarmTime,
-                    AlarmManager.INTERVAL_DAY * 7,
-                    pendingIntent
-                )
-                4 -> alarmManager.setInexactRepeating(
-                    AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    alarmTime,
-                    AlarmManager.INTERVAL_DAY * 30,
-                    pendingIntent
-                )
-                5 ->
-                    alarmManager.setInexactRepeating(
-                        AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                        alarmTime,
-                        AlarmManager.INTERVAL_DAY * 365,
-                        pendingIntent
-                    )
+                }
+
             }
             Toast.makeText(context, "Alarm Set", Toast.LENGTH_SHORT).show()
         }
