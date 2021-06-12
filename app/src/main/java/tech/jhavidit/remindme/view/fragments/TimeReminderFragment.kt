@@ -34,7 +34,6 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
     private var reminderTime = ""
     private var reminderDate = ""
     private var repeatingValue: Long = -1
-    private var reminderTIme: String = ""
     private lateinit var repeatList: Array<String>
     private lateinit var viewModel: NotesViewModel
 
@@ -47,6 +46,8 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
         binding = FragmentTimeReminderBinding.inflate(inflater, container, false)
 
         repeatList = RepeatHourModel.getRepeatingHours()
+
+
 
         binding.closeBtn.setOnClickListener {
             findNavController().navigateUp()
@@ -75,6 +76,27 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
         var alarmDay = 0
 
 
+//12/02/2021
+        //02:04 AM
+        if (args.currentNotes.timeReminder == true) {
+            reminderDate = args.currentNotes.reminderDate!!
+            reminderTime = args.currentNotes.reminderTime!!
+            alarmDay = reminderDate.substring(0, 2).toInt()
+            alarmMonth = reminderDate.substring(3, 5).toInt()
+            alarmYear = reminderDate.substring(6, 10).toInt()
+            alarmMinute = reminderTime.substring(3, 5).toInt()
+            alarmHour =
+                if (reminderTime.substring(6, 8) == "PM" && reminderTime.substring(0, 2) != "12") {
+                    reminderTime.substring(0, 2).toInt() + 12
+                } else {
+                    reminderTime.substring(0, 2).toInt()
+                }
+            binding.calendarText.text = "$alarmDay/$alarmMonth/$alarmMonth"
+            binding.timePicker.hour = alarmHour
+            binding.timePicker.minute = alarmMinute
+        }
+
+
         val datePickerDialog = DatePickerDialog(
             requireContext(),
             DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
@@ -83,7 +105,18 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
                 alarmMonth = monthOfYear
                 alarmDay = dayOfMonth
                 binding.calendarText.text = "$dayOfMonth/$monthOfYear/$year"
-                reminderDate = "$dayOfMonth/$monthOfYear/$year"
+
+                val monthFormat = if (monthOfYear < 10)
+                    "0$monthOfYear"
+                else
+                    monthOfYear.toString()
+
+                val dayFormat = if (dayOfMonth < 10)
+                    "0$dayOfMonth"
+                else
+                    dayOfMonth.toString()
+
+                reminderDate = "$dayFormat/$monthFormat/$year"
             },
             year,
             month,
@@ -93,12 +126,25 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
         binding.timePicker.setOnTimeChangedListener { _, hourOfDay, minute ->
             alarmHour = hourOfDay
             alarmMinute = minute
-            if (hourOfDay == 12)
-                reminderTime = "$hourOfDay:$minute PM"
-            else if (hourOfDay < 12)
-                reminderTIme = "$hourOfDay:$minute AM"
+
+            val hourFormat = if (hourOfDay < 10)
+                "0$hourOfDay"
             else
-                reminderTIme = "${hourOfDay - 12}:$minute PM"
+                hourOfDay.toString()
+
+            val minuteFormat = if (minute < 10)
+                "0$minute"
+            else
+                minute.toString()
+
+            reminderTime = if (hourOfDay == 12)
+                "$hourFormat:$minuteFormat PM"
+            else if (hourOfDay < 12)
+                "$hourFormat:$minuteFormat AM"
+            else if ((hourOfDay - 12) < 10)
+                "0${hourOfDay - 12}:$minuteFormat PM"
+            else
+                "${hourOfDay - 12}:$minuteFormat PM"
         }
 
         binding.repeatPicker.apply {

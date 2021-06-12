@@ -42,7 +42,7 @@ class ActiveReminderBottomSheet : BottomSheetDialogFragment() {
             binding.locationReminderCard.visibility = GONE
             binding.timeReminderSwitch.isChecked = args.currentNotes.timeReminder ?: false
             binding.reminderTime.text =
-                args.currentNotes.reminderTime.toString() + " " + args.currentNotes.reminderDate.toString()
+                args.currentNotes.reminderTime.toString()
             if (args.currentNotes.repeatValue == -1L)
                 binding.reminderRepeat.text = "Not Repeating"
             else

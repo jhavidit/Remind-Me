@@ -13,9 +13,12 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.service.AlarmService
+import tech.jhavidit.remindme.util.NOTES_LOCATION
+import tech.jhavidit.remindme.util.NOTES_TIME
 import tech.jhavidit.remindme.util.log
 import tech.jhavidit.remindme.view.activity.MainActivity
 import java.util.*
@@ -24,8 +27,6 @@ class AlarmReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
 
-        log("time ${intent?.getStringExtra("reminder")}")
-        log("note  ${intent?.getStringExtra("notes")}")
         context?.let {
             intent?.let { it1 -> startAlarmService(context, it1) }
         }
@@ -37,56 +38,14 @@ class AlarmReceiver : BroadcastReceiver() {
     ) {
         val intentService = Intent(context, AlarmService::class.java)
         intentService.putExtra(
-            "notes",
-            intent.getParcelableExtra<NotesModel>("notes")
+            NOTES_TIME, intent.getBundleExtra(NOTES_TIME)
         )
-        log("Time Note ${intent.extras?.getParcelable<NotesModel>("notes")}")
-        log("Time note ${intent.getParcelableExtra<NotesModel>("notes")}")
-        log("reminder  ${intent.getStringExtra("reminder")}")
-        intentService.putExtra("reminder", "time")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(intentService)
         } else {
             context.startService(intentService)
         }
     }
-
-    /*private fun showNotification(context: Context, title: String) {
-        val intent = Intent(context, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = PendingIntent.getActivity(
-            context, 0, intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
-        val channelId = "default"
-        val channelName = "Remind Me"
-        val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        val notificationBuilder = NotificationCompat.Builder(context, channelId)
-            .setColor(ContextCompat.getColor(context, R.color.purple_200))
-            .setSmallIcon(R.drawable.notification_icon)
-            .setContentTitle("We are here to remind you about")
-            .setContentText(title)
-            .setAutoCancel(true)
-            .setVibrate(longArrayOf(1000, 500, 1000, 500, 1000, 500))
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setSound(defaultSoundUri)
-            .setContentIntent(pendingIntent)
-
-        val notificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-        // Since android Oreo notification channel is needed.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                channelId,
-                channelName,
-                NotificationManager.IMPORTANCE_HIGH
-            )
-            notificationManager.createNotificationChannel(channel)
-        }
-
-        notificationManager.notify(0, notificationBuilder.build())
-    }*/
 
 
     fun scheduleAlarm(context: Context, notes: NotesModel) {
@@ -96,10 +55,17 @@ class AlarmReceiver : BroadcastReceiver() {
         val alarmTime = notes.reminderWaitTime ?: 0L
         val currentTime = Calendar.getInstance().timeInMillis
         if (currentTime < alarmTime) {
-            log("notes ${notes}")
+            log("notes $notes")
             val intent = Intent(context, AlarmReceiver::class.java)
-            intent.putExtra("notes", notes)
-            intent.putExtra("reminder", "time")
+            val bundle = bundleOf(
+                "id" to notes.id,
+                "title" to notes.title,
+                "description" to notes.description,
+                "reminderTime" to notes.reminderTime,
+                "reminder" to "time",
+                "locationName" to notes.locationName
+            )
+            intent.putExtra(NOTES_TIME, bundle)
             val pendingIntent =
                 PendingIntent.getBroadcast(
                     context,
@@ -123,7 +89,7 @@ class AlarmReceiver : BroadcastReceiver() {
                 }
                 else -> {
                     alarmManager.setInexactRepeating(
-                        AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                        AlarmManager.RTC_WAKEUP,
                         alarmTime,
                         notes.repeatValue!!,
                         pendingIntent

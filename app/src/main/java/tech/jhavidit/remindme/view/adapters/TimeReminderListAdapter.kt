@@ -26,7 +26,6 @@ class TimeReminderListAdapter : RecyclerView.Adapter<TimeReminderListAdapter.MyV
     }
 
     override fun getItemCount(): Int {
-
         return notes.size
     }
 
@@ -36,7 +35,7 @@ class TimeReminderListAdapter : RecyclerView.Adapter<TimeReminderListAdapter.MyV
             holder.itemView.title.text = currentNotes.title
             holder.itemView.description.text = currentNotes.description
             holder.itemView.time.text =
-                currentNotes.reminderTime.toString() + "\n" + currentNotes.reminderDate.toString()
+                currentNotes.reminderTime.toString()
             if (currentNotes.repeatValue == -1L)
                 holder.itemView.reminder_repeat.text = "Not Repeating"
             else

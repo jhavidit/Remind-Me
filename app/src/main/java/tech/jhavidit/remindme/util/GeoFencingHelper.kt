@@ -49,7 +49,7 @@ class GeoFencingHelper(context: Context) : ContextWrapper(context) {
             "reminder" to "location",
             "locationName" to notesModel.locationName
         )
-        intent.putExtra("notes", bundle)
+        intent.putExtra(NOTES_LOCATION, bundle)
         log("pendinng intent - ${notesModel}")
         pendingIntent =
             PendingIntent.getBroadcast(this, id, intent, PendingIntent.FLAG_UPDATE_CURRENT)

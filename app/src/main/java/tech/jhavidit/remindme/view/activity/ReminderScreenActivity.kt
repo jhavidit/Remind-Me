@@ -12,6 +12,8 @@ import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.ActivityTimeReminderBinding
 import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.service.AlarmService
+import tech.jhavidit.remindme.util.NOTES_LOCATION
+import tech.jhavidit.remindme.util.NOTES_TIME
 import tech.jhavidit.remindme.util.log
 import tech.jhavidit.remindme.viewModel.NotesViewModel
 
@@ -22,17 +24,28 @@ class ReminderScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_time_reminder)
         viewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
-        val bundle = intent?.getBundleExtra("notes")
-        val reminder = bundle?.getString("reminder")
-        binding.title.text = bundle?.getString("title")
-        binding.description.text = bundle?.getString("description")
-        binding.reminderLocationTime.text = bundle?.getString("locationName")
-        log("notesMOdel = ${bundle?.getString("title")}")
-        log("reminder = ${bundle?.toString()}")
-        if (reminder == "location")
-            binding.reminderIcon.setImageResource(R.drawable.ic_add_location)
-        else if (reminder == "time")
+        val notesTimeBundle = intent?.getBundleExtra(NOTES_TIME)
+        notesTimeBundle?.let {
             binding.reminderIcon.setImageResource(R.drawable.ic_alarm_set)
+            binding.reminderLocationTime.text =
+                notesTimeBundle.getString("reminderTime")
+            binding.title.text = notesTimeBundle.getString("title")
+            binding.description.text = notesTimeBundle.getString("description")
+
+        }
+        val notesLocationBundle = intent?.getBundleExtra(NOTES_LOCATION)
+
+        notesLocationBundle?.let {
+            binding.reminderIcon.setImageResource(R.drawable.ic_alarm_set)
+            binding.reminderLocationTime.text =
+                notesLocationBundle.getString("reminderTime")
+            binding.title.text = notesLocationBundle.getString("title")
+            binding.description.text = notesLocationBundle.getString("description")
+            binding.reminderIcon.setImageResource(R.drawable.ic_add_location)
+            binding.reminderLocationTime.text = notesLocationBundle.getString("locationName")
+
+        }
+
         binding.cancelReminder.setOnClickListener {
             val intentService = Intent(applicationContext, AlarmService::class.java)
             applicationContext.stopService(intentService)
