@@ -37,7 +37,7 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
     private lateinit var repeatList: Array<String>
     private lateinit var viewModel: NotesViewModel
 
-    @RequiresApi(Build.VERSION_CODES.M)
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -76,8 +76,7 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
         var alarmDay = 0
 
 
-//12/02/2021
-        //02:04 AM
+
         if (args.currentNotes.timeReminder == true) {
             reminderDate = args.currentNotes.reminderDate!!
             reminderTime = args.currentNotes.reminderTime!!
@@ -92,8 +91,15 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
                     reminderTime.substring(0, 2).toInt()
                 }
             binding.calendarText.text = "$alarmDay/$alarmMonth/$alarmMonth"
-            binding.timePicker.hour = alarmHour
-            binding.timePicker.minute = alarmMinute
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                binding.timePicker.hour = alarmHour
+                binding.timePicker.minute = alarmMinute
+            } else {
+                binding.timePicker.currentHour = alarmHour
+                binding.timePicker.currentMinute = alarmMinute
+            }
+
         }
 
 
