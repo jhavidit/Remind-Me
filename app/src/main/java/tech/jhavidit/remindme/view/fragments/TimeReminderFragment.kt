@@ -90,7 +90,7 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
                 } else {
                     reminderTime.substring(0, 2).toInt()
                 }
-            binding.calendarText.text = "$alarmDay/$alarmMonth/$alarmMonth"
+            binding.calendarText.text = "$alarmDay/$alarmMonth/$alarmYear"
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 binding.timePicker.hour = alarmHour
@@ -105,7 +105,7 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
 
         val datePickerDialog = DatePickerDialog(
             requireContext(),
-            DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+            DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
                 // Display Selected date in textbox
                 alarmYear = year
                 alarmMonth = monthOfYear

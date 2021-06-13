@@ -42,10 +42,14 @@ class AlarmService : Service() {
         val id: Int = bundle?.getInt("id") ?: 0
         val dismissIntent = Intent(this, ReminderScreenActivity::class.java)
         val snoozeIntent = Intent(this, ReminderScreenActivity::class.java)
+        snoozeIntent.putExtra(NOTES_TIME, bundle)
+        dismissIntent.putExtra(NOTES_TIME, bundle)
         snoozeIntent.putExtra("snooze", true)
         dismissIntent.putExtra("dismiss", true)
-        val snoozePendingIntent = PendingIntent.getActivity(this, id, snoozeIntent, 0)
-        val dismissPendingIntent = PendingIntent.getActivity(this, id, dismissIntent, 0)
+        val snoozePendingIntent =
+            PendingIntent.getActivity(this, id, snoozeIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val dismissPendingIntent =
+            PendingIntent.getActivity(this, id, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         val notificationIntent = Intent(this, ReminderScreenActivity::class.java)
         notificationIntent.putExtra(NOTES_TIME, bundle)
         val pendingIntent = PendingIntent.getActivity(
