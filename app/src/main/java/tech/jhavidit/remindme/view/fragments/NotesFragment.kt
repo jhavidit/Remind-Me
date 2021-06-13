@@ -45,6 +45,9 @@ class NotesFragment : Fragment() {
         navController = Navigation.findNavController(requireActivity(), R.id.NavHostFragment)
         viewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
         adapter = NotesListAdapter()
+        binding.searchBar.setOnClickListener {
+            navController.navigate(NotesFragmentDirections.searchNotes())
+        }
         binding.recyclerView.adapter = adapter
         val staggeredGridLayoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
         binding.recyclerView.layoutManager = staggeredGridLayoutManager

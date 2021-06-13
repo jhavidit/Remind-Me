@@ -134,7 +134,7 @@
                             android:alpha="0.2"
                             android:background="?selectableItemBackgroundBorderless"
                             android:src="@drawable/ic_down"
-                            android:tint="#323232" />
+                            app:tint="@color/purple_200" />
 
 
                     </LinearLayout>
@@ -254,11 +254,11 @@
                         android:layout_width="@dimen/dimen_28"
                         android:layout_height="@dimen/dimen_28"
                         android:src="@drawable/ic_map"
-                        android:tint="@color/purple_200"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/map_text"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/purple_200" />
 
                     <TextView
                         android:id="@+id/map_text"

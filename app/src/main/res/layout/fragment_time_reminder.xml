@@ -1,149 +1,480 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/time_reminder_bottom_sheet"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingBottom="40dp">
-
-        <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/startGuideline"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.05" />
+        app:cardBackgroundColor="@color/purple_light"
+        app:strokeColor="@color/purple_200"
+        app:strokeWidth="0.5dp">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/middleGuideline"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/dimen_20">
+
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/topGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="8dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/startGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.05" />
+
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/endGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.95" />
+
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/middleGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <ImageView
+                android:id="@+id/close_btn"
+                android:layout_width="@dimen/dimen_28"
+                android:layout_height="@dimen/dimen_28"
+                android:background="?selectableItemBackgroundBorderless"
+                android:contentDescription="@string/close_bottom_sheet_button"
+                android:src="@drawable/ic_down"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/topGuideline" />
+
+            <LinearLayout
+                android:id="@+id/set_time_reminder_ll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_8"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/close_btn">
+
+
+                <ImageView
+                    android:id="@+id/time_reminder_image"
+                    android:layout_width="@dimen/dimen_24"
+                    android:layout_height="@dimen/dimen_24"
+                    android:layout_marginEnd="@dimen/dimen_12"
+                    android:src="@drawable/ic_clock" />
+
+                <TextView
+                    android:id="@+id/time_reminder_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/alata_regular"
+                    android:text="Select Time"
+                    android:textColor="@color/purple_200"
+                    android:textSize="@dimen/dimen_text_16"
+                    app:layout_constraintTop_toBottomOf="@id/close_btn" />
+
+            </LinearLayout>
+
+
+            <TimePicker
+                android:id="@+id/time_picker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:theme="@style/MyAppTheme.NumberPicker"
+                android:timePickerMode="spinner"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/set_time_reminder_ll" />
+
+            <View
+                android:layout_width="@dimen/dimen_0"
+                android:layout_height="1dp"
+                android:background="@color/description_color"
+                app:layout_constraintEnd_toEndOf="@id/time_picker"
+                app:layout_constraintStart_toStartOf="@id/time_picker"
+                app:layout_constraintTop_toBottomOf="@id/time_picker" />
+
+            <TextView
+                android:id="@+id/repeat_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_20"
+                android:fontFamily="@font/alata_regular"
+                android:text="Repeat"
+                android:textColor="@color/purple_200"
+                android:textSize="@dimen/dimen_text_20"
+                app:layout_constraintStart_toStartOf="@id/time_picker"
+                app:layout_constraintTop_toBottomOf="@id/time_picker" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/repeater_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_20"
+                app:layout_constraintEnd_toEndOf="@id/time_picker"
+                app:layout_constraintTop_toBottomOf="@id/time_picker" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/repeat_layout"
+                android:layout_width="@dimen/dimen_0"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_20"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@id/endGuideline"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                app:layout_constraintTop_toBottomOf="@id/repeat_text">
+
+                <com.shawnlin.numberpicker.NumberPicker
+                    android:id="@+id/repeat_picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:np_dividerColor="#00000000"
+                    app:np_orientation="horizontal"
+                    app:np_selectedTextColor="@color/purple_200"
+                    app:np_textColor="@color/purple_200"
+                    app:np_wrapSelectorWheel="true" />
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/repeat_picker">
+
+
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:id="@+id/hours"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/alata_regular"
+                        android:text="Hours"
+                        android:textColor="@color/purple_200"
+                        android:textSize="@dimen/dimen_text_16"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/hours" />
+
+
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:id="@+id/daily"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dimen_20"
+                        app:layout_constraintStart_toEndOf="@id/hours"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/alata_regular"
+                        android:text="Daily"
+                        android:textColor="@color/purple_200"
+                        android:textSize="@dimen/dimen_text_16"
+                        app:layout_constraintStart_toStartOf="@id/daily"
+                        app:layout_constraintTop_toBottomOf="@id/daily" />
+
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:id="@+id/weekly"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dimen_20"
+                        app:layout_constraintStart_toEndOf="@id/daily"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/alata_regular"
+                        android:text="Weekly"
+                        android:textColor="@color/purple_200"
+                        android:textSize="@dimen/dimen_text_16"
+                        app:layout_constraintStart_toStartOf="@id/weekly"
+                        app:layout_constraintTop_toBottomOf="@id/weekly" />
+
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:id="@+id/monthly"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dimen_20"
+                        app:layout_constraintStart_toEndOf="@id/weekly"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/alata_regular"
+                        android:text="Monthly"
+
+                        android:textColor="@color/purple_200"
+                        android:textSize="@dimen/dimen_text_16"
+                        app:layout_constraintStart_toStartOf="@id/monthly"
+                        app:layout_constraintTop_toBottomOf="@id/monthly" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/date_picker"
+                android:layout_width="@dimen/dimen_0"
+                android:layout_height="@dimen/dimen_50"
+                android:layout_marginTop="@dimen/dimen_20"
+                android:layout_marginEnd="@dimen/dimen_10"
+                app:cardBackgroundColor="@color/purple_light"
+                app:cardCornerRadius="@dimen/dimen_8"
+                app:layout_constraintEnd_toEndOf="@id/middleGuideline"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                app:layout_constraintTop_toBottomOf="@id/repeat_layout"
+                app:strokeColor="@color/purple_200"
+                app:strokeWidth="1dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/calendar_image"
+                        android:layout_width="@dimen/dimen_28"
+                        android:layout_height="@dimen/dimen_28"
+                        android:src="@drawable/ic_select_date"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/calendar_text"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/purple_200" />
+
+                    <TextView
+                        android:id="@+id/calendar_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/alata_regular"
+                        android:text="Select Date"
+                        android:textColor="@color/purple_200"
+                        android:textSize="@dimen/dimen_text_16"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/calendar_image"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/save_reminder_card"
+                android:layout_width="@dimen/dimen_0"
+                android:layout_height="@dimen/dimen_50"
+                android:layout_marginStart="@dimen/dimen_10"
+                android:layout_marginTop="@dimen/dimen_20"
+                app:cardBackgroundColor="@color/purple_200"
+                app:cardCornerRadius="@dimen/dimen_8"
+                app:layout_constraintEnd_toEndOf="@id/endGuideline"
+                app:layout_constraintStart_toStartOf="@id/middleGuideline"
+                app:layout_constraintTop_toBottomOf="@id/repeat_layout"
+                app:strokeColor="@color/purple_200"
+                app:strokeWidth="1dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/alata_regular"
+                        android:text="Done"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/dimen_text_16"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+    <!--
+    <layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="40dp">
+
+            <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/startGuideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/endGuideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.95" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/topGuideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.05" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/bottomGuideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.95" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/middleGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
 
-        <TextView
-            android:id="@+id/time_reminder_heading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
-            android:text="Time Reminder"
-            android:textColor="#373A42"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@id/startGuideline"
-            app:layout_constraintTop_toTopOf="@id/topGuideline" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/endGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.95" />
 
-        <TextView
-            android:id="@+id/time_picker_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/startGuideline"
-            app:layout_constraintEnd_toEndOf="@id/endGuideline"
-            app:layout_constraintTop_toBottomOf="@id/time_reminder_heading"
-            android:layout_marginTop="40dp"
-            android:textAllCaps="false"
-            android:text="No time selected"
-            android:textStyle="bold"
-            android:textSize="24sp"/>
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/topGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.05" />
 
-        <Button
-            android:id="@+id/time_picker"
-            android:textColor="@color/white"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/startGuideline"
-            app:layout_constraintEnd_toEndOf="@id/endGuideline"
-            app:layout_constraintTop_toBottomOf="@id/time_picker_text"
-            android:layout_marginTop="10dp"
-            android:textAllCaps="false"
-            android:textSize="20sp"
-            android:text="Select time"/>
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/bottomGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.95" />
 
-        <TextView
-            android:id="@+id/date_picker_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/startGuideline"
-            app:layout_constraintEnd_toEndOf="@id/endGuideline"
-            app:layout_constraintTop_toBottomOf="@id/time_picker"
-            android:layout_marginTop="20dp"
-            android:textAllCaps="false"
-            android:text="No date selected"
-            android:textStyle="bold"
-            android:textSize="24sp"/>
+            <TextView
+                android:id="@+id/time_reminder_heading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:text="Time Reminder"
+                android:textColor="#373A42"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                app:layout_constraintTop_toTopOf="@id/topGuideline" />
 
-        <Button
-            android:id="@+id/date_picker"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/startGuideline"
-            app:layout_constraintEnd_toEndOf="@id/endGuideline"
-            app:layout_constraintTop_toBottomOf="@id/date_picker_text"
-            android:layout_marginTop="20dp"
-            android:textColor="@color/white"
-            android:textAllCaps="false"
-            android:textSize="20sp"
-            android:text="Select Date"/>
+            <TextView
+                android:id="@+id/time_picker_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                app:layout_constraintEnd_toEndOf="@id/endGuideline"
+                app:layout_constraintTop_toBottomOf="@id/time_reminder_heading"
+                android:layout_marginTop="40dp"
+                android:textAllCaps="false"
+                android:text="No time selected"
+                android:textStyle="bold"
+                android:textSize="24sp"/>
 
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/spinner"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/startGuideline"
-            app:layout_constraintEnd_toEndOf="@id/endGuideline"
-            android:layout_marginTop="20dp"
-            app:layout_constraintTop_toBottomOf="@id/date_picker"/>
+            <Button
+                android:id="@+id/time_picker"
+                android:textColor="@color/white"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                app:layout_constraintEnd_toEndOf="@id/endGuideline"
+                app:layout_constraintTop_toBottomOf="@id/time_picker_text"
+                android:layout_marginTop="10dp"
+                android:textAllCaps="false"
+                android:textSize="20sp"
+                android:text="Select time"/>
 
+            <TextView
+                android:id="@+id/date_picker_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                app:layout_constraintEnd_toEndOf="@id/endGuideline"
+                app:layout_constraintTop_toBottomOf="@id/time_picker"
+                android:layout_marginTop="20dp"
+                android:textAllCaps="false"
+                android:text="No date selected"
+                android:textStyle="bold"
+                android:textSize="24sp"/>
 
-        <Button
-            android:id="@+id/cancel_alarm"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/startGuideline"
-            app:layout_constraintEnd_toEndOf="@id/endGuideline"
-            app:layout_constraintTop_toBottomOf="@id/spinner"
-            android:layout_marginTop="20dp"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:text="Cancel"/>
+            <Button
+                android:id="@+id/date_picker"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                app:layout_constraintEnd_toEndOf="@id/endGuideline"
+                app:layout_constraintTop_toBottomOf="@id/date_picker_text"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:textSize="20sp"
+                android:text="Select Date"/>
 
-        <Button
-            android:id="@+id/save"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/startGuideline"
-            app:layout_constraintEnd_toEndOf="@id/endGuideline"
-            app:layout_constraintTop_toBottomOf="@id/cancel_alarm"
-            android:layout_marginTop="20dp"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:layout_marginBottom="40dp"
-            android:text="Save"/>
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/spinner"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                app:layout_constraintEnd_toEndOf="@id/endGuideline"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@id/date_picker"/>
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <Button
+                android:id="@+id/cancel_alarm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                app:layout_constraintEnd_toEndOf="@id/endGuideline"
+                app:layout_constraintTop_toBottomOf="@id/spinner"
+                android:layout_marginTop="20dp"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:text="Cancel"/>
+
+            <Button
+                android:id="@+id/save"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                app:layout_constraintEnd_toEndOf="@id/endGuideline"
+                app:layout_constraintTop_toBottomOf="@id/cancel_alarm"
+                android:layout_marginTop="20dp"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:layout_marginBottom="40dp"
+                android:text="Save"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </layout>-->
 
 </layout>

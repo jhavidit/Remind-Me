@@ -11,6 +11,7 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+
         <!-- Customize your theme here. -->
     </style>
 
@@ -36,5 +37,14 @@
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="MyAppTheme.NumberPicker" parent="@android:style/Widget.Material.Light.TimePicker">
+        <item name="android:colorControlNormal">#00000000</item>
+        <item name="android:fontFamily">@font/alata_regular</item>
+        <item name="android:textColorPrimary">@color/purple_200</item>
+        <item name="android:textSize">@dimen/dimen_text_24</item>
+
+    </style>
+
 
 </resources>

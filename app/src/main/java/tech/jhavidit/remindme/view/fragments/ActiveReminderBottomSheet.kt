@@ -41,8 +41,12 @@ class ActiveReminderBottomSheet : BottomSheetDialogFragment() {
         if (args.reminderType == TIME) {
             binding.locationReminderCard.visibility = GONE
             binding.timeReminderSwitch.isChecked = args.currentNotes.timeReminder ?: false
-            binding.reminderTime.text = args.currentNotes.reminderTime.toString()
-            binding.reminderRepeat.text = args.currentNotes.repeatAlarmIndex.toString()
+            binding.reminderTime.text =
+                args.currentNotes.reminderTime.toString()
+            if (args.currentNotes.repeatValue == -1L)
+                binding.reminderRepeat.text = "Not Repeating"
+            else
+                binding.reminderRepeat.text = "Repeating"
         } else if (args.reminderType == LOCATION) {
             binding.timeReminderCard.visibility = GONE
             binding.locationReminderSwitch.isChecked = args.currentNotes.locationReminder ?: false
@@ -75,12 +79,14 @@ class ActiveReminderBottomSheet : BottomSheetDialogFragment() {
                         description = args.currentNotes.description,
                         locationReminder = null,
                         timeReminder = args.currentNotes.timeReminder,
+                        reminderWaitTime = args.currentNotes.reminderWaitTime,
                         reminderTime = args.currentNotes.reminderTime,
+                        reminderDate = args.currentNotes.reminderDate,
                         isPinned = args.currentNotes.isPinned,
                         latitude = null,
                         longitude = null,
                         radius = null,
-                        repeatAlarmIndex = args.currentNotes.repeatAlarmIndex,
+                        repeatValue = args.currentNotes.repeatValue,
                         locationName = null,
                         backgroundColor = args.currentNotes.backgroundColor
                     )
@@ -106,12 +112,14 @@ class ActiveReminderBottomSheet : BottomSheetDialogFragment() {
                     description = args.currentNotes.description,
                     locationReminder = args.currentNotes.locationReminder,
                     timeReminder = true,
+                    reminderWaitTime = args.currentNotes.reminderWaitTime,
                     reminderTime = args.currentNotes.reminderTime,
+                    reminderDate = args.currentNotes.reminderDate,
                     latitude = args.currentNotes.latitude,
                     longitude = args.currentNotes.longitude,
                     isPinned = args.currentNotes.isPinned,
                     radius = args.currentNotes.radius,
-                    repeatAlarmIndex = args.currentNotes.repeatAlarmIndex,
+                    repeatValue = args.currentNotes.repeatValue,
                     locationName = args.currentNotes.locationName,
                     backgroundColor = args.currentNotes.backgroundColor,
                     lastUpdated = args.currentNotes.lastUpdated
@@ -125,12 +133,14 @@ class ActiveReminderBottomSheet : BottomSheetDialogFragment() {
                     description = args.currentNotes.description,
                     locationReminder = args.currentNotes.locationReminder,
                     timeReminder = false,
+                    reminderWaitTime = args.currentNotes.reminderWaitTime,
                     reminderTime = args.currentNotes.reminderTime,
+                    reminderDate = args.currentNotes.reminderDate,
                     latitude = args.currentNotes.latitude,
                     longitude = args.currentNotes.longitude,
                     isPinned = args.currentNotes.isPinned,
                     radius = args.currentNotes.radius,
-                    repeatAlarmIndex = args.currentNotes.repeatAlarmIndex,
+                    repeatValue = args.currentNotes.repeatValue,
                     locationName = args.currentNotes.locationName,
                     backgroundColor = args.currentNotes.backgroundColor,
                     lastUpdated = args.currentNotes.lastUpdated
@@ -157,11 +167,13 @@ class ActiveReminderBottomSheet : BottomSheetDialogFragment() {
                         locationReminder = args.currentNotes.locationReminder,
                         timeReminder = true,
                         reminderTime = args.currentNotes.reminderTime,
+                        reminderWaitTime = args.currentNotes.reminderWaitTime,
+                        reminderDate = args.currentNotes.reminderDate,
                         latitude = args.currentNotes.latitude,
                         longitude = args.currentNotes.longitude,
                         isPinned = args.currentNotes.isPinned,
                         radius = args.currentNotes.radius,
-                        repeatAlarmIndex = args.currentNotes.repeatAlarmIndex,
+                        repeatValue = args.currentNotes.repeatValue,
                         locationName = args.currentNotes.locationName,
                         backgroundColor = args.currentNotes.backgroundColor,
                         lastUpdated = args.currentNotes.lastUpdated
@@ -179,11 +191,13 @@ class ActiveReminderBottomSheet : BottomSheetDialogFragment() {
                     locationReminder = args.currentNotes.locationReminder,
                     timeReminder = false,
                     reminderTime = args.currentNotes.reminderTime,
+                    reminderWaitTime = args.currentNotes.reminderWaitTime,
+                    reminderDate = args.currentNotes.reminderDate,
                     latitude = args.currentNotes.latitude,
                     longitude = args.currentNotes.longitude,
                     isPinned = args.currentNotes.isPinned,
                     radius = args.currentNotes.radius,
-                    repeatAlarmIndex = args.currentNotes.repeatAlarmIndex,
+                    repeatValue = args.currentNotes.repeatValue,
                     locationName = args.currentNotes.locationName,
                     backgroundColor = args.currentNotes.backgroundColor,
                     lastUpdated = args.currentNotes.lastUpdated
@@ -209,11 +223,13 @@ class ActiveReminderBottomSheet : BottomSheetDialogFragment() {
                         locationReminder = args.currentNotes.locationReminder,
                         timeReminder = null,
                         reminderTime = null,
+                        reminderWaitTime = null,
+                        reminderDate = null,
                         latitude = args.currentNotes.latitude,
                         longitude = args.currentNotes.longitude,
                         isPinned = args.currentNotes.isPinned,
                         radius = args.currentNotes.radius,
-                        repeatAlarmIndex = -1,
+                        repeatValue = null,
                         locationName = args.currentNotes.locationName,
                         backgroundColor = args.currentNotes.backgroundColor,
                         lastUpdated = args.currentNotes.lastUpdated

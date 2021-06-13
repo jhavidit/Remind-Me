@@ -1,5 +1,6 @@
 package tech.jhavidit.remindme.view.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -30,12 +31,13 @@ class ReminderFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val bottomNavigation : BottomNavigationView? = activity?.findViewById(R.id.bottom_nav)
+        val bottomNavigation: BottomNavigationView? = activity?.findViewById(R.id.bottom_nav)
         bottomNavigation?.visibility = View.VISIBLE
         locationAdapter = LocationReminderListAdapter()
         timeAdapter = TimeReminderListAdapter()
         binding = FragmentRemindersBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
+
 
         viewModel.readAllData.observe(viewLifecycleOwner, Observer { notes ->
             timeReminderList = notes?.filter {

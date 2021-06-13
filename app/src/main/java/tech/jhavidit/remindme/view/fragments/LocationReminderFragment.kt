@@ -28,6 +28,7 @@ import com.google.android.gms.location.GeofencingClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.android.synthetic.main.fragment_create_notes.*
 import tech.jhavidit.remindme.databinding.FragmentLocationReminderBinding
 import tech.jhavidit.remindme.model.LocationModel
 import tech.jhavidit.remindme.model.NotesModel
@@ -249,8 +250,10 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
                         latitude = selectedLocation?.latitude,
                         longitude = selectedLocation?.longitude,
                         radius = getRadius(minRadius, maxRadius, binding.radius.progress),
-                        repeatAlarmIndex = notesValue.repeatAlarmIndex,
+                        repeatValue = notesValue.repeatValue,
                         reminderTime = notesValue.reminderTime,
+                        reminderWaitTime = notesValue.reminderWaitTime,
+                        reminderDate = notesValue.reminderDate,
                         locationName = selectedLocation?.name,
                         backgroundColor = notesValue.backgroundColor
                     )

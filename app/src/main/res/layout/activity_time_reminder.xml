@@ -32,9 +32,9 @@
             android:background="?selectableItemBackgroundBorderless"
             android:contentDescription="@string/go_to_app"
             android:src="@drawable/ic_open_app"
-            android:tint="@color/white"
             app:layout_constraintEnd_toEndOf="@id/endGuideline"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/white" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/reminder_card"
@@ -59,11 +59,11 @@
                     android:layout_height="@dimen/dimen_50"
                     android:layout_marginTop="@dimen/dimen_10"
                     android:src="@drawable/ic_alarm_set"
-                    android:tint="@color/white"
                     app:layout_constraintBottom_toTopOf="@id/reminder_location_time"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
 
 
                 <TextView
@@ -93,10 +93,10 @@
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/dimen_8"
             android:paddingBottom="@dimen/dimen_12"
+            app:layout_constraintBottom_toTopOf="@id/reminder_off_card"
             app:layout_constraintEnd_toEndOf="@id/endGuideline"
             app:layout_constraintStart_toStartOf="@id/startGuideline"
-            app:layout_constraintTop_toBottomOf="@id/reminder_card"
-            app:layout_constraintBottom_toTopOf="@id/reminder_off_card">
+            app:layout_constraintTop_toBottomOf="@id/reminder_card">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -161,10 +161,10 @@
                 android:layout_marginEnd="@dimen/dimen_10"
                 android:alpha="0.75"
                 android:src="@drawable/ic_back_button"
-                android:tint="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/reminder_fab"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white" />
 
             <ImageView
                 android:id="@+id/left_arrow_2"
@@ -173,10 +173,10 @@
                 android:layout_marginEnd="@dimen/dimen_10"
                 android:alpha="0.5"
                 android:src="@drawable/ic_back_button"
-                android:tint="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/left_arrow_1"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white" />
 
 
             <ImageView
@@ -186,10 +186,10 @@
                 android:layout_marginStart="@dimen/dimen_10"
                 android:alpha="0.75"
                 android:src="@drawable/ic_right_arrow"
-                android:tint="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/reminder_fab"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white" />
 
             <ImageView
                 android:id="@+id/right_arrow_2"
@@ -198,10 +198,10 @@
                 android:layout_marginStart="@dimen/dimen_10"
                 android:alpha="0.5"
                 android:src="@drawable/ic_right_arrow"
-                android:tint="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/right_arrow_1"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white" />
 
 
             <ImageView
@@ -210,10 +210,10 @@
                 android:layout_height="@dimen/dimen_40"
                 android:layout_marginStart="@dimen/dimen_10"
                 android:src="@drawable/ic_snooze_reminder"
-                android:tint="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/right_arrow_2"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white" />
 
             <TextView
                 android:id="@+id/snooze_reminder_text"
@@ -236,10 +236,10 @@
                 android:layout_marginEnd="@dimen/dimen_10"
                 android:scaleType="fitXY"
                 android:src="@drawable/ic_reminder_cancel"
-                android:tint="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/left_arrow_2"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white" />
 
             <TextView
                 android:id="@+id/cancel_reminder_text"
@@ -256,26 +256,6 @@
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <!--     <Button
-                 android:id="@+id/dismiss"
-                 android:layout_width="match_parent"
-                 android:layout_height="60dp"
-                 android:text="DISMISS"
-                 android:textSize="20sp"
-                 android:textStyle="bold"
-                 app:layout_constraintStart_toStartOf="parent"
-                 app:layout_constraintTop_toTopOf="parent" />
-
-             <Button
-                 android:id="@+id/snooze"
-                 android:layout_width="match_parent"
-                 android:layout_height="60dp"
-                 android:text="SNOOZE"
-                 android:textSize="20sp"
-                 android:textStyle="bold"
-                 app:layout_constraintStart_toStartOf="parent"
-                 app:layout_constraintTop_toBottomOf="@id/dismiss" />-->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

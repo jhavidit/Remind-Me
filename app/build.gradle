@@ -79,6 +79,7 @@ dependencies {
 
     // ViewModel and LiveData (arch components)
     implementation "androidx.lifecycle:lifecycle-extensions:$version_lifecycle_extensions"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$version_lifecycle_extensions"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$version_lifecycle_extensions"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$version_lifecycle_extensions"
 
@@ -112,6 +113,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:18.0.0'
 
     implementation 'com.google.android.libraries.places:places:2.4.0'
+
+    implementation 'com.shawnlin:number-picker:2.4.12'
 
 
 

@@ -6,19 +6,19 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.media.MediaPlayer
 import android.media.Ringtone
 import android.media.RingtoneManager
 import android.net.Uri
-import android.os.*
+import android.os.Build
+import android.os.IBinder
+import android.os.VibrationEffect
+import android.os.Vibrator
 import androidx.core.app.NotificationCompat
 import tech.jhavidit.remindme.R
-import tech.jhavidit.remindme.model.NotesModel
-import tech.jhavidit.remindme.util.NOTES_TIME
+import tech.jhavidit.remindme.util.NOTES_LOCATION
 import tech.jhavidit.remindme.view.activity.ReminderScreenActivity
 
-
-class AlarmService : Service() {
+class LocationReminderService : Service() {
 
     private lateinit var vibrator: Vibrator
     private lateinit var ringtone: Ringtone
@@ -38,20 +38,13 @@ class AlarmService : Service() {
 
         val channelId = "default"
         val channelName = "Remind Me"
-        val bundle = intent.getBundleExtra(NOTES_TIME)
-        val id: Int = bundle?.getInt("id") ?: 0
+        val bundle = intent.getBundleExtra(NOTES_LOCATION)
+        val id = bundle?.getInt("id") ?: 0
         val dismissIntent = Intent(this, ReminderScreenActivity::class.java)
-        val snoozeIntent = Intent(this, ReminderScreenActivity::class.java)
-        snoozeIntent.putExtra(NOTES_TIME, bundle)
-        dismissIntent.putExtra(NOTES_TIME, bundle)
-        snoozeIntent.putExtra("snooze", true)
-        dismissIntent.putExtra("dismiss", true)
-        val snoozePendingIntent =
-            PendingIntent.getActivity(this, id, snoozeIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-        val dismissPendingIntent =
-            PendingIntent.getActivity(this, id, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        dismissIntent.putExtra("dismiss", "dismiss")
+        val dismissPendingIntent = PendingIntent.getActivity(this, id, dismissIntent, 0)
         val notificationIntent = Intent(this, ReminderScreenActivity::class.java)
-        notificationIntent.putExtra(NOTES_TIME, bundle)
+        notificationIntent.putExtra(NOTES_LOCATION, bundle)
         val pendingIntent = PendingIntent.getActivity(
             this,
             id,
@@ -70,7 +63,6 @@ class AlarmService : Service() {
                 .setSmallIcon(R.drawable.notification_icon)
                 .setContentIntent(pendingIntent)
                 .addAction(R.drawable.snooze_icon, "Dismiss", dismissPendingIntent)
-                .addAction(R.drawable.snooze_icon, "Snooze", snoozePendingIntent)
                 .build()
 
         val notificationManager =
@@ -104,3 +96,4 @@ class AlarmService : Service() {
     }
 
 }
+

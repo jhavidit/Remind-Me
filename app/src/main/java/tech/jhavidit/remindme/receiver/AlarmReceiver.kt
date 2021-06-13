@@ -13,10 +13,11 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.service.AlarmService
-import tech.jhavidit.remindme.util.log
+import tech.jhavidit.remindme.util.*
 import tech.jhavidit.remindme.view.activity.MainActivity
 import java.util.*
 
@@ -24,8 +25,6 @@ class AlarmReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
 
-        log("time ${intent?.getStringExtra("reminder")}")
-        log("note  ${intent?.getStringExtra("notes")}")
         context?.let {
             intent?.let { it1 -> startAlarmService(context, it1) }
         }
@@ -37,13 +36,8 @@ class AlarmReceiver : BroadcastReceiver() {
     ) {
         val intentService = Intent(context, AlarmService::class.java)
         intentService.putExtra(
-            "notes",
-            intent.getParcelableExtra<NotesModel>("notes")
+            NOTES_TIME, intent.getBundleExtra(NOTES_TIME)
         )
-        log("Time Note ${intent.extras?.getParcelable<NotesModel>("notes")}")
-        log("Time note ${intent.getParcelableExtra<NotesModel>("notes")}")
-        log("reminder  ${intent.getStringExtra("reminder")}")
-        intentService.putExtra("reminder", "time")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(intentService)
         } else {
@@ -51,59 +45,35 @@ class AlarmReceiver : BroadcastReceiver() {
         }
     }
 
-    /*private fun showNotification(context: Context, title: String) {
-        val intent = Intent(context, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = PendingIntent.getActivity(
-            context, 0, intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
-        val channelId = "default"
-        val channelName = "Remind Me"
-        val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        val notificationBuilder = NotificationCompat.Builder(context, channelId)
-            .setColor(ContextCompat.getColor(context, R.color.purple_200))
-            .setSmallIcon(R.drawable.notification_icon)
-            .setContentTitle("We are here to remind you about")
-            .setContentText(title)
-            .setAutoCancel(true)
-            .setVibrate(longArrayOf(1000, 500, 1000, 500, 1000, 500))
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setSound(defaultSoundUri)
-            .setContentIntent(pendingIntent)
-
-        val notificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-        // Since android Oreo notification channel is needed.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                channelId,
-                channelName,
-                NotificationManager.IMPORTANCE_HIGH
-            )
-            notificationManager.createNotificationChannel(channel)
-        }
-
-        notificationManager.notify(0, notificationBuilder.build())
-    }*/
-
 
     fun scheduleAlarm(context: Context, notes: NotesModel) {
         val alarmManager =
             context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        val alarmTime = notes.reminderTime ?: 0L
+        val alarmTime = notes.reminderWaitTime ?: 0L
         val currentTime = Calendar.getInstance().timeInMillis
         if (currentTime < alarmTime) {
-            log("notes ${notes}")
+            log("notes $notes")
             val intent = Intent(context, AlarmReceiver::class.java)
-            intent.putExtra("notes", notes)
-            intent.putExtra("reminder","time")
+            val bundle = bundleOf(
+                "id" to notes.id,
+                "title" to notes.title,
+                "description" to notes.description,
+                "snooze" to false,
+                "reminderTime" to notes.reminderTime,
+                "reminder" to "time",
+                "locationName" to notes.locationName
+            )
+            intent.putExtra(NOTES_TIME, bundle)
             val pendingIntent =
-                PendingIntent.getBroadcast(context, notes.id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-            when (notes.repeatAlarmIndex) {
-                0 -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                PendingIntent.getBroadcast(
+                    context,
+                    notes.id,
+                    intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT
+                )
+            when (notes.repeatValue) {
+                -1L -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     alarmManager.setExactAndAllowWhileIdle(
                         AlarmManager.RTC_WAKEUP,
                         alarmTime,
@@ -116,43 +86,60 @@ class AlarmReceiver : BroadcastReceiver() {
                         pendingIntent
                     )
                 }
-                1 -> alarmManager.setInexactRepeating(
-                    AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    alarmTime,
-                    AlarmManager.INTERVAL_HOUR,
-                    pendingIntent
-                )
-                2 ->
+                else -> {
                     alarmManager.setInexactRepeating(
-                        AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                        AlarmManager.RTC_WAKEUP,
                         alarmTime,
-                        AlarmManager.INTERVAL_DAY,
+                        notes.repeatValue!!,
                         pendingIntent
                     )
-                3 -> alarmManager.setInexactRepeating(
-                    AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    alarmTime,
-                    AlarmManager.INTERVAL_DAY * 7,
-                    pendingIntent
-                )
-                4 -> alarmManager.setInexactRepeating(
-                    AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    alarmTime,
-                    AlarmManager.INTERVAL_DAY * 30,
-                    pendingIntent
-                )
-                5 ->
-                    alarmManager.setInexactRepeating(
-                        AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                        alarmTime,
-                        AlarmManager.INTERVAL_DAY * 365,
-                        pendingIntent
-                    )
+                }
+
             }
             Toast.makeText(context, "Alarm Set", Toast.LENGTH_SHORT).show()
         }
 
     }
+
+    fun scheduleSnoozeAlarm(context: Context, notes: NotesModel, reminder: String) {
+        val alarmManager =
+            context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val currentTime = Calendar.getInstance().timeInMillis
+        val alarmTime = currentTime + fiveMinutes
+        val intent = Intent(context, AlarmReceiver::class.java)
+        val bundle = bundleOf(
+            "id" to notes.id,
+            "title" to notes.title,
+            "description" to notes.description,
+            "reminderTime" to notes.reminderTime,
+            "snooze" to true,
+            "reminder" to reminder,
+            "locationName" to notes.locationName
+        )
+        intent.putExtra(NOTES_TIME, bundle)
+        val pendingIntent =
+            PendingIntent.getBroadcast(
+                context,
+                SNOOZE_ID,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                alarmTime,
+                pendingIntent
+            )
+        } else {
+            alarmManager.setExact(
+                AlarmManager.RTC_WAKEUP,
+                alarmTime,
+                pendingIntent
+            )
+        }
+
+    }
+
 
     fun cancelAlarm(context: Context, id: Int) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager

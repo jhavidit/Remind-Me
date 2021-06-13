@@ -12,7 +12,9 @@ import com.google.android.gms.location.GeofencingEvent
 import com.google.android.gms.location.LocationServices
 import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.service.AlarmService
+import tech.jhavidit.remindme.service.LocationReminderService
 import tech.jhavidit.remindme.util.GeoFencingHelper
+import tech.jhavidit.remindme.util.NOTES_LOCATION
 import tech.jhavidit.remindme.util.log
 import tech.jhavidit.remindme.util.toast
 
@@ -137,11 +139,10 @@ class GeoFencingReceiver : BroadcastReceiver() {
         context: Context,
         intent: Intent
     ) {
-        val intentService = Intent(context, AlarmService::class.java)
-        log("Service start ${intent.getBundleExtra("notes")}")
-
+        val intentService = Intent(context, LocationReminderService::class.java)
+        log("Service start ${intent.getBundleExtra(NOTES_LOCATION)}")
         intentService.putExtra(
-            "notes",intent.getBundleExtra("notes")
+            NOTES_LOCATION,intent.getBundleExtra(NOTES_LOCATION)
         )
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(intentService)
