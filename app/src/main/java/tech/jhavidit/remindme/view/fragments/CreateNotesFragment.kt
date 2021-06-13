@@ -23,6 +23,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.fragment_create_notes.*
+import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.BottomSheetAddColorBinding
 import tech.jhavidit.remindme.databinding.FragmentCreateNotesBinding
@@ -83,7 +84,7 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
             binding.pinBtn.setImageResource(R.drawable.ic_unpin)
         }
 
-        val bottomNavigation: BottomNavigationView? = activity?.findViewById(R.id.bottom_nav)
+        val bottomNavigation: CurvedBottomNavigationView? = activity?.findViewById(R.id.bottom_nav)
         bottomNavigation?.visibility = GONE
         if (args.update == "update") {
             updated = true

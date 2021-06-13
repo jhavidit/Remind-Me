@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.FragmentRemindersBinding
 import tech.jhavidit.remindme.model.NotesModel
@@ -31,7 +32,7 @@ class ReminderFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val bottomNavigation: BottomNavigationView? = activity?.findViewById(R.id.bottom_nav)
+        val bottomNavigation: CurvedBottomNavigationView? = activity?.findViewById(R.id.bottom_nav)
         bottomNavigation?.visibility = View.VISIBLE
         locationAdapter = LocationReminderListAdapter()
         timeAdapter = TimeReminderListAdapter()

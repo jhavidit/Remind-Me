@@ -14,6 +14,7 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.FragmentNotesBinding
 import tech.jhavidit.remindme.model.NotesModel
@@ -39,7 +40,7 @@ class NotesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val bottomNavigation: BottomNavigationView? = activity?.findViewById(R.id.bottom_nav)
+        val bottomNavigation: CurvedBottomNavigationView? = activity?.findViewById(R.id.bottom_nav)
         bottomNavigation?.visibility = VISIBLE
         binding = FragmentNotesBinding.inflate(inflater, container, false)
         navController = Navigation.findNavController(requireActivity(), R.id.NavHostFragment)

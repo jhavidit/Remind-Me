@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            android:name="vector"
+            android:width="24dp"
+            android:height="24dp"
+            android:autoMirrored="true"
+            android:viewportWidth="24"
+            android:viewportHeight="28">
+            <path
+                android:name="path_1"
+                android:fillColor="#1E40AF"
+                android:pathData="M14.9602,0H3.7602C2.2202,0 0.9742,1.26 0.9742,2.8L0.9602,25.2C0.9602,26.74 2.2062,28 3.7462,28H20.5602C22.1002,28 23.3602,26.74 23.3602,25.2V8.4L14.9602,0ZM17.7602,22.4H6.5602V19.6H17.7602V22.4ZM17.7602,16.8H6.5602V14H17.7602V16.8ZM13.5602,9.8V2.1L21.2602,9.8H13.5602Z" />
+        </vector>
+
+    </aapt:attr>
+</animated-vector>

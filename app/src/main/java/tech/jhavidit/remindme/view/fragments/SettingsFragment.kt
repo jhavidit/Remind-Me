@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.FragmentSettingsBinding
 import tech.jhavidit.remindme.receiver.AlarmReceiver
@@ -26,7 +27,7 @@ class SettingsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentSettingsBinding.inflate(inflater, container, false)
-        val bottomNavigation: BottomNavigationView? = activity?.findViewById(R.id.bottom_nav)
+        val bottomNavigation: CurvedBottomNavigationView? = activity?.findViewById(R.id.bottom_nav)
         notesViewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
         alarmReceiver = AlarmReceiver()
         geoFencingReceiver = GeoFencingReceiver()

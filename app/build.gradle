@@ -116,6 +116,8 @@ dependencies {
 
     implementation 'com.shawnlin:number-picker:2.4.12'
 
+    implementation 'np.com.susanthapa:curved_bottom_navigation:0.6.5'
+
 
 
 }
