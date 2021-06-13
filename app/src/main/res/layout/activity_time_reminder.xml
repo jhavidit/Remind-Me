@@ -173,10 +173,10 @@
                 android:layout_marginEnd="@dimen/dimen_10"
                 android:alpha="0.5"
                 android:src="@drawable/ic_back_button"
-                android:tint="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/left_arrow_1"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white" />
 
 
             <ImageView
@@ -186,10 +186,10 @@
                 android:layout_marginStart="@dimen/dimen_10"
                 android:alpha="0.75"
                 android:src="@drawable/ic_right_arrow"
-                android:tint="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/reminder_fab"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white" />
 
             <ImageView
                 android:id="@+id/right_arrow_2"
@@ -198,10 +198,10 @@
                 android:layout_marginStart="@dimen/dimen_10"
                 android:alpha="0.5"
                 android:src="@drawable/ic_right_arrow"
-                android:tint="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/right_arrow_1"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white" />
 
 
             <ImageView
@@ -210,10 +210,10 @@
                 android:layout_height="@dimen/dimen_40"
                 android:layout_marginStart="@dimen/dimen_10"
                 android:src="@drawable/ic_snooze_reminder"
-                android:tint="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/right_arrow_2"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white" />
 
             <TextView
                 android:id="@+id/snooze_reminder_text"
@@ -236,10 +236,10 @@
                 android:layout_marginEnd="@dimen/dimen_10"
                 android:scaleType="fitXY"
                 android:src="@drawable/ic_reminder_cancel"
-                android:tint="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/left_arrow_2"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white" />
 
             <TextView
                 android:id="@+id/cancel_reminder_text"

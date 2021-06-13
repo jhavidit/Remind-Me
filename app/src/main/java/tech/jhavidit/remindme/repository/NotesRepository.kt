@@ -6,12 +6,17 @@ import tech.jhavidit.remindme.room.NotesDao
 
 class NotesRepository(private val notesDao: NotesDao) {
 
-    val readAllData : LiveData<List<NotesModel>> = notesDao.readAllData()
-    val notesCount : LiveData<Int> = notesDao.notesCount()
-    val createdId : LiveData<Int> = notesDao.createdId()
+    val readAllData: LiveData<List<NotesModel>> = notesDao.readAllData()
+    val notesCount: LiveData<Int> = notesDao.notesCount()
+    val createdId: LiveData<Int> = notesDao.createdId()
+
 
     suspend fun addNotes(notes: NotesModel) {
         notesDao.addNotes(notes)
+    }
+
+     fun selectedNote(id: Int): LiveData<List<NotesModel>> {
+        return notesDao.selectedNote(id)
     }
 
     suspend fun updateNotes(notes: NotesModel) {

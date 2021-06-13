@@ -1,9 +1,7 @@
 package tech.jhavidit.remindme.viewModel
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import tech.jhavidit.remindme.model.NotesModel
@@ -13,13 +11,14 @@ import tech.jhavidit.remindme.room.NotesDatabase
 class NotesViewModel(application: Application) : AndroidViewModel(application) {
 
     val readAllData: LiveData<List<NotesModel>>
-    val notesCount : LiveData<Int>
-    val createdId  : LiveData<Int>
+    val notesCount: LiveData<Int>
+    val createdId: LiveData<Int>
+    var selectedNote: LiveData<List<NotesModel>> = MutableLiveData()
     private val repository: NotesRepository
 
     init {
         val userDao = NotesDatabase.getDatabase(
-                application
+            application
         ).userDao()
         repository = NotesRepository(userDao)
         readAllData = repository.readAllData
@@ -31,6 +30,14 @@ class NotesViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.addNotes(notes)
         }
+    }
+
+    fun selectedNote(id: Int) {
+
+        viewModelScope.launch(Dispatchers.IO) {
+            selectedNote = repository.selectedNote(id)
+        }
+
     }
 
     fun updateNotes(notes: NotesModel) {

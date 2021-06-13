@@ -23,9 +23,12 @@ interface NotesDao {
     fun readAllData(): LiveData<List<NotesModel>>
 
     @Query("SELECT COUNT(id) FROM notes_table")
-    fun notesCount():LiveData<Int>
+    fun notesCount(): LiveData<Int>
 
     @Query("SELECT id FROM notes_table ORDER BY id DESC LIMIT 1")
-    fun createdId():LiveData<Int>
+    fun createdId(): LiveData<Int>
+
+    @Query("SELECT * from notes_table where id = :id")
+     fun selectedNote(id: Int): LiveData<List<NotesModel>>
 
 }
