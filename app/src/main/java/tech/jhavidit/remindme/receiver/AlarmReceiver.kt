@@ -17,9 +17,7 @@ import androidx.core.os.bundleOf
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.service.AlarmService
-import tech.jhavidit.remindme.util.NOTES_LOCATION
-import tech.jhavidit.remindme.util.NOTES_TIME
-import tech.jhavidit.remindme.util.log
+import tech.jhavidit.remindme.util.*
 import tech.jhavidit.remindme.view.activity.MainActivity
 import java.util.*
 
@@ -61,6 +59,7 @@ class AlarmReceiver : BroadcastReceiver() {
                 "id" to notes.id,
                 "title" to notes.title,
                 "description" to notes.description,
+                "snooze" to false,
                 "reminderTime" to notes.reminderTime,
                 "reminder" to "time",
                 "locationName" to notes.locationName
@@ -101,6 +100,46 @@ class AlarmReceiver : BroadcastReceiver() {
         }
 
     }
+
+    fun scheduleSnoozeAlarm(context: Context, notes: NotesModel, reminder: String) {
+        val alarmManager =
+            context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val currentTime = Calendar.getInstance().timeInMillis
+        val alarmTime = currentTime + fiveMinutes
+        val intent = Intent(context, AlarmReceiver::class.java)
+        val bundle = bundleOf(
+            "id" to notes.id,
+            "title" to notes.title,
+            "description" to notes.description,
+            "reminderTime" to notes.reminderTime,
+            "snooze" to true,
+            "reminder" to reminder,
+            "locationName" to notes.locationName
+        )
+        intent.putExtra(NOTES_TIME, bundle)
+        val pendingIntent =
+            PendingIntent.getBroadcast(
+                context,
+                SNOOZE_ID,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                alarmTime,
+                pendingIntent
+            )
+        } else {
+            alarmManager.setExact(
+                AlarmManager.RTC_WAKEUP,
+                alarmTime,
+                pendingIntent
+            )
+        }
+
+    }
+
 
     fun cancelAlarm(context: Context, id: Int) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager

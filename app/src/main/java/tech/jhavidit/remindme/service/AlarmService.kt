@@ -39,9 +39,12 @@ class AlarmService : Service() {
         val channelId = "default"
         val channelName = "Remind Me"
         val bundle = intent.getBundleExtra(NOTES_TIME)
-        val id : Int = bundle?.getInt("id")?:0
+        val id: Int = bundle?.getInt("id") ?: 0
         val dismissIntent = Intent(this, ReminderScreenActivity::class.java)
-        dismissIntent.putExtra("dismiss", "dismiss")
+        val snoozeIntent = Intent(this, ReminderScreenActivity::class.java)
+        snoozeIntent.putExtra("snooze", true)
+        dismissIntent.putExtra("dismiss", true)
+        val snoozePendingIntent = PendingIntent.getActivity(this, id, snoozeIntent, 0)
         val dismissPendingIntent = PendingIntent.getActivity(this, id, dismissIntent, 0)
         val notificationIntent = Intent(this, ReminderScreenActivity::class.java)
         notificationIntent.putExtra(NOTES_TIME, bundle)
@@ -63,6 +66,7 @@ class AlarmService : Service() {
                 .setSmallIcon(R.drawable.notification_icon)
                 .setContentIntent(pendingIntent)
                 .addAction(R.drawable.snooze_icon, "Dismiss", dismissPendingIntent)
+                .addAction(R.drawable.snooze_icon, "Snooze", snoozePendingIntent)
                 .build()
 
         val notificationManager =

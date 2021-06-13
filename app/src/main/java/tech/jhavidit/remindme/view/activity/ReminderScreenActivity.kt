@@ -2,9 +2,6 @@ package tech.jhavidit.remindme.view.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.view.MotionEvent
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -13,6 +10,7 @@ import kotlinx.android.synthetic.main.fragment_create_notes.*
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.ActivityTimeReminderBinding
 import tech.jhavidit.remindme.model.NotesModel
+import tech.jhavidit.remindme.receiver.AlarmReceiver
 import tech.jhavidit.remindme.service.AlarmService
 import tech.jhavidit.remindme.service.LocationReminderService
 import tech.jhavidit.remindme.util.NOTES_LOCATION
@@ -24,16 +22,24 @@ import tech.jhavidit.remindme.viewModel.NotesViewModel
 class ReminderScreenActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTimeReminderBinding
     private lateinit var viewModel: NotesViewModel
+    private lateinit var alarmReceiver: AlarmReceiver
     private var id: Int = 0
+    private var snooze: Boolean = false
     private var reminder: String? = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_time_reminder)
+        alarmReceiver = AlarmReceiver()
         viewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
         val notesTimeBundle = intent?.getBundleExtra(NOTES_TIME)
+        val snoozeAlarm = intent?.getBooleanExtra("snooze", false)
+        val dismissAlarm = intent?.getBooleanExtra("dismiss", false)
+
+
         notesTimeBundle?.let {
             id = notesTimeBundle.getInt("id")
-            reminder = notesTimeBundle.getString("reminder")
+            snooze = notesTimeBundle.getBoolean("snooze")
+            reminder = notesTimeBundle.getString("reminder") ?: ""
             binding.reminderIcon.setImageResource(R.drawable.ic_alarm_set)
             binding.reminderLocationTime.text =
                 notesTimeBundle.getString("reminderTime")
@@ -47,11 +53,8 @@ class ReminderScreenActivity : AppCompatActivity() {
 
         notesLocationBundle?.let {
             id = notesLocationBundle.getInt("id")
-//            viewModel.selectedNote(id)
-//            viewModel.selectedNote.observe(this, Observer {
-//                notesModelLocation = it.firstOrNull()
-//            })
-            reminder = notesLocationBundle.getString("reminder")
+            snooze = notesLocationBundle.getBoolean("snooze")
+            reminder = notesLocationBundle.getString("reminder") ?: ""
             binding.reminderIcon.setImageResource(R.drawable.ic_alarm_set)
             binding.reminderLocationTime.text =
                 notesLocationBundle.getString("reminderTime")
@@ -68,11 +71,26 @@ class ReminderScreenActivity : AppCompatActivity() {
         binding.cancelReminder.setOnClickListener {
             cancelReminder()
         }
+
+        binding.snoozeReminder.setOnClickListener {
+            snoozeReminder()
+        }
+
         binding.openApp.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
         }
+
+        if (snoozeAlarm == true) {
+            snoozeReminder()
+        }
+
+        if (dismissAlarm == true) {
+            cancelReminder()
+        }
+
+
     }
 
     private fun cancelReminder() {
@@ -134,7 +152,56 @@ class ReminderScreenActivity : AppCompatActivity() {
             })
 
 
+        } else if (snooze && reminder == "location") {
+            viewModel.selectedNote.observe(this, Observer { note ->
+                val notes = note[0]
+                val notesModel = NotesModel(
+                    id = notes.id,
+                    title = notes.title,
+                    description = notes.description,
+                    locationReminder = null,
+                    timeReminder = notes.timeReminder,
+                    reminderWaitTime = notes.reminderWaitTime,
+                    reminderTime = notes.reminderTime,
+                    reminderDate = notes.reminderDate,
+                    isPinned = notes.isPinned,
+                    latitude = null,
+                    longitude = null,
+                    radius = null,
+                    repeatValue = notes.repeatValue,
+                    locationName = null,
+                    backgroundColor = notes.backgroundColor
+                )
+                viewModel.updateNotes(notesModel)
+                val intentService =
+                    Intent(applicationContext, AlarmService::class.java)
+                applicationContext.stopService(intentService)
+                finish()
+            })
         }
+    }
+
+    private fun snoozeReminder() {
+        viewModel.selectedNote.observe(this, Observer { notes ->
+            notes?.let {
+                val note = it[0]
+                reminder?.let { remind ->
+                    alarmReceiver.scheduleSnoozeAlarm(this, note, remind)
+                    toast(this, "Alarm snoozed for five minutes")
+                    if (remind == "time") {
+                        val intentService = Intent(applicationContext, AlarmService::class.java)
+                        applicationContext.stopService(intentService)
+                        finish()
+                    } else if (remind == "location") {
+                        val intentService =
+                            Intent(applicationContext, LocationReminderService::class.java)
+                        applicationContext.stopService(intentService)
+                        finish()
+                    }
+                }
+            }
+        })
+
     }
 
 }
