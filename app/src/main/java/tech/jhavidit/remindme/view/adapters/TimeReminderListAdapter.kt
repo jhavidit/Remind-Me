@@ -14,8 +14,13 @@ import tech.jhavidit.remindme.util.*
 import tech.jhavidit.remindme.view.fragments.NotesFragment
 import tech.jhavidit.remindme.view.fragments.ReminderFragmentDirections
 
-class TimeReminderListAdapter : RecyclerView.Adapter<TimeReminderListAdapter.MyViewHolder>() {
+class TimeReminderListAdapter(private val clickListen: TimeReminderAdapterInterface) :
+    RecyclerView.Adapter<TimeReminderListAdapter.MyViewHolder>() {
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
+    interface TimeReminderAdapterInterface {
+        fun disableEnableTimeReminder(checked: Boolean,notesModel: NotesModel)
+    }
 
     private var notes = emptyList<NotesModel>()
 
@@ -39,14 +44,17 @@ class TimeReminderListAdapter : RecyclerView.Adapter<TimeReminderListAdapter.MyV
             if (currentNotes.repeatValue == -1L)
                 holder.itemView.reminder_repeat.text = "Not Repeating"
             else
-                holder.itemView.reminder_repeat.text = "Repeating"
+                holder.itemView.reminder_repeat.text = String.format("%s", "Repeating")
             holder.itemView.reminder.setCardBackgroundColor(Color.parseColor(currentNotes.backgroundColor))
             currentNotes.image?.let {
                 if (checkStoragePermission(holder.itemView.context)) {
                     holder.itemView.reminder_image.setImageURI(stringToUri(currentNotes.image))
                 } else {
                     holder.itemView.image_card.visibility = GONE
-                    toast(holder.itemView.context,"You need to enable storage permission to view image")
+                    toast(
+                        holder.itemView.context,
+                        "You need to enable storage permission to view image"
+                    )
                 }
             } ?: run {
                 holder.itemView.image_card.visibility = GONE
@@ -57,6 +65,12 @@ class TimeReminderListAdapter : RecyclerView.Adapter<TimeReminderListAdapter.MyV
                         UPDATE, currentNotes
                     )
                 )
+            }
+            holder.itemView.reminder_switch.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    clickListen.disableEnableTimeReminder(true,currentNotes)
+                } else
+                    clickListen.disableEnableTimeReminder(false,currentNotes)
             }
         }
     }

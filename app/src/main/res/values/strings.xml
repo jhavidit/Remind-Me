@@ -41,9 +41,7 @@
     <string name="gallery">Gallery</string>
     <string name="camera">Camera</string>
     <string name="upload_image">Upload Image</string>
-    <string name="time">Time</string>
     <string name="time_reminder_icon">time reminder icon</string>
-    <string name="location">Location</string>
     <string name="location_reminder_icon">location reminder icon</string>
     <string name="save_location">Save Location</string>
     <string name="save_location_icon">save location icon</string>
@@ -66,7 +64,6 @@
     <string name="change_limits_of_radius_icon">change limits of radius icon</string>
     <string name="change_limits_of_radius">Change Limits Of Radius</string>
     <string name="right_arrow">right arrow</string>
-    <string name="default">Default</string>
     <string name="ringtone">Ringtone</string>
     <string name="default_ringtone">Default</string>
     <string name="do_not_disturb">Do Not Disturb</string>
@@ -74,7 +71,6 @@
     <string name="select_date_icon">select date icon</string>
     <string name="monthly">Monthly</string>
     <string name="weekly">Weekly</string>
-    <string name="daily">Daily</string>
     <string name="hours">Hours</string>
     <string name="repeat">Repeat</string>
     <string name="select_time">Select Time</string>

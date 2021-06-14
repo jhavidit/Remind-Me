@@ -13,19 +13,21 @@ import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.FragmentRemindersBinding
 import tech.jhavidit.remindme.model.NotesModel
+import tech.jhavidit.remindme.receiver.AlarmReceiver
 import tech.jhavidit.remindme.view.adapters.LocationReminderListAdapter
 import tech.jhavidit.remindme.view.adapters.NotesListAdapter
 import tech.jhavidit.remindme.view.adapters.TimeReminderListAdapter
 import tech.jhavidit.remindme.viewModel.NotesViewModel
 
 
-class ReminderFragment : Fragment() {
+class ReminderFragment : Fragment(), TimeReminderListAdapter.TimeReminderAdapterInterface {
     private lateinit var binding: FragmentRemindersBinding
     private lateinit var locationAdapter: LocationReminderListAdapter
     private lateinit var timeAdapter: TimeReminderListAdapter
     private lateinit var viewModel: NotesViewModel
     private lateinit var timeReminderList: List<NotesModel>
     private lateinit var locationReminderList: List<NotesModel>
+    private var alarmReceiver = AlarmReceiver()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,11 +37,15 @@ class ReminderFragment : Fragment() {
         val bottomNavigation: CurvedBottomNavigationView? = activity?.findViewById(R.id.bottom_nav)
         bottomNavigation?.visibility = View.VISIBLE
         locationAdapter = LocationReminderListAdapter()
-        timeAdapter = TimeReminderListAdapter()
+        timeAdapter = TimeReminderListAdapter(this)
         binding = FragmentRemindersBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
 
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel.readAllData.observe(viewLifecycleOwner, Observer { notes ->
             timeReminderList = notes?.filter {
                 it.reminderTime != null
@@ -62,9 +68,54 @@ class ReminderFragment : Fragment() {
                 }
             }
         })
+    }
 
-
-        return binding.root
+    override fun disableEnableTimeReminder(checked: Boolean, notesModel: NotesModel) {
+        if (checked) {
+            alarmReceiver.scheduleAlarm(requireContext(), notesModel)
+            val notes = NotesModel(
+                id = notesModel.id,
+                title = notesModel.title,
+                description = notesModel.description,
+                locationReminder = notesModel.locationReminder,
+                timeReminder = true,
+                reminderWaitTime = notesModel.reminderWaitTime,
+                reminderTime = notesModel.reminderTime,
+                reminderDate = notesModel.reminderDate,
+                latitude = notesModel.latitude,
+                image = notesModel.image,
+                longitude = notesModel.longitude,
+                isPinned = notesModel.isPinned,
+                radius = notesModel.radius,
+                repeatValue = notesModel.repeatValue,
+                locationName = notesModel.locationName,
+                backgroundColor = notesModel.backgroundColor,
+                lastUpdated = notesModel.lastUpdated
+            )
+            viewModel.updateNotes(notes)
+        } else {
+            alarmReceiver.cancelAlarm(requireContext(), notesModel.id)
+            val notes = NotesModel(
+                id = notesModel.id,
+                title = notesModel.title,
+                description = notesModel.description,
+                locationReminder = notesModel.locationReminder,
+                timeReminder = false,
+                reminderWaitTime = notesModel.reminderWaitTime,
+                reminderTime = notesModel.reminderTime,
+                reminderDate = notesModel.reminderDate,
+                latitude = notesModel.latitude,
+                image = notesModel.image,
+                longitude = notesModel.longitude,
+                isPinned = notesModel.isPinned,
+                radius = notesModel.radius,
+                repeatValue = notesModel.repeatValue,
+                locationName = notesModel.locationName,
+                backgroundColor = notesModel.backgroundColor,
+                lastUpdated = notesModel.lastUpdated
+            )
+            viewModel.updateNotes(notes)
+        }
     }
 
 

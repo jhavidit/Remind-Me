@@ -40,6 +40,11 @@ class NotesFragment : Fragment() {
         binding = FragmentNotesBinding.inflate(inflater, container, false)
         navController = Navigation.findNavController(requireActivity(), R.id.NavHostFragment)
         viewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         adapter = NotesListAdapter()
         binding.searchBar.setOnClickListener {
             navController.navigate(NotesFragmentDirections.searchNotes())
@@ -65,7 +70,6 @@ class NotesFragment : Fragment() {
             val notes = NotesModel(notesCount + 1, "", "")
             navController.navigate(NotesFragmentDirections.updateNotes(CREATE, notes))
         }
-        return binding.root
     }
 
 }
