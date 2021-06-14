@@ -24,7 +24,7 @@
                 app:layout_constraintGuide_begin="8dp" />
 
             <ImageView
-                android:id="@+id/close_btn"
+                android:id="@+id/close_btn_image"
                 android:layout_width="@dimen/dimen_28"
                 android:layout_height="@dimen/dimen_28"
                 android:background="?selectableItemBackgroundBorderless"
@@ -42,7 +42,7 @@
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/close_btn">
+                app:layout_constraintTop_toBottomOf="@id/close_btn_image">
 
 
                 <ImageView

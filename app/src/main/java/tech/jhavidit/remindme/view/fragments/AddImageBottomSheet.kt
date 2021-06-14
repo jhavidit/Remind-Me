@@ -37,7 +37,7 @@ class AddImageBottomSheet : BottomSheetDialogFragment() {
         // Inflate the layout for this fragment
         binding = BottomSheetAddImageBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
-        binding.closeBtn.setOnClickListener {
+        binding.closeBtnImage.setOnClickListener {
             findNavController().navigateUp()
         }
         binding.galleryCard.setOnClickListener {

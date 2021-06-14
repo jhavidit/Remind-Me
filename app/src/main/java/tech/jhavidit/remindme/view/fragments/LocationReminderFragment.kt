@@ -37,7 +37,6 @@ import tech.jhavidit.remindme.util.*
 import tech.jhavidit.remindme.view.activity.LocationSearchActivity
 import tech.jhavidit.remindme.view.adapters.LocationNameAdapter
 import tech.jhavidit.remindme.viewModel.LocationViewModel
-import tech.jhavidit.remindme.viewModel.MainActivityViewModel
 import tech.jhavidit.remindme.viewModel.NotesViewModel
 
 
@@ -50,7 +49,6 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
     private var minRadius: Double = 100.0
     private var maxRadius: Double = 1000.0
     private lateinit var locationViewModel: LocationViewModel
-    private lateinit var activityViewModel: MainActivityViewModel
     private val args: LocationReminderFragmentArgs by navArgs()
     private lateinit var locationManager: LocationManager
     private var selectedLocation: LocationModel? = null
@@ -68,7 +66,6 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
         binding = FragmentLocationReminderBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
         locationViewModel = ViewModelProvider(this).get(LocationViewModel::class.java)
-        activityViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
         adapter = LocationNameAdapter(this)
         geoFencingReceiver = GeoFencingReceiver()
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -246,6 +243,7 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
                         description = notesValue.description,
                         locationReminder = true,
                         isPinned = notesValue.isPinned,
+                        image = notesValue.image,
                         timeReminder = notesValue.timeReminder,
                         latitude = selectedLocation?.latitude,
                         longitude = selectedLocation?.longitude,
@@ -297,7 +295,7 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
         binding.locationPicker.setOnClickListener {
             if (foregroundAndBackgroundLocationPermissionApproved(requireContext())) {
                 locationManager =
-                    context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                    context?.getSystemService(LOCATION_SERVICE) as LocationManager
                 if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     onGPS()
                 } else {

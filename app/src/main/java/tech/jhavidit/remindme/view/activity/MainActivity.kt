@@ -2,25 +2,15 @@ package tech.jhavidit.remindme.view.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import np.com.susanthapa.curved_bottom_navigation.CbnMenuItem
 import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.ActivityMainBinding
 import tech.jhavidit.remindme.model.LocationModel
 import tech.jhavidit.remindme.model.NotesModel
-import tech.jhavidit.remindme.view.fragments.LocationReminderFragment
-import tech.jhavidit.remindme.view.fragments.LocationReminderFragmentArgs
-import tech.jhavidit.remindme.view.fragments.NotesFragmentDirections
-import tech.jhavidit.remindme.viewModel.MainActivityViewModel
-import tech.jhavidit.remindme.viewModel.NotesViewModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding

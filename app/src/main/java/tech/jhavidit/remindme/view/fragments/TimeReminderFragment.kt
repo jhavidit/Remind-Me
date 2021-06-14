@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.android.synthetic.main.fragment_create_notes.*
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.FragmentTimeReminderBinding
 import tech.jhavidit.remindme.model.NotesModel
@@ -47,8 +48,6 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
 
         repeatList = RepeatHourModel.getRepeatingHours()
 
-
-
         binding.closeBtn.setOnClickListener {
             findNavController().navigateUp()
         }
@@ -60,8 +59,6 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
                 binding.repeatLayout.visibility = GONE
             }
         }
-
-
 
         viewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
         alarmReceiver = AlarmReceiver()

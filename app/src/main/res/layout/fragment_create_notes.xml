@@ -4,273 +4,308 @@
     xmlns:tools="http://schemas.android.com/tools">
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/note"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/note"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/startGuideline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.05" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/startGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/middleGuideline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.5" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/middleGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/endGuideline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.95" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/endGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/topGuideline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.025" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/topGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.025" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/bottomGuideline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.95" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/bottomGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.95" />
 
-            <ImageView
-                android:id="@+id/back_btn"
-                android:layout_width="@dimen/dimen_24"
-                android:background="?selectableItemBackgroundBorderless"
-                android:layout_height="@dimen/dimen_24"
-                android:contentDescription="@string/back_button"
-                android:src="@drawable/ic_back_button"
-                app:layout_constraintStart_toStartOf="@id/startGuideline"
-                app:layout_constraintTop_toTopOf="@id/topGuideline" />
+        <ImageView
+            android:id="@+id/back_btn"
+            android:layout_width="@dimen/dimen_24"
+            android:layout_height="@dimen/dimen_24"
+            android:background="?selectableItemBackgroundBorderless"
+            android:contentDescription="@string/back_button"
+            android:src="@drawable/ic_back_button"
+            app:layout_constraintStart_toStartOf="@id/startGuideline"
+            app:layout_constraintTop_toTopOf="@id/topGuideline" />
 
-            <ImageView
-                android:id="@+id/delete_btn"
-                android:layout_width="@dimen/dimen_24"
-                android:layout_height="@dimen/dimen_24"
-                android:layout_marginStart="10dp"
-                android:background="?selectableItemBackgroundBorderless"
-                android:contentDescription="@string/delete_note"
-                android:src="@drawable/ic_delete"
-                app:layout_constraintEnd_toEndOf="@id/endGuideline"
-                app:layout_constraintTop_toTopOf="@id/topGuideline" />
+        <ImageView
+            android:id="@+id/delete_btn"
+            android:layout_width="@dimen/dimen_24"
+            android:layout_height="@dimen/dimen_24"
+            android:layout_marginStart="10dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:contentDescription="@string/delete_note"
+            android:src="@drawable/ic_delete"
+            app:layout_constraintEnd_toEndOf="@id/endGuideline"
+            app:layout_constraintTop_toTopOf="@id/topGuideline" />
 
-            <ImageView
-                android:id="@+id/share_btn"
-                android:layout_width="@dimen/dimen_24"
-                android:layout_height="@dimen/dimen_24"
-                android:layout_marginStart="10dp"
-                android:background="?selectableItemBackgroundBorderless"
-                android:layout_marginEnd="10dp"
-                android:contentDescription="@string/share_note"
-                android:src="@drawable/ic_share"
-                app:layout_constraintEnd_toStartOf="@id/delete_btn"
-                app:layout_constraintTop_toTopOf="@id/topGuideline" />
+        <ImageView
+            android:id="@+id/share_btn"
+            android:layout_width="@dimen/dimen_24"
+            android:layout_height="@dimen/dimen_24"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:contentDescription="@string/share_note"
+            android:src="@drawable/ic_share"
+            app:layout_constraintEnd_toStartOf="@id/delete_btn"
+            app:layout_constraintTop_toTopOf="@id/topGuideline" />
 
 
-            <ImageView
-                android:id="@+id/pin_btn"
-                android:layout_width="@dimen/dimen_24"
-                android:layout_height="@dimen/dimen_24"
-                android:layout_marginStart="10dp"
-                android:background="?selectableItemBackgroundBorderless"
-                android:layout_marginEnd="10dp"
-                android:contentDescription="@string/pin_note"
-                android:src="@drawable/ic_unpin"
-                app:layout_constraintEnd_toStartOf="@id/share_btn"
-                app:layout_constraintTop_toTopOf="@id/topGuideline" />
+        <ImageView
+            android:id="@+id/pin_btn"
+            android:layout_width="@dimen/dimen_24"
+            android:layout_height="@dimen/dimen_24"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:contentDescription="@string/pin_note"
+            android:src="@drawable/ic_unpin"
+            app:layout_constraintEnd_toStartOf="@id/share_btn"
+            app:layout_constraintTop_toTopOf="@id/topGuideline" />
 
-            <ScrollView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginBottom="@dimen/dimen_10"
-                app:layout_constraintStart_toStartOf="@id/startGuideline"
-                app:layout_constraintEnd_toEndOf="@id/endGuideline"
-                app:layout_constraintTop_toBottomOf="@id/back_btn"
-                app:layout_constraintBottom_toTopOf="@id/bottom_card"
-                android:layout_marginTop="@dimen/dimen_8">
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/dimen_8"
+            android:layout_marginBottom="@dimen/dimen_10"
+            app:layout_constraintBottom_toTopOf="@id/bottom_card"
+            app:layout_constraintEnd_toEndOf="@id/endGuideline"
+            app:layout_constraintStart_toStartOf="@id/startGuideline"
+            app:layout_constraintTop_toBottomOf="@id/back_btn">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/dimen_12"
-                android:layout_marginBottom="@dimen/dimen_50"
-                android:layout_marginTop="@dimen/dimen_8">
-
-            <EditText
-                android:id="@+id/title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/alata_regular"
-                android:background="@null"
-                android:hint="@string/title"
-                android:textColor="@color/title_color"
-                android:textSize="@dimen/dimen_text_20"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/notes_image"
-                android:layout_width="@dimen/dimen_0"
-                android:layout_height="280dp"
-                android:visibility="gone"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/title"
-                android:scaleType="fitXY"/>
-
-            <EditText
-                android:id="@+id/description"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_8"
-                android:background="@null"
-                android:fontFamily="@font/alata_regular"
-                android:hint="@string/description"
-                android:textColor="#373A42"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/notes_image" />
+                android:layout_marginBottom="@dimen/dimen_50"
+                android:paddingBottom="@dimen/dimen_12">
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-            </ScrollView>
+                <EditText
+                    android:id="@+id/title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:fontFamily="@font/alata_regular"
+                    android:hint="@string/title"
+                    android:textColor="@color/title_color"
+                    android:textSize="@dimen/dimen_text_20"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/bottom_card"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_50"
-                app:cardBackgroundColor="@color/purple_light"
-                app:strokeWidth="1dp"
-                app:strokeColor="@color/purple_200"
-                app:cardElevation="@dimen/dimen_8"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/notes_image_card"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="280dp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/title">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
 
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/last_updated_guidline"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_percent="0.6" />
+                        <ImageView
+                            android:id="@+id/image"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="@dimen/dimen_4"
+                            android:layout_marginEnd="@dimen/dimen_4"
+                            android:contentDescription="@string/notes_image"
+                            android:scaleType="fitXY"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/image_guidline"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_percent="0.733" />
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/delete_image"
+                            android:layout_width="@dimen/dimen_28"
+                            android:layout_height="@dimen/dimen_28"
+                            android:layout_gravity="top|end"
+                            app:cardBackgroundColor="@color/purple_light"
+                            app:cardCornerRadius="14dp"
+                            app:cardElevation="@dimen/dimen_4">
 
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/reminder_guidline"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_percent="0.867" />
+                            <ImageView
+                                android:layout_width="@dimen/dimen_20"
+                                android:layout_height="@dimen/dimen_20"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_close" />
 
+                        </com.google.android.material.card.MaterialCardView>
 
-                    <TextView
-                        android:id="@+id/last_updated"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/dimen_text_16"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="@id/last_updated_guidline"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        android:text="Last edit : 12/05/21"
-                        android:fontFamily="@font/alata_regular"
-                        android:textColor="@color/purple_200"/>
-
-                    <View
-                        android:layout_width="2dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/purple_200"
-                        app:layout_constraintStart_toStartOf="@id/last_updated_guidline"
-                        app:layout_constraintTop_toTopOf="parent"/>
-
-                    <ImageView
-                        android:id="@+id/upload_image_btn"
-                        android:layout_width="@dimen/dimen_28"
-                        android:contentDescription="@string/add_image"
-                        android:layout_height="@dimen/dimen_28"
-                        android:background="?selectableItemBackgroundBorderless"
-                        app:layout_constraintStart_toStartOf="@id/last_updated_guidline"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:src="@drawable/ic_upload"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@id/image_guidline"/>
-
-                    <View
-                        android:layout_width="2dp"
-                        android:layout_height="wrap_content"
-                        android:background="@color/purple_200"
-                        app:layout_constraintStart_toStartOf="@id/image_guidline"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-
-                    <ImageView
-
-                        android:id="@+id/reminder_btn"
-                        android:layout_width="@dimen/dimen_28"
-                        android:layout_height="@dimen/dimen_28"
-                        android:background="?selectableItemBackgroundBorderless"
-                        app:layout_constraintStart_toStartOf="@id/image_guidline"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:contentDescription="@string/add_reminder"
-                        android:src="@drawable/ic_add_reminder"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@id/reminder_guidline"/>
-
-                    <View
-                        android:layout_width="2dp"
-                        android:layout_height="wrap_content"
-                        android:background="@color/purple_200"
-                        app:layout_constraintStart_toStartOf="@id/reminder_guidline"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-
-                    <ImageView
-                        android:id="@+id/color_btn"
-                        android:layout_width="@dimen/dimen_28"
-                        android:layout_height="@dimen/dimen_28"
-                        app:layout_constraintStart_toStartOf="@id/reminder_guidline"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:src="@drawable/ic_color"
-                        android:background="?selectableItemBackgroundBorderless"
-                        android:contentDescription="@string/add_background_color"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
-
-
+                    </FrameLayout>
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </com.google.android.material.card.MaterialCardView>
+
+                <EditText
+                    android:id="@+id/description"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_8"
+                    android:background="@null"
+                    android:fontFamily="@font/alata_regular"
+                    android:hint="@string/description"
+                    android:textColor="#373A42"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/notes_image_card" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/bottom_card"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_50"
+            app:cardBackgroundColor="@color/purple_light"
+            app:cardElevation="@dimen/dimen_8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:strokeColor="@color/purple_200"
+            app:strokeWidth="1dp">
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/last_updated_guidline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.6" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/image_guidline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.733" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/reminder_guidline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.867" />
+
+
+                <TextView
+                    android:id="@+id/last_updated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/alata_regular"
+                    android:text="Last edit : 12/05/21"
+                    android:textColor="@color/purple_200"
+                    android:textSize="@dimen/dimen_text_16"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/last_updated_guidline"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/purple_200"
+                    app:layout_constraintStart_toStartOf="@id/last_updated_guidline"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/upload_image_btn"
+                    android:layout_width="@dimen/dimen_28"
+                    android:layout_height="@dimen/dimen_28"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/add_image"
+                    android:src="@drawable/ic_upload"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/image_guidline"
+                    app:layout_constraintStart_toStartOf="@id/last_updated_guidline"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/purple_200"
+                    app:layout_constraintStart_toStartOf="@id/image_guidline"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <ImageView
+
+                    android:id="@+id/reminder_btn"
+                    android:layout_width="@dimen/dimen_28"
+                    android:layout_height="@dimen/dimen_28"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/add_reminder"
+                    android:src="@drawable/ic_add_reminder"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/reminder_guidline"
+                    app:layout_constraintStart_toStartOf="@id/image_guidline"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/purple_200"
+                    app:layout_constraintStart_toStartOf="@id/reminder_guidline"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <ImageView
+                    android:id="@+id/color_btn"
+                    android:layout_width="@dimen/dimen_28"
+                    android:layout_height="@dimen/dimen_28"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/add_background_color"
+                    android:src="@drawable/ic_color"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/reminder_guidline"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </layout>

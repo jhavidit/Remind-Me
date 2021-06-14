@@ -13,7 +13,6 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.FragmentNotesBinding
@@ -21,16 +20,12 @@ import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.util.CREATE
 import tech.jhavidit.remindme.util.toast
 import tech.jhavidit.remindme.view.adapters.NotesListAdapter
-import tech.jhavidit.remindme.view.adapters.SelectBackgroundColorAdapter
-import tech.jhavidit.remindme.view.fragments.CreateNotesFragmentDirections.notesList
-import tech.jhavidit.remindme.viewModel.MainActivityViewModel
 import tech.jhavidit.remindme.viewModel.NotesViewModel
 
 
 class NotesFragment : Fragment() {
     private lateinit var binding: FragmentNotesBinding
     private lateinit var navController: NavController
-    private val activityViewModel: MainActivityViewModel by activityViewModels()
     private lateinit var adapter: NotesListAdapter
     private lateinit var viewModel: NotesViewModel
     private var notesCount = 0

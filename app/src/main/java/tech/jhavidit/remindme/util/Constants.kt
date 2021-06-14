@@ -9,6 +9,7 @@ const val BACKGROUND_LOCATION_PERMISSION_INDEX = 1
 const val PICK_IMAGE = 101
 const val PICK_IMAGE_FROM_CAMERA = 102
 const val CAMERA_PERMISSION_CODE = 203
+const val STORAGE_PERMISSION_CODE = 303
 const val TIME = "time"
 const val LOCATION = "location"
 const val UPDATE = "update"
