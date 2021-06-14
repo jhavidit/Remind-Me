@@ -31,6 +31,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_create_notes.*
 import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView
 import tech.jhavidit.remindme.R
@@ -71,9 +72,25 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
         navController = Navigation.findNavController(requireActivity(), R.id.NavHostFragment)
         notesViewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
         args.currentNotes.image?.let {
-            binding.notesImageCard.visibility = VISIBLE
 
-            binding.image.setImageURI(stringToUri(it))
+            if (checkStoragePermission(requireContext())) {
+                binding.notesImageCard.visibility = VISIBLE
+                binding.image.setImageURI(stringToUri(it))
+            } else {
+                binding.notesImageCard.visibility = GONE
+                Snackbar.make(
+                    binding.note,
+                    "Nedd Storage Permission to see image",
+                    Snackbar.LENGTH_LONG
+                ).setAction("Enable", View.OnClickListener {
+                    val intent =
+                        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    val uri: Uri =
+                        Uri.fromParts("package", activity?.packageName, null)
+                    intent.data = uri
+                    startActivity(intent)
+                })
+            }
         } ?: run {
             binding.notesImageCard.visibility = GONE
         }
@@ -287,25 +304,25 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                     CAMERA_PERMISSION_CODE
                 )
             }
-
-            cameraCard?.setOnClickListener {
-                if (ActivityCompat.checkSelfPermission(
-                        requireContext(),
-                        android.Manifest.permission.CAMERA
-                    ) == PackageManager.PERMISSION_GRANTED
-                ) {
-                    val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                    startActivityForResult(cameraIntent, PICK_IMAGE_FROM_CAMERA)
-                } else {
-                    requestPermissions(
-                        arrayOf(android.Manifest.permission.CAMERA),
-                        STORAGE_PERMISSION_CODE
-                    )
-                }
-            }
-
-
         }
+        cameraCard?.setOnClickListener {
+            if (ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    android.Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                startActivityForResult(cameraIntent, PICK_IMAGE_FROM_CAMERA)
+            } else {
+                requestPermissions(
+                    arrayOf(android.Manifest.permission.CAMERA),
+                    STORAGE_PERMISSION_CODE
+                )
+            }
+        }
+
+
+        
         bottomSheetDialogs.show()
     }
 

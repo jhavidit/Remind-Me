@@ -12,6 +12,9 @@ import kotlinx.android.synthetic.main.reminder_item.view.*
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.util.UPDATE
+import tech.jhavidit.remindme.util.checkStoragePermission
+import tech.jhavidit.remindme.util.stringToUri
+import tech.jhavidit.remindme.util.toast
 import tech.jhavidit.remindme.view.fragments.ReminderFragmentDirections
 
 class LocationReminderListAdapter :
@@ -45,9 +48,18 @@ class LocationReminderListAdapter :
                     )
                 )
             }
-            currentNotes.image?.let { } ?: run {
-                holder.itemView.reminder_image.visibility = GONE
-
+            currentNotes.image?.let {
+                if (checkStoragePermission(holder.itemView.context)) {
+                    holder.itemView.reminder_image.setImageURI(stringToUri(currentNotes.image))
+                } else {
+                    holder.itemView.image_card.visibility = GONE
+                    toast(
+                        holder.itemView.context,
+                        "You need to enable storage permission to view image"
+                    )
+                }
+            } ?: run {
+                holder.itemView.image_card.visibility = GONE
             }
         }
     }
