@@ -107,7 +107,6 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                 binding.lastUpdated.text = "Last edit : recently"
             }
 
-
         if (notes.isPinned) {
             isPinned = true
             binding.pinBtn.setImageResource(R.drawable.ic_pin)
@@ -322,7 +321,7 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
         }
 
 
-        
+
         bottomSheetDialogs.show()
     }
 

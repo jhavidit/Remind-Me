@@ -85,11 +85,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_search"
-                    android:tint="@color/purple_200"
+                    android:contentDescription="@string/search_note_icon"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@id/endSearchGuideline"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/purple_200" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

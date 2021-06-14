@@ -90,7 +90,7 @@
                         app:layout_constraintBottom_toTopOf="@id/time_reminder_text"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-
+                        android:contentDescription="@string/time_reminder_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
@@ -98,7 +98,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/alata_regular"
-                        android:text="Time"
+                        android:text="@string/time"
                         android:textColor="@color/purple_200"
                         android:textSize="@dimen/dimen_text_16"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -136,7 +136,7 @@
                         app:layout_constraintBottom_toTopOf="@id/location_reminder_text"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-
+                        android:contentDescription="@string/location_reminder_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
@@ -145,7 +145,7 @@
 
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/alata_regular"
-                        android:text="Location"
+                        android:text="@string/location"
                         android:textColor="@color/purple_200"
                         android:textSize="@dimen/dimen_text_16"
                         app:layout_constraintBottom_toBottomOf="parent"

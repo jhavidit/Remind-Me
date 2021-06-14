@@ -2,6 +2,7 @@
 
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/location_name"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -10,7 +11,7 @@
     android:background="?selectableItemBackground"
     android:paddingStart="@dimen/dimen_10"
     android:paddingEnd="@dimen/dimen_10"
-    android:text="Location"
+    tools:text="Location"
     android:textColor="#323232"
     android:textSize="@dimen/dimen_text_20"
     app:layout_constraintBottom_toBottomOf="parent"

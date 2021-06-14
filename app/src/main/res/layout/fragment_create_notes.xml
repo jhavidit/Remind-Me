@@ -160,6 +160,7 @@
                                 android:layout_width="@dimen/dimen_20"
                                 android:layout_height="@dimen/dimen_20"
                                 android:layout_gravity="center"
+                                android:contentDescription="@string/delete_image_icon"
                                 android:src="@drawable/ic_close" />
 
                         </com.google.android.material.card.MaterialCardView>
@@ -231,13 +232,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/alata_regular"
-                    android:text="Last edit : 12/05/21"
                     android:textColor="@color/purple_200"
                     android:textSize="@dimen/dimen_text_16"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@id/last_updated_guidline"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Last edit : 12/05/21" />
 
                 <View
                     android:layout_width="2dp"

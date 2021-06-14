@@ -48,6 +48,7 @@
                 <ImageView
                     android:id="@+id/color_image"
                     android:layout_width="@dimen/dimen_24"
+                    android:contentDescription="@string/select_color_icon"
                     android:layout_height="@dimen/dimen_24"
                     android:layout_marginEnd="@dimen/dimen_12"
                     android:src="@drawable/ic_color" />
@@ -57,7 +58,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/alata_regular"
-                    android:text="Select Color"
+                    android:text="@string/select_color"
                     android:textColor="@color/purple_200"
                     android:textSize="@dimen/dimen_text_16"
                     app:layout_constraintTop_toBottomOf="@id/close_btn" />

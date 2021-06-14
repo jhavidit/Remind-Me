@@ -66,7 +66,7 @@
                     android:layout_width="@dimen/dimen_24"
                     android:layout_height="@dimen/dimen_24"
                     android:layout_marginEnd="@dimen/dimen_12"
-                    android:contentDescription="@string/reminder_image"
+                    android:contentDescription="@string/save_location_icon"
                     android:src="@drawable/ic_add_location" />
 
                 <TextView
@@ -74,7 +74,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/alata_regular"
-                    android:text="Save Location"
+                    android:text="@string/save_location"
                     android:textColor="@color/purple_200"
                     android:textSize="@dimen/dimen_text_16"
                     app:layout_constraintTop_toBottomOf="@id/close_btn" />
@@ -86,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_12"
                 android:fontFamily="@font/alata_regular"
-                android:text="Location Name"
+                android:text="@string/location_name"
                 android:textColor="@color/purple_200"
                 android:textSize="@dimen/dimen_text_16"
                 app:layout_constraintStart_toStartOf="@id/startGuideline"
@@ -140,7 +140,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/alata_regular"
-                        android:text="Save"
+                        android:text="@string/save"
                         android:textColor="@color/white"
                         android:textSize="@dimen/dimen_text_20"
                         app:layout_constraintBottom_toBottomOf="parent"
