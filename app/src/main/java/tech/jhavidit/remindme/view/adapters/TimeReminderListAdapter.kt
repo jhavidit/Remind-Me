@@ -19,7 +19,7 @@ class TimeReminderListAdapter(private val clickListen: TimeReminderAdapterInterf
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     interface TimeReminderAdapterInterface {
-        fun disableEnableTimeReminder(checked: Boolean,notesModel: NotesModel)
+        fun disableEnableTimeReminder(checked: Boolean, notesModel: NotesModel)
     }
 
     private var notes = emptyList<NotesModel>()
@@ -66,11 +66,12 @@ class TimeReminderListAdapter(private val clickListen: TimeReminderAdapterInterf
                     )
                 )
             }
+            holder.itemView.reminder_switch.isChecked = currentNotes.timeReminder == true
             holder.itemView.reminder_switch.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    clickListen.disableEnableTimeReminder(true,currentNotes)
+                    clickListen.disableEnableTimeReminder(true, currentNotes)
                 } else
-                    clickListen.disableEnableTimeReminder(false,currentNotes)
+                    clickListen.disableEnableTimeReminder(false, currentNotes)
             }
         }
     }

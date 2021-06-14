@@ -17,9 +17,13 @@ import tech.jhavidit.remindme.util.stringToUri
 import tech.jhavidit.remindme.util.toast
 import tech.jhavidit.remindme.view.fragments.ReminderFragmentDirections
 
-class LocationReminderListAdapter :
+class LocationReminderListAdapter(private val clickListen: LocationReminderAdapterInterface) :
     RecyclerView.Adapter<LocationReminderListAdapter.MyViewHolder>() {
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
+    interface LocationReminderAdapterInterface {
+        fun disableEnableLocationReminder(checked: Boolean, notesModel: NotesModel)
+    }
 
     private var notes = emptyList<NotesModel>()
 
@@ -60,6 +64,14 @@ class LocationReminderListAdapter :
                 }
             } ?: run {
                 holder.itemView.image_card.visibility = GONE
+            }
+            holder.itemView.reminder_switch.isChecked = currentNotes.locationReminder == true
+            holder.itemView.reminder_switch.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    clickListen.disableEnableLocationReminder(true, currentNotes)
+                } else
+                    clickListen.disableEnableLocationReminder(false, currentNotes)
+
             }
         }
     }
