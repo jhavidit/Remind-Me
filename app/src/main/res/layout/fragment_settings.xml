@@ -51,6 +51,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/do_not_disturb"
             android:layout_width="0dp"
+
             android:layout_height="@dimen/dimen_50"
             app:layout_constraintEnd_toEndOf="@id/endGuideline"
             app:layout_constraintStart_toStartOf="@id/startGuideline"
@@ -90,6 +91,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/ringtone"
+            android:background="?selectableItemBackground"
             android:layout_width="0dp"
             android:layout_height="@dimen/dimen_50"
             app:layout_constraintEnd_toEndOf="@id/endGuideline"
@@ -144,6 +146,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/radius_limit"
             android:layout_width="0dp"
+            android:background="?selectableItemBackground"
             android:layout_height="@dimen/dimen_50"
             app:layout_constraintEnd_toEndOf="@id/endGuideline"
             app:layout_constraintStart_toStartOf="@id/startGuideline"

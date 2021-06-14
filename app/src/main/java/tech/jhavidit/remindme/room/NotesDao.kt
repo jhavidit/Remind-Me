@@ -31,4 +31,5 @@ interface NotesDao {
     @Query("SELECT * from notes_table where id = :id")
      fun selectedNote(id: Int): LiveData<List<NotesModel>>
 
+
 }

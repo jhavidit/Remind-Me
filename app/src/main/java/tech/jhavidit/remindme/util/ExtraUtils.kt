@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
+import android.provider.OpenableColumns
 import android.provider.Settings
 import android.util.Base64
 import android.util.Log
@@ -51,7 +52,7 @@ fun getRadius(minRadius: Double, maxRadius: Double, progress: Int): Double {
     return ((progress.toDouble() / 100.0 * (maxRadius - minRadius)) + minRadius)
 }
 
-fun showLocationPermissionAlertDialog(context: Context){
+fun showLocationPermissionAlertDialog(context: Context) {
     MaterialAlertDialogBuilder(context)
         .setTitle("Location Permission Required")
         .setMessage("You need to provide location permission to access this feature. Kindly enable it from settings")
@@ -71,4 +72,21 @@ fun showLocationPermissionAlertDialog(context: Context){
             dialogInterface.dismiss()
         }
         .show()
+}
+
+fun getNameFromUri(context: Context, uri: Uri): String? {
+    val returnCursor = context.contentResolver.query(uri, null, null, null, null)
+    val nameIndex = returnCursor?.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+    returnCursor?.moveToFirst()
+    var fileName = nameIndex?.let { returnCursor.getString(it) }
+    returnCursor?.close()
+
+    fileName?.let {
+        var name = it.replace('_', ' ', false)
+        name = name.substring(0, name.indexOf("."))
+        if (name.length > 16)
+            name = it.substring(0, 16) + "..."
+        fileName = name
+    }
+    return fileName
 }

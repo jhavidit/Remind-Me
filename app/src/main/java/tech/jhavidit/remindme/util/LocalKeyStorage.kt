@@ -9,7 +9,8 @@ class LocalKeyStorage(context: Context) {
         context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE)
 
     companion object {
-
+        const val RINGTONE = "ringtone"
+        const val RINGTONE_NAME = "ringtone_name"
     }
 
     fun saveValue(key: String, value: String) {

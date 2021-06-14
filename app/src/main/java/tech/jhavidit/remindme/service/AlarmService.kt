@@ -14,7 +14,9 @@ import android.os.*
 import androidx.core.app.NotificationCompat
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.model.NotesModel
+import tech.jhavidit.remindme.util.LocalKeyStorage
 import tech.jhavidit.remindme.util.NOTES_TIME
+import tech.jhavidit.remindme.util.stringToUri
 import tech.jhavidit.remindme.view.activity.ReminderScreenActivity
 
 
@@ -22,15 +24,21 @@ class AlarmService : Service() {
 
     private lateinit var vibrator: Vibrator
     private lateinit var ringtone: Ringtone
+    private lateinit var uri: Uri
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }
 
     override fun onCreate() {
         super.onCreate()
+        LocalKeyStorage(applicationContext).getValue(LocalKeyStorage.RINGTONE)?.let {
+            uri = stringToUri(it)!!
+        }?: run {
+            uri =  RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+        }
 
-        val notification: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
-        ringtone = RingtoneManager.getRingtone(applicationContext, notification)
+        val notification : Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+        ringtone = RingtoneManager.getRingtone(applicationContext, uri)
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     }
 

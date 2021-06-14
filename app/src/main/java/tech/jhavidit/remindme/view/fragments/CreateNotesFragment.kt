@@ -79,7 +79,7 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
             } else {
                 binding.notesImageCard.visibility = GONE
                 Snackbar.make(
-                    binding.note,
+                    binding.coordinatorLayout,
                     "Nedd Storage Permission to see image",
                     Snackbar.LENGTH_LONG
                 ).setAction("Enable", View.OnClickListener {
