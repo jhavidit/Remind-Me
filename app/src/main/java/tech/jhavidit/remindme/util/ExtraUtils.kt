@@ -14,7 +14,9 @@ import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.location.GeofenceStatusCodes
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import java.io.InputStream
 
 
 @SuppressLint("LogNotTimber")
@@ -39,6 +41,8 @@ fun errorMessage(context: Context, errorCode: Int): String {
 fun stringToUri(image: String): Uri? {
     return Uri.parse(image)
 }
+
+
 
 fun bitmapToUri(inContext: Context, inImage: Bitmap): Uri? {
     val bytes = ByteArrayOutputStream()
@@ -89,4 +93,16 @@ fun getNameFromUri(context: Context, uri: Uri): String? {
         fileName = name
     }
     return fileName
+}
+
+fun stringToBitMap(image: String?): Bitmap? {
+    return try {
+        val encodeByte =
+            Base64.decode(image, Base64.DEFAULT)
+        val inputStream: InputStream = ByteArrayInputStream(encodeByte)
+        BitmapFactory.decodeStream(inputStream)
+    } catch (e: Exception) {
+        e.message
+        null
+    }
 }

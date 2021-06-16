@@ -27,6 +27,8 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import coil.load
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
@@ -43,6 +45,7 @@ import tech.jhavidit.remindme.receiver.GeoFencingReceiver
 import tech.jhavidit.remindme.util.*
 import tech.jhavidit.remindme.view.adapters.SelectBackgroundColorAdapter
 import tech.jhavidit.remindme.viewModel.NotesViewModel
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.log
@@ -75,7 +78,9 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
 
             if (checkStoragePermission(requireContext())) {
                 binding.notesImageCard.visibility = VISIBLE
-                binding.image.setImageURI(stringToUri(it))
+                Glide.with(requireContext())
+                    .load(stringToBitMap(it))
+                    .into(binding.image)
             } else {
                 binding.notesImageCard.visibility = GONE
                 Snackbar.make(
@@ -89,7 +94,7 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                         Uri.fromParts("package", activity?.packageName, null)
                     intent.data = uri
                     startActivity(intent)
-                })
+                }).show()
             }
         } ?: run {
             binding.notesImageCard.visibility = GONE
@@ -291,16 +296,27 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                     android.Manifest.permission.WRITE_EXTERNAL_STORAGE
                 ) == PackageManager.PERMISSION_GRANTED
             ) {
-                val galleryIntent =
+
+                //Intent intent = new Intent();
+                //intent.setType("image/*");
+                //intent.setAction(Intent.ACTION_GET_CONTENT);
+                //startActivityForResult(Intent.createChooser(intent, "select a picture"), YOUR_IMAGE_CODE);
+
+                val galleryIntent = Intent()
+                galleryIntent.type = "image/*"
+                galleryIntent.action = Intent.ACTION_GET_CONTENT
+                startActivityForResult(Intent.createChooser(galleryIntent, "Select an image"), PICK_IMAGE)
+
+               /* val galleryIntent =
                     Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-                startActivityForResult(galleryIntent, PICK_IMAGE)
+                startActivityForResult(galleryIntent, PICK_IMAGE)*/
             } else {
                 requestPermissions(
                     arrayOf(
                         android.Manifest.permission.READ_EXTERNAL_STORAGE,
                         android.Manifest.permission.WRITE_EXTERNAL_STORAGE
                     ),
-                    CAMERA_PERMISSION_CODE
+                    STORAGE_PERMISSION_CODE
                 )
             }
         }
@@ -315,7 +331,7 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
             } else {
                 requestPermissions(
                     arrayOf(android.Manifest.permission.CAMERA),
-                    STORAGE_PERMISSION_CODE
+                    CAMERA_PERMISSION_CODE
                 )
             }
         }
@@ -360,9 +376,11 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
         }
         if (requestCode == STORAGE_PERMISSION_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                val galleryIntent =
-                    Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-                startActivityForResult(galleryIntent, PICK_IMAGE)
+                val galleryIntent = Intent()
+                galleryIntent.type = "image/*"
+                galleryIntent.action = Intent.ACTION_GET_CONTENT
+                startActivityForResult(Intent.createChooser(galleryIntent, "Select an image"), PICK_IMAGE)
+
             }
         } else {
             MaterialAlertDialogBuilder(requireContext())
@@ -394,7 +412,11 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
         if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
             binding.notesImageCard.visibility = View.VISIBLE
             val pickedImage: Uri? = data?.data
-            binding.image.setImageURI(pickedImage)
+            val bitmap =
+                MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, pickedImage)
+            Glide.with(requireContext())
+                .load(bitmap)
+                .into(binding.image)
             val notes = NotesModel(
                 id = notesId,
                 title = binding.title.text.toString(),
@@ -412,16 +434,17 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                 locationName = args.currentNotes.locationName,
                 backgroundColor = args.currentNotes.backgroundColor,
                 lastUpdated = args.currentNotes.lastUpdated,
-                image = pickedImage.toString()
+                image = bitmap.toString()
             )
             notesViewModel.updateNotes(notes)
 
 
         } else if (requestCode == PICK_IMAGE_FROM_CAMERA && resultCode == Activity.RESULT_OK) {
-            binding.notesImageCard.visibility = View.VISIBLE
+            binding.notesImageCard.visibility = VISIBLE
             val bitmap = data?.extras?.get("data") as Bitmap
-            val uri = bitmapToUri(requireContext(), bitmap)
-            binding.image.setImageURI(uri)
+            Glide.with(requireContext())
+                .load(bitmap)
+                .into(binding.image)
             val notes = NotesModel(
                 id = notesId,
                 title = binding.title.text.toString(),
@@ -439,7 +462,7 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                 locationName = args.currentNotes.locationName,
                 backgroundColor = args.currentNotes.backgroundColor,
                 lastUpdated = args.currentNotes.lastUpdated,
-                image = uri.toString()
+                image = bitmap.toString()
             )
             notesViewModel.updateNotes(notes)
 

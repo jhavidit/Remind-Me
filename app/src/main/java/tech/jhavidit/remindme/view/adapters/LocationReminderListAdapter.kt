@@ -11,10 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.reminder_item.view.*
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.model.NotesModel
-import tech.jhavidit.remindme.util.UPDATE
-import tech.jhavidit.remindme.util.checkStoragePermission
-import tech.jhavidit.remindme.util.stringToUri
-import tech.jhavidit.remindme.util.toast
+import tech.jhavidit.remindme.util.*
 import tech.jhavidit.remindme.view.fragments.ReminderFragmentDirections
 
 class LocationReminderListAdapter(private val clickListen: LocationReminderAdapterInterface) :
@@ -54,7 +51,7 @@ class LocationReminderListAdapter(private val clickListen: LocationReminderAdapt
             }
             currentNotes.image?.let {
                 if (checkStoragePermission(holder.itemView.context)) {
-                    holder.itemView.reminder_image.setImageURI(stringToUri(currentNotes.image))
+                    holder.itemView.reminder_image.setImageBitmap(stringToBitMap(currentNotes.image))
                 } else {
                     holder.itemView.image_card.visibility = GONE
                     toast(

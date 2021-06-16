@@ -48,7 +48,7 @@ class TimeReminderListAdapter(private val clickListen: TimeReminderAdapterInterf
             holder.itemView.reminder.setCardBackgroundColor(Color.parseColor(currentNotes.backgroundColor))
             currentNotes.image?.let {
                 if (checkStoragePermission(holder.itemView.context)) {
-                    holder.itemView.reminder_image.setImageURI(stringToUri(currentNotes.image))
+                    holder.itemView.reminder_image.setImageBitmap(stringToBitMap(currentNotes.image))
                 } else {
                     holder.itemView.image_card.visibility = GONE
                     toast(

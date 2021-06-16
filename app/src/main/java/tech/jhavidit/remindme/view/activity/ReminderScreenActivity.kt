@@ -57,7 +57,7 @@ class ReminderScreenActivity : AppCompatActivity() {
             reminder = notesLocationBundle.getString("reminder") ?: ""
             binding.reminderIcon.setImageResource(R.drawable.ic_alarm_set)
             binding.reminderLocationTime.text =
-                notesLocationBundle.getString("reminderTime")
+                notesLocationBundle.getString("locationName")
             binding.title.text = notesLocationBundle.getString("title")
             binding.description.text = notesLocationBundle.getString("description")
             binding.reminderIcon.setImageResource(R.drawable.ic_add_location)
@@ -66,7 +66,6 @@ class ReminderScreenActivity : AppCompatActivity() {
 
         }
 
-        viewModel.selectedNote(id)
 
         binding.cancelReminder.setOnClickListener {
             cancelReminder()
@@ -95,7 +94,7 @@ class ReminderScreenActivity : AppCompatActivity() {
 
     private fun cancelReminder() {
         if (reminder == "location") {
-            viewModel.selectedNote.observe(this, Observer { note ->
+            viewModel.selectedNote(id).observe(this, Observer { note ->
                 val notes = note[0]
                 val notesModel = NotesModel(
                     id = notes.id,
@@ -124,7 +123,7 @@ class ReminderScreenActivity : AppCompatActivity() {
 
 
         } else if (reminder == "time") {
-            viewModel.selectedNote.observe(this, Observer { note ->
+            viewModel.selectedNote(id).observe(this, Observer { note ->
                 val notes = note[0]
                 if (notes.repeatValue == -1L) {
                     val notesModel = NotesModel(
@@ -155,7 +154,7 @@ class ReminderScreenActivity : AppCompatActivity() {
 
 
         } else if (snooze && reminder == "location") {
-            viewModel.selectedNote.observe(this, Observer { note ->
+            viewModel.selectedNote(id).observe(this, Observer { note ->
                 val notes = note[0]
                 val notesModel = NotesModel(
                     id = notes.id,
@@ -185,7 +184,7 @@ class ReminderScreenActivity : AppCompatActivity() {
     }
 
     private fun snoozeReminder() {
-        viewModel.selectedNote.observe(this, Observer { notes ->
+        viewModel.selectedNote(id).observe(this, Observer { notes ->
             notes?.let {
                 val note = it[0]
                 reminder?.let { remind ->

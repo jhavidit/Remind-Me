@@ -2,7 +2,9 @@ package tech.jhavidit.remindme.room
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 import tech.jhavidit.remindme.model.NotesModel
+
 
 @Dao
 interface NotesDao {
@@ -29,7 +31,9 @@ interface NotesDao {
     fun createdId(): LiveData<Int>
 
     @Query("SELECT * from notes_table where id = :id")
-     fun selectedNote(id: Int): LiveData<List<NotesModel>>
+    fun selectedNote(id: Int): Flow<List<NotesModel>>
 
+    @Query("SELECT * from notes_table where title like :searchQuery or description like :searchQuery")
+    fun searchNotes(searchQuery: String?): Flow<List<NotesModel>>
 
 }

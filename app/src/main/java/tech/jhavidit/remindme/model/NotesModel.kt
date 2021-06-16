@@ -9,7 +9,7 @@ import java.util.*
 
 @Entity(tableName = "notes_table")
 @Parcelize
-data class  NotesModel(
+data class NotesModel(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     var title: String = "",
