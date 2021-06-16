@@ -77,4 +77,5 @@
     <string name="select_time_icon">select time icon</string>
     <string name="pinned_icon">pinned icon</string>
     <string name="daily">Daily</string>
+    <string name="clear_text">clear text</string>
 </resources>

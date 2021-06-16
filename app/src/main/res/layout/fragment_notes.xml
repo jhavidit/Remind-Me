@@ -46,7 +46,7 @@
             android:layout_marginStart="@dimen/dimen_16"
             android:layout_marginEnd="@dimen/dimen_16"
             app:cardBackgroundColor="#EEF5F6"
-            app:cardCornerRadius="6dp"
+            app:cardCornerRadius="@dimen/dimen_16"
             app:cardElevation="@dimen/dimen_8"
             app:layout_constraintEnd_toEndOf="@id/endGuideline"
             app:layout_constraintStart_toStartOf="@id/startGuideline"

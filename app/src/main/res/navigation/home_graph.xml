@@ -67,17 +67,6 @@
         android:name="tech.jhavidit.remindme.view.fragments.CreateNotesFragment"
         android:label="CreateNotesFragment">
 
-        <action
-            android:id="@+id/uploadImage"
-            app:destination="@id/addImageBottomSheet">
-
-
-            <argument
-                android:name="currentNotes"
-                app:argType="tech.jhavidit.remindme.model.NotesModel" />
-
-
-        </action>
 
 
         <action
@@ -185,16 +174,7 @@
 
     </dialog>
 
-    <dialog
-        android:id="@+id/addImageBottomSheet"
-        android:name="tech.jhavidit.remindme.view.fragments.AddImageBottomSheet"
-        android:label="AddImageBottomSheet">
 
-        <argument
-            android:name="currentNotes"
-            app:argType="tech.jhavidit.remindme.model.NotesModel" />
-
-    </dialog>
 
 
     <dialog
@@ -236,7 +216,23 @@
     <fragment
         android:id="@+id/searchNotesFragment"
         android:name="tech.jhavidit.remindme.view.fragments.SearchNotesFragment"
-        android:label="SearchNotesFragment" />
+        android:label="SearchNotesFragment" >
+
+        <action
+            android:id="@+id/updateNotes"
+            app:destination="@id/createNotesFragment">
+
+            <argument
+                android:name="update"
+                app:argType="string" />
+
+            <argument
+                android:name="currentNotes"
+                app:argType="tech.jhavidit.remindme.model.NotesModel" />
+
+        </action>
+
+    </fragment>
 
 
 </navigation>
