@@ -38,14 +38,15 @@ class ReminderScreenActivity : AppCompatActivity() {
 
         notesTimeBundle?.let {
             id = notesTimeBundle.getInt("id")
+            viewModel.selectedNote(id).observe(this, Observer {
+                binding.reminderLocationTime.text =
+                    it[0].reminderTime
+                binding.title.text = it[0].title
+                binding.description.text = it[0].description
+            })
             snooze = notesTimeBundle.getBoolean("snooze")
             reminder = notesTimeBundle.getString("reminder") ?: ""
             binding.reminderIcon.setImageResource(R.drawable.ic_alarm_set)
-            binding.reminderLocationTime.text =
-                notesTimeBundle.getString("reminderTime")
-            binding.title.text = notesTimeBundle.getString("title")
-            binding.description.text = notesTimeBundle.getString("description")
-
         }
 
 
@@ -56,12 +57,13 @@ class ReminderScreenActivity : AppCompatActivity() {
             snooze = notesLocationBundle.getBoolean("snooze")
             reminder = notesLocationBundle.getString("reminder") ?: ""
             binding.reminderIcon.setImageResource(R.drawable.ic_alarm_set)
-            binding.reminderLocationTime.text =
-                notesLocationBundle.getString("locationName")
-            binding.title.text = notesLocationBundle.getString("title")
-            binding.description.text = notesLocationBundle.getString("description")
+            viewModel.selectedNote(id).observe(this, Observer {
+                binding.reminderLocationTime.text =
+                    it[0].locationName
+                binding.title.text = it[0].title
+                binding.description.text = it[0].description
+            })
             binding.reminderIcon.setImageResource(R.drawable.ic_add_location)
-            binding.reminderLocationTime.text = notesLocationBundle.getString("locationName")
 
 
         }

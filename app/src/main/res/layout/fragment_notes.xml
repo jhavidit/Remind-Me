@@ -41,10 +41,8 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/search_bar"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="@dimen/dimen_50"
-            android:layout_marginStart="@dimen/dimen_16"
-            android:layout_marginEnd="@dimen/dimen_16"
             app:cardBackgroundColor="#EEF5F6"
             app:cardCornerRadius="@dimen/dimen_16"
             app:cardElevation="@dimen/dimen_8"
