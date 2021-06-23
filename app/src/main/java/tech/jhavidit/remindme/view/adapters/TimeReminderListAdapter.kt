@@ -7,6 +7,7 @@ import android.view.View.GONE
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import kotlinx.android.synthetic.main.reminder_item.view.*
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.model.NotesModel
@@ -48,7 +49,7 @@ class TimeReminderListAdapter(private val clickListen: TimeReminderAdapterInterf
             holder.itemView.reminder.setCardBackgroundColor(Color.parseColor(currentNotes.backgroundColor))
             currentNotes.image?.let {
                 if (checkStoragePermission(holder.itemView.context)) {
-                    holder.itemView.reminder_image.setImageBitmap(stringToBitMap(currentNotes.image))
+                    holder.itemView.reminder_image.load(currentNotes.image)
                 } else {
                     holder.itemView.image_card.visibility = GONE
                     toast(

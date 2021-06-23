@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import kotlinx.android.synthetic.main.reminder_item.view.*
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.model.NotesModel
@@ -51,7 +52,7 @@ class LocationReminderListAdapter(private val clickListen: LocationReminderAdapt
             }
             currentNotes.image?.let {
                 if (checkStoragePermission(holder.itemView.context)) {
-                    holder.itemView.reminder_image.setImageBitmap(stringToBitMap(currentNotes.image))
+                    holder.itemView.reminder_image.load(currentNotes.image)
                 } else {
                     holder.itemView.image_card.visibility = GONE
                     toast(

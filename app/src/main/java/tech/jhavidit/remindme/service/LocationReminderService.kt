@@ -34,11 +34,11 @@ class LocationReminderService : Service() {
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     }
 
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
         val channelId = "default"
         val channelName = "Remind Me"
-        val bundle = intent.getBundleExtra(NOTES_LOCATION)
+        val bundle = intent?.getBundleExtra(NOTES_LOCATION)
         val id = bundle?.getInt("id") ?: 0
         val dismissIntent = Intent(this, ReminderScreenActivity::class.java)
         dismissIntent.putExtra("dismiss", "dismiss")
@@ -86,6 +86,7 @@ class LocationReminderService : Service() {
             vibrator.vibrate(pattern, 0)
 
         startForeground((1 + System.currentTimeMillis()).toInt(), notification)
+        bundle?.clear()
         return START_STICKY
     }
 

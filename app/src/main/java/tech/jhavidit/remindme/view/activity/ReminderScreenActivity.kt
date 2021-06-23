@@ -91,6 +91,8 @@ class ReminderScreenActivity : AppCompatActivity() {
             cancelReminder()
         }
 
+        notesTimeBundle?.clear()
+        notesLocationBundle?.clear()
 
     }
 

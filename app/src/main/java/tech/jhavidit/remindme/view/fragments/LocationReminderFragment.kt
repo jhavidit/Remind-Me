@@ -118,7 +118,7 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
             //  val notesModel = args.currentNotes
             intent.putExtra("latitude", lat)
             intent.putExtra("longitude", lon)
-            intent.putExtra("notes", notesValue)
+            intent.putExtra("id", notesValue.id)
             startActivity(intent)
         } else
             requestForegroundAndBackgroundLocationPermissions()

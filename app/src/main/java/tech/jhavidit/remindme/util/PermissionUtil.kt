@@ -32,9 +32,6 @@ fun checkStoragePermission(context: Context): Boolean {
     return ActivityCompat.checkSelfPermission(
         context,
         android.Manifest.permission.READ_EXTERNAL_STORAGE
-    ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-        context,
-        android.Manifest.permission.WRITE_EXTERNAL_STORAGE
     ) == PackageManager.PERMISSION_GRANTED
 }
 

@@ -1,5 +1,6 @@
 package tech.jhavidit.remindme.model
 
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Parcelable
 import androidx.room.Entity
@@ -25,7 +26,7 @@ data class NotesModel(
     val reminderDate: String? = null,
     val repeatValue: Long? = null,
     val isPinned: Boolean = false,
-    val image: String? = null,
+    val image: Bitmap? = null,
     val lastUpdated: String? = null,
     val backgroundColor: String = "#FFFFFF"
 

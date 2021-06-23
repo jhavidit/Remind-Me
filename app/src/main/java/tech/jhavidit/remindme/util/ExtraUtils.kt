@@ -3,6 +3,7 @@ package tech.jhavidit.remindme.util
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -42,15 +43,6 @@ fun stringToUri(image: String): Uri? {
     return Uri.parse(image)
 }
 
-
-
-fun bitmapToUri(inContext: Context, inImage: Bitmap): Uri? {
-    val bytes = ByteArrayOutputStream()
-    inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-    val path =
-        MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, "Title", null)
-    return Uri.parse(path)
-}
 
 fun getRadius(minRadius: Double, maxRadius: Double, progress: Int): Double {
     return ((progress.toDouble() / 100.0 * (maxRadius - minRadius)) + minRadius)
@@ -93,16 +85,4 @@ fun getNameFromUri(context: Context, uri: Uri): String? {
         fileName = name
     }
     return fileName
-}
-
-fun stringToBitMap(image: String?): Bitmap? {
-    return try {
-        val encodeByte =
-            Base64.decode(image, Base64.DEFAULT)
-        val inputStream: InputStream = ByteArrayInputStream(encodeByte)
-        BitmapFactory.decodeStream(inputStream)
-    } catch (e: Exception) {
-        e.message
-        null
-    }
 }

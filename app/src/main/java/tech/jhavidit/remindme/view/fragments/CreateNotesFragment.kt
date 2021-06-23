@@ -1,10 +1,12 @@
 package tech.jhavidit.remindme.view.fragments
 
+import android.R.attr
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
@@ -29,7 +31,6 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.bumptech.glide.Glide
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -42,13 +43,13 @@ import tech.jhavidit.remindme.databinding.FragmentCreateNotesBinding
 import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.receiver.AlarmReceiver
 import tech.jhavidit.remindme.receiver.GeoFencingReceiver
+import tech.jhavidit.remindme.room.Converters
 import tech.jhavidit.remindme.util.*
 import tech.jhavidit.remindme.view.adapters.SelectBackgroundColorAdapter
 import tech.jhavidit.remindme.viewModel.NotesViewModel
-import java.io.File
+import java.io.FileNotFoundException
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.log
 
 
 class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInterface {
@@ -79,7 +80,7 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
             if (checkStoragePermission(requireContext())) {
                 binding.notesImageCard.visibility = VISIBLE
                 Glide.with(requireContext())
-                    .load(stringToBitMap(it))
+                    .load(it)
                     .into(binding.image)
             } else {
                 binding.notesImageCard.visibility = GONE
@@ -291,9 +292,6 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
             if (ActivityCompat.checkSelfPermission(
                     requireContext(),
                     android.Manifest.permission.READ_EXTERNAL_STORAGE
-                ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                    requireContext(),
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
                 ) == PackageManager.PERMISSION_GRANTED
             ) {
 
@@ -305,16 +303,18 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                 val galleryIntent = Intent()
                 galleryIntent.type = "image/*"
                 galleryIntent.action = Intent.ACTION_GET_CONTENT
-                startActivityForResult(Intent.createChooser(galleryIntent, "Select an image"), PICK_IMAGE)
+                startActivityForResult(
+                    Intent.createChooser(galleryIntent, "Select an image"),
+                    PICK_IMAGE
+                )
 
-               /* val galleryIntent =
-                    Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-                startActivityForResult(galleryIntent, PICK_IMAGE)*/
+                /* val galleryIntent =
+                     Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+                 startActivityForResult(galleryIntent, PICK_IMAGE)*/
             } else {
                 requestPermissions(
                     arrayOf(
-                        android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        android.Manifest.permission.READ_EXTERNAL_STORAGE
                     ),
                     STORAGE_PERMISSION_CODE
                 )
@@ -379,7 +379,10 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                 val galleryIntent = Intent()
                 galleryIntent.type = "image/*"
                 galleryIntent.action = Intent.ACTION_GET_CONTENT
-                startActivityForResult(Intent.createChooser(galleryIntent, "Select an image"), PICK_IMAGE)
+                startActivityForResult(
+                    Intent.createChooser(galleryIntent, "Select an image"),
+                    PICK_IMAGE
+                )
 
             }
         } else {
@@ -410,13 +413,47 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
-            binding.notesImageCard.visibility = View.VISIBLE
+            binding.notesImageCard.visibility = VISIBLE
             val pickedImage: Uri? = data?.data
-            val bitmap =
-                MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, pickedImage)
-            Glide.with(requireContext())
-                .load(bitmap)
-                .into(binding.image)
+//            var imageSource: String? = null
+            var bitmap: Bitmap? = null
+            try {
+                val inputStream =
+                    pickedImage?.let { requireContext().contentResolver.openInputStream(it) }
+                bitmap = BitmapFactory.decodeStream(inputStream)
+//                imageSource = converters.bitmapToString(bitmap)
+                binding.image.load(bitmap)
+
+
+//                val imageSource = ImageBitmapString.BitMapToString(bitmap)
+//                imageSources.add(imageSource);
+            } catch (e: FileNotFoundException) {
+                e.printStackTrace()
+            }
+
+
+//            val filePath = arrayOf(MediaStore.Images.Media.DATA)
+//            val cursor: Cursor? =
+//                requireContext().contentResolver.query(pickedImage!!, filePath, null, null, null)
+//            cursor?.moveToFirst()
+//            val imagePath: String = cursor?.getString(cursor.getColumnIndex(filePath[0])) ?: ""
+//
+//            val options = BitmapFactory.Options()
+//            options.inPreferredConfig = Bitmap.Config.ARGB_8888
+//            var bitmap = BitmapFactory.decodeFile(imagePath, options)
+
+
+//         bitmap: Bitmap? = uriToBitmap(requireContext(), pickedImage!!)
+//            val uri = bitmap?.let { bitmapToUri(requireContext(), it) }
+//            lifecycleScope.launch {
+//                bitmap = getBitmap(uri)
+//            }
+
+//            Glide.with(requireContext())
+//                .load(bitmap)
+//                .into(binding.image)
+//
+//            cursor?.close()
             val notes = NotesModel(
                 id = notesId,
                 title = binding.title.text.toString(),
@@ -434,7 +471,7 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                 locationName = args.currentNotes.locationName,
                 backgroundColor = args.currentNotes.backgroundColor,
                 lastUpdated = args.currentNotes.lastUpdated,
-                image = bitmap.toString()
+                image = bitmap
             )
             notesViewModel.updateNotes(notes)
 
@@ -442,6 +479,7 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
         } else if (requestCode == PICK_IMAGE_FROM_CAMERA && resultCode == Activity.RESULT_OK) {
             binding.notesImageCard.visibility = VISIBLE
             val bitmap = data?.extras?.get("data") as Bitmap
+//            val imageSource = converters.bitmapToString(bitmap)
             Glide.with(requireContext())
                 .load(bitmap)
                 .into(binding.image)
@@ -462,7 +500,7 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                 locationName = args.currentNotes.locationName,
                 backgroundColor = args.currentNotes.backgroundColor,
                 lastUpdated = args.currentNotes.lastUpdated,
-                image = bitmap.toString()
+                image = bitmap
             )
             notesViewModel.updateNotes(notes)
 

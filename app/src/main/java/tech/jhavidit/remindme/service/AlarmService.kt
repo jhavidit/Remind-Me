@@ -6,14 +6,12 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.media.MediaPlayer
 import android.media.Ringtone
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.*
 import androidx.core.app.NotificationCompat
 import tech.jhavidit.remindme.R
-import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.util.LocalKeyStorage
 import tech.jhavidit.remindme.util.NOTES_TIME
 import tech.jhavidit.remindme.util.stringToUri
@@ -32,21 +30,25 @@ class AlarmService : Service() {
     override fun onCreate() {
         super.onCreate()
         LocalKeyStorage(applicationContext).getValue(LocalKeyStorage.RINGTONE)?.let {
-            uri = stringToUri(it)!!
-        }?: run {
-            uri =  RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+            uri = try {
+                stringToUri(it)!!
+            } catch (e: Exception) {
+                RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+            }
+
+        } ?: run {
+            uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
         }
 
-        val notification : Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
         ringtone = RingtoneManager.getRingtone(applicationContext, uri)
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     }
 
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
         val channelId = "default"
         val channelName = "Remind Me"
-        val bundle = intent.getBundleExtra(NOTES_TIME)
+        val bundle = intent?.getBundleExtra(NOTES_TIME)
         val id: Int = bundle?.getInt("id") ?: 0
         val dismissIntent = Intent(this, ReminderScreenActivity::class.java)
         val snoozeIntent = Intent(this, ReminderScreenActivity::class.java)
@@ -102,7 +104,11 @@ class AlarmService : Service() {
             vibrator.vibrate(pattern, 0)
 
         startForeground((1 + System.currentTimeMillis()).toInt(), notification)
+
+        bundle?.clear()
         return START_STICKY
+
+
     }
 
     override fun onDestroy() {

@@ -21,6 +21,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -49,21 +50,21 @@ import tech.jhavidit.remindme.util.log
 import tech.jhavidit.remindme.util.showLocationPermissionAlertDialog
 import tech.jhavidit.remindme.view.adapters.SelectBackgroundColorAdapter
 import tech.jhavidit.remindme.viewModel.LocationViewModel
+import tech.jhavidit.remindme.viewModel.NotesViewModel
 
 
 class LocationSearchActivity : AppCompatActivity(), OnMapReadyCallback,
     GoogleMap.OnMyLocationClickListener, GoogleMap.OnMyLocationButtonClickListener {
     private var map: GoogleMap? = null
     private lateinit var viewModel: LocationViewModel
-    private var cameraPosition: CameraPosition? = null
     private lateinit var placesClient: PlacesClient
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private var locationPlace: String = ""
     private var locationId: String = ""
     private var locationPermissionGranted = false
-    private var notesModel: NotesModel? = null
     private var lat = 0.0
     private var lon = 0.0
+    private var id: Int? = -1
     private lateinit var binding: ActivityLocationSearchBinding
 
     @SuppressLint("MissingPermission")
@@ -72,7 +73,8 @@ class LocationSearchActivity : AppCompatActivity(), OnMapReadyCallback,
 
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_location_search)
-        notesModel = intent?.getParcelableExtra<NotesModel>("notes")
+
+        id = intent?.getIntExtra("id", -1)
         lat = intent?.getDoubleExtra("latitude", 0.0) ?: 0.0
         lon = intent?.getDoubleExtra("longitude", 0.0) ?: 0.0
 
@@ -82,7 +84,11 @@ class LocationSearchActivity : AppCompatActivity(), OnMapReadyCallback,
             Places.initialize(applicationContext, MAPS_API_KEY)
             placesClient = Places.createClient(this)
         }
+
         viewModel = ViewModelProvider(this).get(LocationViewModel::class.java)
+
+
+
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as? SupportMapFragment
@@ -113,6 +119,7 @@ class LocationSearchActivity : AppCompatActivity(), OnMapReadyCallback,
                 .build(this)
             startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
         }
+
     }
 
     @SuppressLint("MissingPermission")
@@ -214,7 +221,7 @@ class LocationSearchActivity : AppCompatActivity(), OnMapReadyCallback,
                 )
                 viewModel.addLocation(locationModel)
                 val intent = Intent(this, MainActivity::class.java)
-                intent.putExtra("notes", notesModel)
+                intent.putExtra("id", id)
                 intent.putExtra("location", locationModel)
                 startActivity(intent)
 
