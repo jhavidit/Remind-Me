@@ -11,6 +11,7 @@ import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.ActivityTimeReminderBinding
 import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.receiver.AlarmReceiver
+import tech.jhavidit.remindme.receiver.GeoFencingReceiver
 import tech.jhavidit.remindme.service.AlarmService
 import tech.jhavidit.remindme.service.LocationReminderService
 import tech.jhavidit.remindme.util.NOTES_LOCATION
@@ -23,6 +24,7 @@ class ReminderScreenActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTimeReminderBinding
     private lateinit var viewModel: NotesViewModel
     private lateinit var alarmReceiver: AlarmReceiver
+    private lateinit var geoFencingReceiver: GeoFencingReceiver
     private var id: Int = 0
     private var snooze: Boolean = false
     private var reminder: String? = ""
@@ -30,6 +32,7 @@ class ReminderScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_time_reminder)
         alarmReceiver = AlarmReceiver()
+        geoFencingReceiver = GeoFencingReceiver()
         viewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
         val notesTimeBundle = intent?.getBundleExtra(NOTES_TIME)
         val snoozeAlarm = intent?.getBooleanExtra("snooze", false)
@@ -100,6 +103,7 @@ class ReminderScreenActivity : AppCompatActivity() {
         if (reminder == "location") {
             viewModel.selectedNote(id).observe(this, Observer { note ->
                 val notes = note[0]
+                geoFencingReceiver.cancelLocationReminder(this, notes.id)
                 val notesModel = NotesModel(
                     id = notes.id,
                     title = notes.title,
