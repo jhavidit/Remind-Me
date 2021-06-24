@@ -43,7 +43,8 @@ import tech.jhavidit.remindme.databinding.FragmentCreateNotesBinding
 import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.receiver.AlarmReceiver
 import tech.jhavidit.remindme.receiver.GeoFencingReceiver
-import tech.jhavidit.remindme.room.Converters
+import tech.jhavidit.remindme.room.bitmapToString
+import tech.jhavidit.remindme.room.stringToBitmap
 import tech.jhavidit.remindme.util.*
 import tech.jhavidit.remindme.view.adapters.SelectBackgroundColorAdapter
 import tech.jhavidit.remindme.viewModel.NotesViewModel
@@ -80,13 +81,13 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
             if (checkStoragePermission(requireContext())) {
                 binding.notesImageCard.visibility = VISIBLE
                 Glide.with(requireContext())
-                    .load(it)
+                    .load(stringToUri(it))
                     .into(binding.image)
             } else {
                 binding.notesImageCard.visibility = GONE
                 Snackbar.make(
                     binding.coordinatorLayout,
-                    "Nedd Storage Permission to see image",
+                    "Need Storage Permission to see image",
                     Snackbar.LENGTH_LONG
                 ).setAction("Enable", View.OnClickListener {
                     val intent =
@@ -295,22 +296,13 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                 ) == PackageManager.PERMISSION_GRANTED
             ) {
 
-                //Intent intent = new Intent();
-                //intent.setType("image/*");
-                //intent.setAction(Intent.ACTION_GET_CONTENT);
-                //startActivityForResult(Intent.createChooser(intent, "select a picture"), YOUR_IMAGE_CODE);
-
                 val galleryIntent = Intent()
                 galleryIntent.type = "image/*"
-                galleryIntent.action = Intent.ACTION_GET_CONTENT
+                galleryIntent.action = Intent.ACTION_OPEN_DOCUMENT
                 startActivityForResult(
                     Intent.createChooser(galleryIntent, "Select an image"),
                     PICK_IMAGE
                 )
-
-                /* val galleryIntent =
-                     Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-                 startActivityForResult(galleryIntent, PICK_IMAGE)*/
             } else {
                 requestPermissions(
                     arrayOf(
@@ -336,8 +328,6 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
             }
         }
 
-
-
         bottomSheetDialogs.show()
     }
 
@@ -352,59 +342,59 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 startActivityForResult(cameraIntent, PICK_IMAGE_FROM_CAMERA)
+            } else {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Camera Permission Required")
+                    .setMessage("You need to provide camera permission to access this feature. Kindly enable it from settings")
+                    .setPositiveButton(
+                        "Ok"
+                    ) { _, _ ->
+                        val intent =
+                            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                        val uri: Uri =
+                            Uri.fromParts("package", activity?.packageName, null)
+                        intent.data = uri
+                        startActivity(intent)
+                    }
+                    .setNegativeButton(
+                        "Cancel"
+                    ) { dialogInterface, _ ->
+                        dialogInterface.dismiss()
+                    }
+                    .show()
             }
-        } else {
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Camera Permission Required")
-                .setMessage("You need to provide camera permission to access this feature. Kindly enable it from settings")
-                .setPositiveButton(
-                    "Ok"
-                ) { _, _ ->
-                    val intent =
-                        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    val uri: Uri =
-                        Uri.fromParts("package", activity?.packageName, null)
-                    intent.data = uri
-                    startActivity(intent)
-                }
-                .setNegativeButton(
-                    "Cancel"
-                ) { dialogInterface, _ ->
-                    dialogInterface.dismiss()
-                }
-                .show()
         }
         if (requestCode == STORAGE_PERMISSION_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 val galleryIntent = Intent()
                 galleryIntent.type = "image/*"
-                galleryIntent.action = Intent.ACTION_GET_CONTENT
+                galleryIntent.action = Intent.ACTION_OPEN_DOCUMENT
                 startActivityForResult(
                     Intent.createChooser(galleryIntent, "Select an image"),
                     PICK_IMAGE
                 )
 
+            } else {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Storage Permission Required")
+                    .setMessage("You need to provide storage permission to access this feature. Kindly enable it from settings")
+                    .setPositiveButton(
+                        "Ok"
+                    ) { _, _ ->
+                        val intent =
+                            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                        val uri: Uri =
+                            Uri.fromParts("package", activity?.packageName, null)
+                        intent.data = uri
+                        startActivity(intent)
+                    }
+                    .setNegativeButton(
+                        "Cancel"
+                    ) { dialogInterface, _ ->
+                        dialogInterface.dismiss()
+                    }
+                    .show()
             }
-        } else {
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Storage Permission Required")
-                .setMessage("You need to provide storage permission to access this feature. Kindly enable it from settings")
-                .setPositiveButton(
-                    "Ok"
-                ) { _, _ ->
-                    val intent =
-                        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    val uri: Uri =
-                        Uri.fromParts("package", activity?.packageName, null)
-                    intent.data = uri
-                    startActivity(intent)
-                }
-                .setNegativeButton(
-                    "Cancel"
-                ) { dialogInterface, _ ->
-                    dialogInterface.dismiss()
-                }
-                .show()
         }
 
 
@@ -415,45 +405,10 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
         if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
             binding.notesImageCard.visibility = VISIBLE
             val pickedImage: Uri? = data?.data
-//            var imageSource: String? = null
-            var bitmap: Bitmap? = null
-            try {
-                val inputStream =
-                    pickedImage?.let { requireContext().contentResolver.openInputStream(it) }
-                bitmap = BitmapFactory.decodeStream(inputStream)
-//                imageSource = converters.bitmapToString(bitmap)
-                binding.image.load(bitmap)
+            Glide.with(requireContext())
+                .load(pickedImage)
+                .into(binding.image)
 
-
-//                val imageSource = ImageBitmapString.BitMapToString(bitmap)
-//                imageSources.add(imageSource);
-            } catch (e: FileNotFoundException) {
-                e.printStackTrace()
-            }
-
-
-//            val filePath = arrayOf(MediaStore.Images.Media.DATA)
-//            val cursor: Cursor? =
-//                requireContext().contentResolver.query(pickedImage!!, filePath, null, null, null)
-//            cursor?.moveToFirst()
-//            val imagePath: String = cursor?.getString(cursor.getColumnIndex(filePath[0])) ?: ""
-//
-//            val options = BitmapFactory.Options()
-//            options.inPreferredConfig = Bitmap.Config.ARGB_8888
-//            var bitmap = BitmapFactory.decodeFile(imagePath, options)
-
-
-//         bitmap: Bitmap? = uriToBitmap(requireContext(), pickedImage!!)
-//            val uri = bitmap?.let { bitmapToUri(requireContext(), it) }
-//            lifecycleScope.launch {
-//                bitmap = getBitmap(uri)
-//            }
-
-//            Glide.with(requireContext())
-//                .load(bitmap)
-//                .into(binding.image)
-//
-//            cursor?.close()
             val notes = NotesModel(
                 id = notesId,
                 title = binding.title.text.toString(),
@@ -471,7 +426,7 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                 locationName = args.currentNotes.locationName,
                 backgroundColor = args.currentNotes.backgroundColor,
                 lastUpdated = args.currentNotes.lastUpdated,
-                image = bitmap
+                image = pickedImage.toString()
             )
             notesViewModel.updateNotes(notes)
 
@@ -479,10 +434,12 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
         } else if (requestCode == PICK_IMAGE_FROM_CAMERA && resultCode == Activity.RESULT_OK) {
             binding.notesImageCard.visibility = VISIBLE
             val bitmap = data?.extras?.get("data") as Bitmap
-//            val imageSource = converters.bitmapToString(bitmap)
-            Glide.with(requireContext())
-                .load(bitmap)
-                .into(binding.image)
+            val imageSource: Uri? = bitmapToUri(requireContext(), bitmap)
+            imageSource?.let {
+                Glide.with(requireContext())
+                    .load(imageSource)
+                    .into(binding.image)
+            }
             val notes = NotesModel(
                 id = notesId,
                 title = binding.title.text.toString(),
@@ -500,7 +457,7 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                 locationName = args.currentNotes.locationName,
                 backgroundColor = args.currentNotes.backgroundColor,
                 lastUpdated = args.currentNotes.lastUpdated,
-                image = bitmap
+                image = imageSource.toString()
             )
             notesViewModel.updateNotes(notes)
 
@@ -551,7 +508,6 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
     private fun updateData() {
         val title = binding.title.text.toString()
         val description = binding.description.text.toString()
-
         val calendar = Calendar.getInstance()
         val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
         val formattedDate: String = dateFormat.format(calendar.time)

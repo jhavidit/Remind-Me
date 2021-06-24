@@ -8,7 +8,6 @@ import tech.jhavidit.remindme.model.NotesModel
 import java.util.concurrent.Executors
 
 @Database(entities = [NotesModel::class, LocationModel::class], version = 1, exportSchema = false)
-@TypeConverters(Converters::class)
 abstract class NotesDatabase : RoomDatabase() {
 
     abstract fun userDao(): NotesDao

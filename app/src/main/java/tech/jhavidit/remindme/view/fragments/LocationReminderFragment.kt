@@ -115,7 +115,6 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
             val lat = bestLocation?.latitude
             val lon = bestLocation?.longitude
             val intent = Intent(requireContext(), LocationSearchActivity::class.java)
-            //  val notesModel = args.currentNotes
             intent.putExtra("latitude", lat)
             intent.putExtra("longitude", lon)
             intent.putExtra("id", notesValue.id)
