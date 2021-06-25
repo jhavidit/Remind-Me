@@ -30,11 +30,11 @@
                 android:layout_gravity="center"
                 android:layout_marginBottom="15dp"
                 android:src="@drawable/ic_maps_and_flags"
-                android:tint="@color/purple_200"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/purple_200" />
 
         </FrameLayout>
 
@@ -42,13 +42,15 @@
             android:id="@+id/search_bar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_50"
-            app:cardBackgroundColor="#EEF5F6"
-            app:cardCornerRadius="@dimen/dimen_8"
             android:layout_margin="@dimen/dimen_10"
+            app:cardBackgroundColor="@color/purple_light"
+            app:cardCornerRadius="@dimen/dimen_16"
             app:cardElevation="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="@color/purple_200"
+            app:strokeWidth="1dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -74,7 +76,7 @@
                     android:layout_height="wrap_content"
                     android:background="@null"
                     android:fontFamily="@font/alata_regular"
-                    android:text="Search location"
+                    android:text="@string/search_location"
                     android:textColor="@color/purple_200"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -85,13 +87,13 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="?selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/search_location"
                     android:src="@drawable/ic_search"
-                    android:tint="@color/purple_200"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@id/endSearchGuideline"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/purple_200" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -104,11 +106,11 @@
             android:layout_height="@dimen/dimen_50"
             android:layout_margin="@dimen/dimen_10"
             android:elevation="@dimen/dimen_8"
-            app:cardCornerRadius="@dimen/dimen_8"
             app:cardBackgroundColor="@color/purple_200"
+            app:cardCornerRadius="@dimen/dimen_16"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" >
+            app:layout_constraintStart_toStartOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -117,14 +119,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Save Location"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:textColor="@color/white"
                     android:fontFamily="@font/alata_regular"
+                    android:text="@string/save_location"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/dimen_text_24"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

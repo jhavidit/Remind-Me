@@ -6,7 +6,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:ignore="ExtraText">
 
 
         <androidx.constraintlayout.widget.Guideline
@@ -40,13 +41,13 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/search_bar"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="@dimen/dimen_50"
-            android:layout_marginStart="@dimen/dimen_16"
-            android:layout_marginEnd="@dimen/dimen_16"
-            app:cardBackgroundColor="#EEF5F6"
-            app:cardCornerRadius="6dp"
-            app:cardElevation="10dp"
+            app:cardBackgroundColor="@color/purple_light"
+            app:cardCornerRadius="@dimen/dimen_16"
+            app:strokeColor="@color/purple_200"
+            app:strokeWidth="1dp"
+            app:cardElevation="@dimen/dimen_8"
             app:layout_constraintEnd_toEndOf="@id/endGuideline"
             app:layout_constraintStart_toStartOf="@id/startGuideline"
             app:layout_constraintTop_toTopOf="@id/topGuideline">
@@ -85,11 +86,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_search"
-                    android:tint="@color/purple_200"
+                    android:contentDescription="@string/search_note_icon"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@id/endSearchGuideline"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/purple_200" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -113,7 +115,8 @@
             android:id="@+id/fab_add_notes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_marginBottom="@dimen/dimen_4"
+            android:layout_marginEnd="@dimen/dimen_20"
             android:contentDescription="@string/notes_add"
             android:src="@drawable/ic_plus"
             app:backgroundTint="@color/white"

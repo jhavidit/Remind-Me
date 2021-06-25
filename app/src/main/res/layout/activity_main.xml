@@ -12,19 +12,25 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:defaultNavHost="true"
-           app:layout_constraintBottom_toTopOf="@id/bottom_nav"
+            app:layout_constraintBottom_toTopOf="@id/bottom_nav"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navGraph="@navigation/home_graph" />
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
+        <np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView
             android:id="@+id/bottom_nav"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
-            app:labelVisibilityMode="unlabeled"
+            android:layout_height="wrap_content"
+            app:cbn_bg="@color/purple_200"
+            app:cbn_elevation="0dp"
+            app:cbn_fabElevation="8dp"
+            app:cbn_fabBg="@color/purple_light"
+            app:cbn_selectedColor="@color/purple_200"
+            app:cbn_unSelectedColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:menu="@menu/nav_menu" />
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

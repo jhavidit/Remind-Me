@@ -43,7 +43,6 @@ class RescheduledAlarmService : LifecycleService() {
         applicationContext.stopService(intentService)
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
         val db: NotesDatabase = NotesDatabase.getDatabase(application)

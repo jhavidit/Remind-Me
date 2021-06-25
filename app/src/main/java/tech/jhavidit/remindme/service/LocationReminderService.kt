@@ -16,6 +16,7 @@ import android.os.Vibrator
 import androidx.core.app.NotificationCompat
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.util.NOTES_LOCATION
+import tech.jhavidit.remindme.util.NOTES_TIME
 import tech.jhavidit.remindme.view.activity.ReminderScreenActivity
 
 class LocationReminderService : Service() {
@@ -34,15 +35,28 @@ class LocationReminderService : Service() {
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     }
 
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
         val channelId = "default"
         val channelName = "Remind Me"
-        val bundle = intent.getBundleExtra(NOTES_LOCATION)
+        val bundle = intent?.getBundleExtra(NOTES_LOCATION)
         val id = bundle?.getInt("id") ?: 0
-        val dismissIntent = Intent(this, ReminderScreenActivity::class.java)
-        dismissIntent.putExtra("dismiss", "dismiss")
-        val dismissPendingIntent = PendingIntent.getActivity(this, id, dismissIntent, 0)
+        val isSnooze = bundle?.getBoolean("snooze")
+        val dismissIntent = Intent(this, ReminderNotificationService::class.java)
+        val snoozeIntent = Intent(this, ReminderNotificationService::class.java)
+        snoozeIntent.putExtra(NOTES_TIME, bundle)
+        dismissIntent.putExtra(NOTES_TIME, bundle)
+        snoozeIntent.putExtra("snooze", true)
+        snoozeIntent.putExtra("isSnooze", isSnooze)
+        snoozeIntent.putExtra("reminder", "location")
+        snoozeIntent.putExtra("id", id)
+        dismissIntent.putExtra("dismiss", true)
+        dismissIntent.putExtra("reminder", "location")
+        dismissIntent.putExtra("id", id)
+        val snoozePendingIntent =
+            PendingIntent.getService(this, id, snoozeIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val dismissPendingIntent =
+            PendingIntent.getService(this, id, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         val notificationIntent = Intent(this, ReminderScreenActivity::class.java)
         notificationIntent.putExtra(NOTES_LOCATION, bundle)
         val pendingIntent = PendingIntent.getActivity(
@@ -63,6 +77,7 @@ class LocationReminderService : Service() {
                 .setSmallIcon(R.drawable.notification_icon)
                 .setContentIntent(pendingIntent)
                 .addAction(R.drawable.snooze_icon, "Dismiss", dismissPendingIntent)
+                .addAction(R.drawable.snooze_icon, "Snooze", snoozePendingIntent)
                 .build()
 
         val notificationManager =
@@ -86,6 +101,7 @@ class LocationReminderService : Service() {
             vibrator.vibrate(pattern, 0)
 
         startForeground((1 + System.currentTimeMillis()).toInt(), notification)
+        bundle?.clear()
         return START_STICKY
     }
 

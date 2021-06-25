@@ -8,15 +8,22 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.reminder_item.view.*
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.model.NotesModel
-import tech.jhavidit.remindme.util.UPDATE
+
+import tech.jhavidit.remindme.util.*
 import tech.jhavidit.remindme.view.fragments.ReminderFragmentDirections
 
-class LocationReminderListAdapter :
+class  LocationReminderListAdapter(private val clickListen: LocationReminderAdapterInterface) :
     RecyclerView.Adapter<LocationReminderListAdapter.MyViewHolder>() {
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
+    interface LocationReminderAdapterInterface {
+        fun disableEnableLocationReminder(checked: Boolean, notesModel: NotesModel)
+    }
 
     private var notes = emptyList<NotesModel>()
 
@@ -45,8 +52,27 @@ class LocationReminderListAdapter :
                     )
                 )
             }
-            currentNotes.image?.let { } ?: run {
-                holder.itemView.reminder_image.visibility = GONE
+            currentNotes.image?.let {
+                if (checkStoragePermission(holder.itemView.context)) {
+                    Glide.with(holder.itemView.context)
+                        .load(stringToUri(currentNotes.image))
+                        .into(holder.itemView.reminder_image)
+                } else {
+                    holder.itemView.image_card.visibility = GONE
+                    toast(
+                        holder.itemView.context,
+                        "You need to enable storage permission to view image"
+                    )
+                }
+            } ?: run {
+                holder.itemView.image_card.visibility = GONE
+            }
+            holder.itemView.reminder_switch.isChecked = currentNotes.locationReminder == true
+            holder.itemView.reminder_switch.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    clickListen.disableEnableLocationReminder(true, currentNotes)
+                } else
+                    clickListen.disableEnableLocationReminder(false, currentNotes)
 
             }
         }

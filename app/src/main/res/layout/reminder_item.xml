@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/reminder"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -43,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_16"
             android:fontFamily="@font/alata_regular"
-            android:text="07:30 AM"
+            tools:text="07:30 AM"
             android:textColor="@color/purple_200"
             android:textSize="@dimen/dimen_text_16"
             app:layout_constraintStart_toStartOf="@id/startGuideline"
@@ -54,7 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/alata_regular"
-            android:text="Daily"
+           tools:text="@string/daily"
             android:textColor="@color/purple_200"
             android:textSize="@dimen/dimen_text_14"
             app:layout_constraintStart_toStartOf="@id/startGuideline"
@@ -95,6 +96,7 @@
             <ImageView
                 android:id="@+id/reminder_image"
                 android:layout_width="match_parent"
+                android:scaleType="fitXY"
                 android:layout_height="match_parent"
                 android:contentDescription="@string/reminder_image" />
 

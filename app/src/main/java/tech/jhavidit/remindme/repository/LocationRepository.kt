@@ -6,7 +6,7 @@ import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.room.LocationDao
 import tech.jhavidit.remindme.room.NotesDao
 
-class LocationRepository(private val locationDao: LocationDao)
+class  LocationRepository(private val locationDao: LocationDao)
 {
     val readAllData : LiveData<List<LocationModel>> = locationDao.readAllData()
 

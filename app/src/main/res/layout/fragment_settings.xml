@@ -51,6 +51,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/do_not_disturb"
             android:layout_width="0dp"
+
             android:layout_height="@dimen/dimen_50"
             app:layout_constraintEnd_toEndOf="@id/endGuideline"
             app:layout_constraintStart_toStartOf="@id/startGuideline"
@@ -60,7 +61,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/alata_regular"
-                android:text="Do Not Disturb"
+                android:text="@string/do_not_disturb"
                 android:textColor="@color/description_color"
                 android:textSize="@dimen/dimen_text_20"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -76,7 +77,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <Switch
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/do_not_disturb_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -90,6 +91,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/ringtone"
+            android:background="?selectableItemBackground"
             android:layout_width="0dp"
             android:layout_height="@dimen/dimen_50"
             app:layout_constraintEnd_toEndOf="@id/endGuideline"
@@ -100,7 +102,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/alata_regular"
-                android:text="Ringtone"
+                android:text="@string/ringtone"
                 android:textColor="@color/description_color"
                 android:textSize="@dimen/dimen_text_20"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -121,7 +123,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/dimen_4"
-                android:text="Default"
+                android:text="@string/default_ringtone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/ringtone_arrow"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -130,11 +132,12 @@
                 android:id="@+id/ringtone_arrow"
                 android:layout_width="@dimen/dimen_16"
                 android:layout_height="@dimen/dimen_16"
+                android:contentDescription="@string/right_arrow"
                 android:src="@drawable/ic_right_arrow"
-                android:tint="@color/description_color"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/description_color" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -143,6 +146,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/radius_limit"
             android:layout_width="0dp"
+            android:background="?selectableItemBackground"
             android:layout_height="@dimen/dimen_50"
             app:layout_constraintEnd_toEndOf="@id/endGuideline"
             app:layout_constraintStart_toStartOf="@id/startGuideline"
@@ -152,7 +156,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/alata_regular"
-                android:text="Change Limits Of Radius"
+                android:text="@string/change_limits_of_radius"
                 android:textColor="@color/description_color"
                 android:textSize="@dimen/dimen_text_20"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -172,12 +176,13 @@
                 android:id="@+id/radius_image"
                 android:layout_width="@dimen/dimen_28"
                 android:layout_height="@dimen/dimen_28"
+                android:contentDescription="@string/change_limits_of_radius_icon"
                 android:layout_marginEnd="@dimen/dimen_8"
                 android:src="@drawable/ic_radius"
-                android:tint="@color/description_color"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/description_color" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -195,7 +200,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/alata_regular"
-                android:text="Share with friends"
+                android:text="@string/share_with_friends"
                 android:textColor="@color/description_color"
                 android:textSize="@dimen/dimen_text_20"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -216,11 +221,12 @@
                 android:layout_width="@dimen/dimen_28"
                 android:layout_height="@dimen/dimen_28"
                 android:layout_marginEnd="@dimen/dimen_8"
+                android:contentDescription="@string/share_app_icon"
                 android:src="@drawable/ic_share"
-                android:tint="@color/description_color"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/description_color" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -238,7 +244,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/alata_regular"
-                android:text="Development Details"
+                android:text="@string/development_details"
                 android:textColor="@color/description_color"
                 android:textSize="@dimen/dimen_text_20"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -258,12 +264,13 @@
                 android:id="@+id/About_image"
                 android:layout_width="@dimen/dimen_28"
                 android:layout_height="@dimen/dimen_28"
+                android:contentDescription="@string/development_details_icon"
                 android:layout_marginEnd="@dimen/dimen_8"
                 android:src="@drawable/ic_about"
-                android:tint="@color/description_color"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/description_color" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

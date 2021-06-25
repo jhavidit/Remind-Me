@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/time_reminder_bottom_sheet"
@@ -75,6 +74,7 @@
                     android:layout_width="@dimen/dimen_24"
                     android:layout_height="@dimen/dimen_24"
                     android:layout_marginEnd="@dimen/dimen_12"
+                    android:contentDescription="@string/select_time_icon"
                     android:src="@drawable/ic_clock" />
 
                 <TextView
@@ -82,7 +82,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/alata_regular"
-                    android:text="Select Time"
+                    android:text="@string/select_time"
                     android:textColor="@color/purple_200"
                     android:textSize="@dimen/dimen_text_16"
                     app:layout_constraintTop_toBottomOf="@id/close_btn" />
@@ -114,7 +114,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_20"
                 android:fontFamily="@font/alata_regular"
-                android:text="Repeat"
+                android:text="@string/repeat"
                 android:textColor="@color/purple_200"
                 android:textSize="@dimen/dimen_text_20"
                 app:layout_constraintStart_toStartOf="@id/time_picker"
@@ -173,7 +173,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/alata_regular"
-                        android:text="Hours"
+                        android:text="@string/hours"
                         android:textColor="@color/purple_200"
                         android:textSize="@dimen/dimen_text_16"
                         app:layout_constraintStart_toStartOf="parent"
@@ -192,7 +192,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/alata_regular"
-                        android:text="Daily"
+                        android:text="@string/daily"
                         android:textColor="@color/purple_200"
                         android:textSize="@dimen/dimen_text_16"
                         app:layout_constraintStart_toStartOf="@id/daily"
@@ -210,7 +210,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/alata_regular"
-                        android:text="Weekly"
+                        android:text="@string/weekly"
                         android:textColor="@color/purple_200"
                         android:textSize="@dimen/dimen_text_16"
                         app:layout_constraintStart_toStartOf="@id/weekly"
@@ -228,8 +228,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/alata_regular"
-                        android:text="Monthly"
-
+                        android:text="@string/monthly"
                         android:textColor="@color/purple_200"
                         android:textSize="@dimen/dimen_text_16"
                         app:layout_constraintStart_toStartOf="@id/monthly"
@@ -264,6 +263,7 @@
                         android:id="@+id/calendar_image"
                         android:layout_width="@dimen/dimen_28"
                         android:layout_height="@dimen/dimen_28"
+                        android:contentDescription="@string/select_date_icon"
                         android:src="@drawable/ic_select_date"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/calendar_text"
@@ -276,7 +276,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/alata_regular"
-                        android:text="Select Date"
+                        android:text="@string/select_date"
                         android:textColor="@color/purple_200"
                         android:textSize="@dimen/dimen_text_16"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -311,7 +311,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/alata_regular"
-                        android:text="Done"
+                        android:text="@string/done"
                         android:textColor="@color/white"
                         android:textSize="@dimen/dimen_text_16"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -327,154 +327,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
-    <!--
-    <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="40dp">
-
-            <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/startGuideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.05" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/middleGuideline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.5" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/endGuideline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.95" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/topGuideline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.05" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/bottomGuideline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.95" />
-
-            <TextView
-                android:id="@+id/time_reminder_heading"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
-                android:text="Time Reminder"
-                android:textColor="#373A42"
-                android:textSize="28sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@id/startGuideline"
-                app:layout_constraintTop_toTopOf="@id/topGuideline" />
-
-            <TextView
-                android:id="@+id/time_picker_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="@id/startGuideline"
-                app:layout_constraintEnd_toEndOf="@id/endGuideline"
-                app:layout_constraintTop_toBottomOf="@id/time_reminder_heading"
-                android:layout_marginTop="40dp"
-                android:textAllCaps="false"
-                android:text="No time selected"
-                android:textStyle="bold"
-                android:textSize="24sp"/>
-
-            <Button
-                android:id="@+id/time_picker"
-                android:textColor="@color/white"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="@id/startGuideline"
-                app:layout_constraintEnd_toEndOf="@id/endGuideline"
-                app:layout_constraintTop_toBottomOf="@id/time_picker_text"
-                android:layout_marginTop="10dp"
-                android:textAllCaps="false"
-                android:textSize="20sp"
-                android:text="Select time"/>
-
-            <TextView
-                android:id="@+id/date_picker_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="@id/startGuideline"
-                app:layout_constraintEnd_toEndOf="@id/endGuideline"
-                app:layout_constraintTop_toBottomOf="@id/time_picker"
-                android:layout_marginTop="20dp"
-                android:textAllCaps="false"
-                android:text="No date selected"
-                android:textStyle="bold"
-                android:textSize="24sp"/>
-
-            <Button
-                android:id="@+id/date_picker"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="@id/startGuideline"
-                app:layout_constraintEnd_toEndOf="@id/endGuideline"
-                app:layout_constraintTop_toBottomOf="@id/date_picker_text"
-                android:layout_marginTop="20dp"
-                android:textColor="@color/white"
-                android:textAllCaps="false"
-                android:textSize="20sp"
-                android:text="Select Date"/>
-
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/spinner"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="@id/startGuideline"
-                app:layout_constraintEnd_toEndOf="@id/endGuideline"
-                android:layout_marginTop="20dp"
-                app:layout_constraintTop_toBottomOf="@id/date_picker"/>
-
-
-            <Button
-                android:id="@+id/cancel_alarm"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="@id/startGuideline"
-                app:layout_constraintEnd_toEndOf="@id/endGuideline"
-                app:layout_constraintTop_toBottomOf="@id/spinner"
-                android:layout_marginTop="20dp"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:text="Cancel"/>
-
-            <Button
-                android:id="@+id/save"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="@id/startGuideline"
-                app:layout_constraintEnd_toEndOf="@id/endGuideline"
-                app:layout_constraintTop_toBottomOf="@id/cancel_alarm"
-                android:layout_marginTop="20dp"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:layout_marginBottom="40dp"
-                android:text="Save"/>
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </layout>-->
 
 </layout>

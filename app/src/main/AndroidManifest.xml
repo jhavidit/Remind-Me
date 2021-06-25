@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="tech.jhavidit.remindme">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -8,6 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -18,7 +20,9 @@
         android:theme="@style/Theme.RemindMe">
         <activity android:name=".view.activity.LocationSearchActivity" />
         <activity android:name=".view.activity.ReminderScreenActivity" />
-        <activity android:name=".view.activity.MainActivity">
+        <activity
+            android:name=".view.activity.MainActivity"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -45,6 +49,7 @@
         <service android:name=".service.RescheduledAlarmService" />
         <service android:name=".service.LocationReminderService" />
         <service android:name=".service.AlarmService" />
+        <service android:name=".service.ReminderNotificationService" />
     </application>
 
 </manifest>

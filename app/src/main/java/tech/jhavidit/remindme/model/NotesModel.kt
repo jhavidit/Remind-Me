@@ -1,5 +1,6 @@
 package tech.jhavidit.remindme.model
 
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Parcelable
 import androidx.room.Entity

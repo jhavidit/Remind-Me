@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.android.synthetic.main.fragment_create_notes.*
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.FragmentTimeReminderBinding
 import tech.jhavidit.remindme.model.NotesModel
@@ -47,8 +48,6 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
 
         repeatList = RepeatHourModel.getRepeatingHours()
 
-
-
         binding.closeBtn.setOnClickListener {
             findNavController().navigateUp()
         }
@@ -60,8 +59,6 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
                 binding.repeatLayout.visibility = GONE
             }
         }
-
-
 
         viewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
         alarmReceiver = AlarmReceiver()
@@ -110,10 +107,11 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
                 alarmYear = year
                 alarmMonth = monthOfYear
                 alarmDay = dayOfMonth
-                binding.calendarText.text = "$dayOfMonth/$monthOfYear/$year"
+                val realMonthOfYear = monthOfYear+1
+                binding.calendarText.text = "$dayOfMonth/$realMonthOfYear/$year"
 
-                val monthFormat = if (monthOfYear < 10)
-                    "0$monthOfYear"
+                val monthFormat = if (realMonthOfYear < 10)
+                    "0$realMonthOfYear"
                 else
                     monthOfYear.toString()
 
@@ -226,7 +224,7 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
                 repeatingValue = -1
             else if (binding.hours.isChecked)
                 repeatingValue =
-                    repeatList[binding.repeatPicker.value].toLong() * AlarmManager.INTERVAL_HOUR
+                    repeatList[binding.repeatPicker.value-1].toLong() * AlarmManager.INTERVAL_HOUR
             else if (binding.weekly.isChecked) {
                 repeatingValue = AlarmManager.INTERVAL_DAY * 7
             } else if (binding.daily.isChecked) {

@@ -71,6 +71,7 @@
                 <ImageView
                     android:id="@+id/location_reminder_image"
                     android:layout_width="@dimen/dimen_24"
+                    android:contentDescription="@string/add_location_icon"
                     android:layout_height="@dimen/dimen_24"
                     android:layout_marginEnd="@dimen/dimen_12"
                     android:src="@drawable/ic_add_location" />
@@ -80,7 +81,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/alata_regular"
-                    android:text="Select Location"
+                    android:text="@string/select_location"
                     android:textColor="@color/purple_200"
                     android:textSize="@dimen/dimen_text_16"
                     app:layout_constraintTop_toBottomOf="@id/close_btn" />
@@ -132,6 +133,7 @@
                             android:layout_height="@dimen/dimen_20"
                             android:layout_weight="1"
                             android:alpha="0.2"
+                            android:contentDescription="@string/drop_down_button"
                             android:background="?selectableItemBackgroundBorderless"
                             android:src="@drawable/ic_down"
                             app:tint="@color/purple_200" />
@@ -161,7 +163,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_12"
                 android:fontFamily="@font/alata_regular"
-                android:text="Select Radius"
+                android:text="@string/select_radius"
                 android:textColor="@color/purple_200"
                 android:textSize="@dimen/dimen_text_16"
                 app:layout_constraintStart_toStartOf="@id/startGuideline"
@@ -180,6 +182,7 @@
                     android:id="@+id/image_radius"
                     android:layout_width="@dimen/dimen_44"
                     android:layout_height="@dimen/dimen_32"
+                    android:contentDescription="@string/radius_select_icon"
                     android:src="@drawable/ic_rectangle_27" />
 
                 <TextView
@@ -254,6 +257,7 @@
                         android:layout_width="@dimen/dimen_28"
                         android:layout_height="@dimen/dimen_28"
                         android:src="@drawable/ic_map"
+                        android:contentDescription="@string/open_image_icon"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/map_text"
                         app:layout_constraintStart_toStartOf="parent"
@@ -265,7 +269,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/alata_regular"
-                        android:text="Open Map"
+                        android:text="@string/open_map"
                         android:textColor="@color/purple_200"
                         android:textSize="@dimen/dimen_text_16"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -300,7 +304,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/alata_regular"
-                        android:text="Done"
+                        android:text="@string/done"
                         android:textColor="@color/white"
                         android:textSize="@dimen/dimen_text_16"
                         app:layout_constraintBottom_toBottomOf="parent"

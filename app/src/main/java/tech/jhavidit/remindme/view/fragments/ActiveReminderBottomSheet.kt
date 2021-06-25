@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.android.synthetic.main.fragment_create_notes.*
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.BottomSheetActiveReminderBinding
 import tech.jhavidit.remindme.model.NotesModel
@@ -83,6 +84,7 @@ class ActiveReminderBottomSheet : BottomSheetDialogFragment() {
                         reminderTime = args.currentNotes.reminderTime,
                         reminderDate = args.currentNotes.reminderDate,
                         isPinned = args.currentNotes.isPinned,
+                        image = args.currentNotes.image,
                         latitude = null,
                         longitude = null,
                         radius = null,
@@ -116,6 +118,7 @@ class ActiveReminderBottomSheet : BottomSheetDialogFragment() {
                     reminderTime = args.currentNotes.reminderTime,
                     reminderDate = args.currentNotes.reminderDate,
                     latitude = args.currentNotes.latitude,
+                    image = args.currentNotes.image,
                     longitude = args.currentNotes.longitude,
                     isPinned = args.currentNotes.isPinned,
                     radius = args.currentNotes.radius,
@@ -137,6 +140,7 @@ class ActiveReminderBottomSheet : BottomSheetDialogFragment() {
                     reminderTime = args.currentNotes.reminderTime,
                     reminderDate = args.currentNotes.reminderDate,
                     latitude = args.currentNotes.latitude,
+                    image = args.currentNotes.image,
                     longitude = args.currentNotes.longitude,
                     isPinned = args.currentNotes.isPinned,
                     radius = args.currentNotes.radius,
@@ -164,8 +168,9 @@ class ActiveReminderBottomSheet : BottomSheetDialogFragment() {
                         id = args.currentNotes.id,
                         title = args.currentNotes.title,
                         description = args.currentNotes.description,
-                        locationReminder = args.currentNotes.locationReminder,
-                        timeReminder = true,
+                        locationReminder = true,
+                        timeReminder = args.currentNotes.timeReminder,
+                        image = args.currentNotes.image,
                         reminderTime = args.currentNotes.reminderTime,
                         reminderWaitTime = args.currentNotes.reminderWaitTime,
                         reminderDate = args.currentNotes.reminderDate,
@@ -188,8 +193,9 @@ class ActiveReminderBottomSheet : BottomSheetDialogFragment() {
                     id = args.currentNotes.id,
                     title = args.currentNotes.title,
                     description = args.currentNotes.description,
-                    locationReminder = args.currentNotes.locationReminder,
-                    timeReminder = false,
+                    locationReminder = false,
+                    timeReminder = args.currentNotes.timeReminder,
+                    image = args.currentNotes.image,
                     reminderTime = args.currentNotes.reminderTime,
                     reminderWaitTime = args.currentNotes.reminderWaitTime,
                     reminderDate = args.currentNotes.reminderDate,
@@ -224,6 +230,7 @@ class ActiveReminderBottomSheet : BottomSheetDialogFragment() {
                         timeReminder = null,
                         reminderTime = null,
                         reminderWaitTime = null,
+                        image = args.currentNotes.image,
                         reminderDate = null,
                         latitude = args.currentNotes.latitude,
                         longitude = args.currentNotes.longitude,

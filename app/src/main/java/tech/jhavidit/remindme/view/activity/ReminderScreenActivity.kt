@@ -11,6 +11,7 @@ import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.ActivityTimeReminderBinding
 import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.receiver.AlarmReceiver
+import tech.jhavidit.remindme.receiver.GeoFencingReceiver
 import tech.jhavidit.remindme.service.AlarmService
 import tech.jhavidit.remindme.service.LocationReminderService
 import tech.jhavidit.remindme.util.NOTES_LOCATION
@@ -23,6 +24,7 @@ class ReminderScreenActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTimeReminderBinding
     private lateinit var viewModel: NotesViewModel
     private lateinit var alarmReceiver: AlarmReceiver
+    private lateinit var geoFencingReceiver: GeoFencingReceiver
     private var id: Int = 0
     private var snooze: Boolean = false
     private var reminder: String? = ""
@@ -30,6 +32,7 @@ class ReminderScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_time_reminder)
         alarmReceiver = AlarmReceiver()
+        geoFencingReceiver = GeoFencingReceiver()
         viewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
         val notesTimeBundle = intent?.getBundleExtra(NOTES_TIME)
         val snoozeAlarm = intent?.getBooleanExtra("snooze", false)
@@ -38,14 +41,15 @@ class ReminderScreenActivity : AppCompatActivity() {
 
         notesTimeBundle?.let {
             id = notesTimeBundle.getInt("id")
+            viewModel.selectedNote(id).observe(this, Observer {
+                binding.reminderLocationTime.text =
+                    it[0].reminderTime
+                binding.title.text = it[0].title
+                binding.description.text = it[0].description
+            })
             snooze = notesTimeBundle.getBoolean("snooze")
             reminder = notesTimeBundle.getString("reminder") ?: ""
             binding.reminderIcon.setImageResource(R.drawable.ic_alarm_set)
-            binding.reminderLocationTime.text =
-                notesTimeBundle.getString("reminderTime")
-            binding.title.text = notesTimeBundle.getString("title")
-            binding.description.text = notesTimeBundle.getString("description")
-
         }
 
 
@@ -56,17 +60,17 @@ class ReminderScreenActivity : AppCompatActivity() {
             snooze = notesLocationBundle.getBoolean("snooze")
             reminder = notesLocationBundle.getString("reminder") ?: ""
             binding.reminderIcon.setImageResource(R.drawable.ic_alarm_set)
-            binding.reminderLocationTime.text =
-                notesLocationBundle.getString("reminderTime")
-            binding.title.text = notesLocationBundle.getString("title")
-            binding.description.text = notesLocationBundle.getString("description")
+            viewModel.selectedNote(id).observe(this, Observer {
+                binding.reminderLocationTime.text =
+                    it[0].locationName
+                binding.title.text = it[0].title
+                binding.description.text = it[0].description
+            })
             binding.reminderIcon.setImageResource(R.drawable.ic_add_location)
-            binding.reminderLocationTime.text = notesLocationBundle.getString("locationName")
 
 
         }
 
-        viewModel.selectedNote(id)
 
         binding.cancelReminder.setOnClickListener {
             cancelReminder()
@@ -90,13 +94,16 @@ class ReminderScreenActivity : AppCompatActivity() {
             cancelReminder()
         }
 
+        notesTimeBundle?.clear()
+        notesLocationBundle?.clear()
 
     }
 
     private fun cancelReminder() {
-        if (reminder == "location") {
-            viewModel.selectedNote.observe(this, Observer { note ->
+        if (!snooze&&reminder == "location") {
+            viewModel.selectedNote(id).observe(this, Observer { note ->
                 val notes = note[0]
+                geoFencingReceiver.cancelLocationReminder(this, notes.id)
                 val notesModel = NotesModel(
                     id = notes.id,
                     title = notes.title,
@@ -108,6 +115,7 @@ class ReminderScreenActivity : AppCompatActivity() {
                     reminderDate = notes.reminderDate,
                     isPinned = notes.isPinned,
                     latitude = null,
+                    image = notes.image,
                     longitude = null,
                     radius = null,
                     repeatValue = notes.repeatValue,
@@ -123,7 +131,7 @@ class ReminderScreenActivity : AppCompatActivity() {
 
 
         } else if (reminder == "time") {
-            viewModel.selectedNote.observe(this, Observer { note ->
+            viewModel.selectedNote(id).observe(this, Observer { note ->
                 val notes = note[0]
                 if (notes.repeatValue == -1L) {
                     val notesModel = NotesModel(
@@ -135,6 +143,7 @@ class ReminderScreenActivity : AppCompatActivity() {
                         reminderWaitTime = null,
                         reminderTime = null,
                         reminderDate = null,
+                        image = notes.image,
                         isPinned = notes.isPinned,
                         latitude = notes.latitude,
                         longitude = notes.longitude,
@@ -153,7 +162,7 @@ class ReminderScreenActivity : AppCompatActivity() {
 
 
         } else if (snooze && reminder == "location") {
-            viewModel.selectedNote.observe(this, Observer { note ->
+            viewModel.selectedNote(id).observe(this, Observer { note ->
                 val notes = note[0]
                 val notesModel = NotesModel(
                     id = notes.id,
@@ -163,6 +172,7 @@ class ReminderScreenActivity : AppCompatActivity() {
                     timeReminder = notes.timeReminder,
                     reminderWaitTime = notes.reminderWaitTime,
                     reminderTime = notes.reminderTime,
+                    image = notes.image,
                     reminderDate = notes.reminderDate,
                     isPinned = notes.isPinned,
                     latitude = null,
@@ -182,7 +192,7 @@ class ReminderScreenActivity : AppCompatActivity() {
     }
 
     private fun snoozeReminder() {
-        viewModel.selectedNote.observe(this, Observer { notes ->
+        viewModel.selectedNote(id).observe(this, Observer { notes ->
             notes?.let {
                 val note = it[0]
                 reminder?.let { remind ->
