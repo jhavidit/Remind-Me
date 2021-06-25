@@ -13,11 +13,11 @@ import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.reminder_item.view.*
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.model.NotesModel
-import tech.jhavidit.remindme.room.stringToBitmap
+
 import tech.jhavidit.remindme.util.*
 import tech.jhavidit.remindme.view.fragments.ReminderFragmentDirections
 
-class LocationReminderListAdapter(private val clickListen: LocationReminderAdapterInterface) :
+class  LocationReminderListAdapter(private val clickListen: LocationReminderAdapterInterface) :
     RecyclerView.Adapter<LocationReminderListAdapter.MyViewHolder>() {
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 

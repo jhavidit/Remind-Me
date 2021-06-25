@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -70,12 +71,14 @@
                     android:id="@+id/reminder_location_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/dimen_4"
+                    android:layout_marginStart="@dimen/dimen_20"
+                    android:layout_marginEnd="@dimen/dimen_20"
                     android:layout_marginBottom="@dimen/dimen_10"
                     android:fontFamily="@font/alata_regular"
-                    android:text="9:50AM"
+                    tools:text="HELLO THIS IS LOCATION"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/dimen_text_24"
+                    android:textAlignment="center"
+                    android:textSize="@dimen/dimen_text_20"
                     android:tint="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

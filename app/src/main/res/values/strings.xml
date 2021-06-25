@@ -78,4 +78,6 @@
     <string name="pinned_icon">pinned icon</string>
     <string name="daily">Daily</string>
     <string name="clear_text">clear text</string>
+    <string name="search_location">Search Location</string>
+
 </resources>

@@ -100,7 +100,7 @@ class ReminderScreenActivity : AppCompatActivity() {
     }
 
     private fun cancelReminder() {
-        if (reminder == "location") {
+        if (!snooze&&reminder == "location") {
             viewModel.selectedNote(id).observe(this, Observer { note ->
                 val notes = note[0]
                 geoFencingReceiver.cancelLocationReminder(this, notes.id)

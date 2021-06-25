@@ -50,16 +50,20 @@ class AlarmService : Service() {
         val channelName = "Remind Me"
         val bundle = intent?.getBundleExtra(NOTES_TIME)
         val id: Int = bundle?.getInt("id") ?: 0
-        val dismissIntent = Intent(this, ReminderScreenActivity::class.java)
-        val snoozeIntent = Intent(this, ReminderScreenActivity::class.java)
+        val dismissIntent = Intent(this, ReminderNotificationService::class.java)
+        val snoozeIntent = Intent(this, ReminderNotificationService::class.java)
         snoozeIntent.putExtra(NOTES_TIME, bundle)
         dismissIntent.putExtra(NOTES_TIME, bundle)
         snoozeIntent.putExtra("snooze", true)
+        snoozeIntent.putExtra("reminder", "time")
+        snoozeIntent.putExtra("id", id)
         dismissIntent.putExtra("dismiss", true)
+        dismissIntent.putExtra("reminder", "time")
+        dismissIntent.putExtra("id", id)
         val snoozePendingIntent =
-            PendingIntent.getActivity(this, id, snoozeIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            PendingIntent.getService(this, id, snoozeIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         val dismissPendingIntent =
-            PendingIntent.getActivity(this, id, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            PendingIntent.getService(this, id, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         val notificationIntent = Intent(this, ReminderScreenActivity::class.java)
         notificationIntent.putExtra(NOTES_TIME, bundle)
         val pendingIntent = PendingIntent.getActivity(

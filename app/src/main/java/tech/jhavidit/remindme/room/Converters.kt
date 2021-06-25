@@ -8,6 +8,7 @@ import androidx.room.TypeConverter
 import java.io.ByteArrayOutputStream
 import java.util.*
 
+/*
 //class
 //Converters {
 //    @TypeConverter
@@ -91,4 +92,4 @@ fun stringToBitmap(encodedString: String?): Bitmap? {
 ////            e.getMessage();
 ////            return null;
 ////        }
-////    }
+////    }*/
