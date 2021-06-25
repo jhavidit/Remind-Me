@@ -107,10 +107,11 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
                 alarmYear = year
                 alarmMonth = monthOfYear
                 alarmDay = dayOfMonth
-                binding.calendarText.text = "$dayOfMonth/$monthOfYear/$year"
+                val realMonthOfYear = monthOfYear+1
+                binding.calendarText.text = "$dayOfMonth/$realMonthOfYear/$year"
 
-                val monthFormat = if (monthOfYear < 10)
-                    "0$monthOfYear"
+                val monthFormat = if (realMonthOfYear < 10)
+                    "0$realMonthOfYear"
                 else
                     monthOfYear.toString()
 
