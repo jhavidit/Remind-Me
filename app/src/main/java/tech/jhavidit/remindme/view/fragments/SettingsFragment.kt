@@ -83,7 +83,7 @@ class SettingsFragment : Fragment() {
 
         binding.ringtone.setOnClickListener {
             val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
-            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALARM)
+            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI, RingtoneManager.TYPE_ALARM)
             startActivityForResult(intent, RINGTONE_RESULT_CODE)
         }
     }
