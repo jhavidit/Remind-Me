@@ -224,7 +224,7 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
                 repeatingValue = -1
             else if (binding.hours.isChecked)
                 repeatingValue =
-                    repeatList[binding.repeatPicker.value].toLong() * AlarmManager.INTERVAL_HOUR
+                    repeatList[binding.repeatPicker.value-1].toLong() * AlarmManager.INTERVAL_HOUR
             else if (binding.weekly.isChecked) {
                 repeatingValue = AlarmManager.INTERVAL_DAY * 7
             } else if (binding.daily.isChecked) {
