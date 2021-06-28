@@ -17,7 +17,7 @@ import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.util.*
 import tech.jhavidit.remindme.view.fragments.ReminderFragmentDirections
 
-class  LocationReminderListAdapter(private val clickListen: LocationReminderAdapterInterface) :
+class LocationReminderListAdapter(private val clickListen: LocationReminderAdapterInterface) :
     RecyclerView.Adapter<LocationReminderListAdapter.MyViewHolder>() {
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
@@ -54,9 +54,12 @@ class  LocationReminderListAdapter(private val clickListen: LocationReminderAdap
             }
             currentNotes.image?.let {
                 if (checkStoragePermission(holder.itemView.context)) {
-                    Glide.with(holder.itemView.context)
-                        .load(stringToUri(currentNotes.image))
-                        .into(holder.itemView.reminder_image)
+                    holder.itemView.reminder_image.load(
+                        loadImageFromStorage(
+                            currentNotes.image,
+                            currentNotes.id
+                        )
+                    )
                 } else {
                     holder.itemView.image_card.visibility = GONE
                     toast(
