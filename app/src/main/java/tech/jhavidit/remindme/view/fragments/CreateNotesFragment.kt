@@ -1,8 +1,9 @@
 package tech.jhavidit.remindme.view.fragments
 
-import android.R.attr
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -29,6 +30,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+
 import coil.load
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -46,7 +48,7 @@ import tech.jhavidit.remindme.receiver.GeoFencingReceiver
 import tech.jhavidit.remindme.util.*
 import tech.jhavidit.remindme.view.adapters.SelectBackgroundColorAdapter
 import tech.jhavidit.remindme.viewModel.NotesViewModel
-import java.io.FileNotFoundException
+import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -74,12 +76,19 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
         bind = BottomSheetAddColorBinding.inflate(inflater, container, false)
         navController = Navigation.findNavController(requireActivity(), R.id.NavHostFragment)
         notesViewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
+        binding.note.setBackgroundColor(Color.parseColor(args.currentNotes.backgroundColor))
+        binding.notesImageCard.setBackgroundColor(Color.parseColor(args.currentNotes.backgroundColor))
+        alarmReceiver = AlarmReceiver()
+        geoFencingReceiver = GeoFencingReceiver()
+        notes = args.currentNotes
+        notesId = args.currentNotes.id
         args.currentNotes.image?.let {
 
             if (checkStoragePermission(requireContext())) {
                 binding.notesImageCard.visibility = VISIBLE
+                val bitmap = loadImageFromStorage(it, notesId)
                 Glide.with(requireContext())
-                    .load(stringToUri(it))
+                    .load(bitmap)
                     .into(binding.image)
             } else {
                 binding.notesImageCard.visibility = GONE
@@ -99,12 +108,7 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
         } ?: run {
             binding.notesImageCard.visibility = GONE
         }
-        binding.note.setBackgroundColor(Color.parseColor(args.currentNotes.backgroundColor))
-        binding.notesImageCard.setBackgroundColor(Color.parseColor(args.currentNotes.backgroundColor))
-        alarmReceiver = AlarmReceiver()
-        geoFencingReceiver = GeoFencingReceiver()
-        notes = args.currentNotes
-        notesId = args.currentNotes.id
+
         val lastUpdated = args.currentNotes.lastUpdated?.toDateFormat()?.let { getPeriod(it) }
 
         lastUpdated?.let { binding.lastUpdated.text = "Last edit : ${lastUpdated}" }
@@ -401,9 +405,16 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
         if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
             binding.notesImageCard.visibility = VISIBLE
             val pickedImage: Uri? = data?.data
-            Glide.with(requireContext())
-                .load(pickedImage)
-                .into(binding.image)
+//            val path = getPathFromUri(pickedImage)
+            var path: String? = null
+            pickedImage?.let {
+                val bitmap = uriToBitmap(requireContext(), pickedImage)
+                bitmap?.let {
+                    path = saveToInternalStorage(bitmap, notesId,requireActivity())
+                    binding.image.load(bitmap)
+                }
+            }
+
 
             val notes = NotesModel(
                 id = notesId,
@@ -422,7 +433,7 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                 locationName = args.currentNotes.locationName,
                 backgroundColor = args.currentNotes.backgroundColor,
                 lastUpdated = args.currentNotes.lastUpdated,
-                image = pickedImage.toString()
+                image = path
             )
             notesViewModel.updateNotes(notes)
 
@@ -430,12 +441,8 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
         } else if (requestCode == PICK_IMAGE_FROM_CAMERA && resultCode == Activity.RESULT_OK) {
             binding.notesImageCard.visibility = VISIBLE
             val bitmap = data?.extras?.get("data") as Bitmap
-            val imageSource: Uri? = bitmapToUri(requireContext(), bitmap)
-            imageSource?.let {
-                Glide.with(requireContext())
-                    .load(imageSource)
-                    .into(binding.image)
-            }
+            binding.image.load(bitmap)
+            val path = saveToInternalStorage(bitmap, notesId,requireActivity())
             val notes = NotesModel(
                 id = notesId,
                 title = binding.title.text.toString(),
@@ -453,7 +460,7 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                 locationName = args.currentNotes.locationName,
                 backgroundColor = args.currentNotes.backgroundColor,
                 lastUpdated = args.currentNotes.lastUpdated,
-                image = imageSource.toString()
+                image = path
             )
             notesViewModel.updateNotes(notes)
 

@@ -1,23 +1,21 @@
 package tech.jhavidit.remindme.util
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
-import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.provider.MediaStore
+import android.os.ParcelFileDescriptor
 import android.provider.OpenableColumns
 import android.provider.Settings
-import android.util.Base64
 import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.location.GeofenceStatusCodes
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.io.InputStream
+import java.io.*
 
 
 @SuppressLint("LogNotTimber")
@@ -43,13 +41,55 @@ fun stringToUri(image: String): Uri? {
     return Uri.parse(image)
 }
 
-fun bitmapToUri(inContext: Context, inImage: Bitmap): Uri? {
-    val bytes = ByteArrayOutputStream()
-    inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-    val path =
-        MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, "Camera", null)
-    return Uri.parse(path)
+fun uriToBitmap(context: Context, selectedFileUri: Uri): Bitmap? {
+    return try {
+        val parcelFileDescriptor: ParcelFileDescriptor? =
+            context.contentResolver.openFileDescriptor(selectedFileUri, "r")
+        val fileDescriptor: FileDescriptor? = parcelFileDescriptor?.fileDescriptor
+        val image = BitmapFactory.decodeFileDescriptor(fileDescriptor)
+        parcelFileDescriptor?.close()
+        image
+    } catch (e: IOException) {
+        e.printStackTrace()
+        null
+    }
 }
+
+fun saveToInternalStorage(bitmapImage: Bitmap, id: Int, activity: Activity): String? {
+    val cw = ContextWrapper(activity.applicationContext)
+    // path to /data/data/yourapp/app_data/imageDir
+    val directory: File = cw.getDir("imageDir", Context.MODE_PRIVATE)
+    // Create imageDir
+    val myPath = File(directory, "image$id.jpg")
+    var fos: FileOutputStream? = null
+    try {
+        fos = FileOutputStream(myPath)
+        // Use the compress method on the BitMap object to write image to the OutputStream
+        bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos)
+    } catch (e: Exception) {
+        e.printStackTrace()
+    } finally {
+        try {
+            fos?.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+    return directory.absolutePath
+}
+
+fun loadImageFromStorage(path: String, id: Int): Bitmap? {
+    return try {
+        val f = File(path, "image$id.jpg")
+        BitmapFactory.decodeStream(FileInputStream(f))
+    } catch (e: FileNotFoundException) {
+        e.printStackTrace()
+        null
+    }
+
+
+}
+
 
 fun getRadius(minRadius: Double, maxRadius: Double, progress: Int): Double {
     return ((progress.toDouble() / 100.0 * (maxRadius - minRadius)) + minRadius)
