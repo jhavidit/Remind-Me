@@ -30,8 +30,6 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-
-import coil.load
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
@@ -56,7 +54,6 @@ import java.util.*
 class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInterface {
 
     private lateinit var binding: FragmentCreateNotesBinding
-    private lateinit var bind: BottomSheetAddColorBinding
     private lateinit var alarmReceiver: AlarmReceiver
     private lateinit var geoFencingReceiver: GeoFencingReceiver
     private lateinit var notesViewModel: NotesViewModel
@@ -73,7 +70,6 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentCreateNotesBinding.inflate(inflater, container, false)
-        bind = BottomSheetAddColorBinding.inflate(inflater, container, false)
         navController = Navigation.findNavController(requireActivity(), R.id.NavHostFragment)
         notesViewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
         binding.note.setBackgroundColor(Color.parseColor(args.currentNotes.backgroundColor))
@@ -405,13 +401,14 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
         if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
             binding.notesImageCard.visibility = VISIBLE
             val pickedImage: Uri? = data?.data
-//            val path = getPathFromUri(pickedImage)
             var path: String? = null
             pickedImage?.let {
                 val bitmap = uriToBitmap(requireContext(), pickedImage)
                 bitmap?.let {
-                    path = saveToInternalStorage(bitmap, notesId,requireActivity())
-                    binding.image.load(bitmap)
+                    path = saveToInternalStorage(bitmap, notesId, requireActivity())
+                    Glide.with(requireContext())
+                        .load(bitmap)
+                        .into(binding.image)
                 }
             }
 
@@ -441,8 +438,10 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
         } else if (requestCode == PICK_IMAGE_FROM_CAMERA && resultCode == Activity.RESULT_OK) {
             binding.notesImageCard.visibility = VISIBLE
             val bitmap = data?.extras?.get("data") as Bitmap
-            binding.image.load(bitmap)
-            val path = saveToInternalStorage(bitmap, notesId,requireActivity())
+            Glide.with(requireContext())
+                .load(bitmap)
+                .into(binding.image)
+            val path = saveToInternalStorage(bitmap, notesId, requireActivity())
             val notes = NotesModel(
                 id = notesId,
                 title = binding.title.text.toString(),

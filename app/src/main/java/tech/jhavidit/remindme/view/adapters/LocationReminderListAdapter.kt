@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.reminder_item.view.*
 import tech.jhavidit.remindme.R
@@ -54,12 +53,9 @@ class LocationReminderListAdapter(private val clickListen: LocationReminderAdapt
             }
             currentNotes.image?.let {
                 if (checkStoragePermission(holder.itemView.context)) {
-                    holder.itemView.reminder_image.load(
-                        loadImageFromStorage(
-                            currentNotes.image,
-                            currentNotes.id
-                        )
-                    )
+                    Glide.with(holder.itemView.context)
+                        .load(loadImageFromStorage(currentNotes.image,currentNotes.id))
+                        .into(holder.itemView.reminder_image)
                 } else {
                     holder.itemView.image_card.visibility = GONE
                     toast(

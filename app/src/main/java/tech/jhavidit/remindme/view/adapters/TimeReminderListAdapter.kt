@@ -7,7 +7,6 @@ import android.view.View.GONE
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.reminder_item.view.*
 import tech.jhavidit.remindme.R
@@ -45,18 +44,15 @@ class TimeReminderListAdapter(private val clickListen: TimeReminderAdapterInterf
             holder.itemView.time.text =
                 currentNotes.reminderTime.toString()
             if (currentNotes.repeatValue == -1L)
-                holder.itemView.reminder_repeat.text = "Not Repeating"
+                holder.itemView.reminder_repeat.text = String.format("%s","Not Repeating")
             else
                 holder.itemView.reminder_repeat.text = String.format("%s", "Repeating")
             holder.itemView.reminder.setCardBackgroundColor(Color.parseColor(currentNotes.backgroundColor))
             currentNotes.image?.let {
                 if (checkStoragePermission(holder.itemView.context)) {
-                    holder.itemView.reminder_image.load(
-                        loadImageFromStorage(
-                            currentNotes.image,
-                            currentNotes.id
-                        )
-                    )
+                    Glide.with(holder.itemView.context)
+                        .load(loadImageFromStorage(currentNotes.image,currentNotes.id))
+                        .into(holder.itemView.reminder_image)
                 } else {
                     holder.itemView.image_card.visibility = GONE
                     toast(
