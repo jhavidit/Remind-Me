@@ -45,6 +45,7 @@
 
         <receiver android:name=".receiver.AlarmReceiver" />
         <receiver android:name=".receiver.GeoFencingReceiver" />
+        <receiver android:name=".receiver.NotificationReceiver"/>
 
         <service android:name=".service.RescheduledAlarmService" />
         <service android:name=".service.LocationReminderService" />

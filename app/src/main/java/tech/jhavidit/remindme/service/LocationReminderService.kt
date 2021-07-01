@@ -15,6 +15,7 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import androidx.core.app.NotificationCompat
 import tech.jhavidit.remindme.R
+import tech.jhavidit.remindme.receiver.NotificationReceiver
 import tech.jhavidit.remindme.util.NOTES_LOCATION
 import tech.jhavidit.remindme.util.NOTES_TIME
 import tech.jhavidit.remindme.view.activity.ReminderScreenActivity
@@ -42,21 +43,21 @@ class LocationReminderService : Service() {
         val bundle = intent?.getBundleExtra(NOTES_LOCATION)
         val id = bundle?.getInt("id") ?: 0
         val isSnooze = bundle?.getBoolean("snooze")
-        val dismissIntent = Intent(this, ReminderNotificationService::class.java)
-        val snoozeIntent = Intent(this, ReminderNotificationService::class.java)
+        val dismissIntent = Intent(this, NotificationReceiver::class.java)
+        val snoozeIntent = Intent(this, NotificationReceiver::class.java)
         snoozeIntent.putExtra(NOTES_TIME, bundle)
         dismissIntent.putExtra(NOTES_TIME, bundle)
-        snoozeIntent.putExtra("snooze", true)
+        snoozeIntent.putExtra("type", "snooze")
         snoozeIntent.putExtra("isSnooze", isSnooze)
         snoozeIntent.putExtra("reminder", "location")
         snoozeIntent.putExtra("id", id)
-        dismissIntent.putExtra("dismiss", true)
+        dismissIntent.putExtra("type", "dismiss")
         dismissIntent.putExtra("reminder", "location")
         dismissIntent.putExtra("id", id)
         val snoozePendingIntent =
-            PendingIntent.getService(this, id, snoozeIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            PendingIntent.getBroadcast(this, id, snoozeIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         val dismissPendingIntent =
-            PendingIntent.getService(this, id, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            PendingIntent.getBroadcast(this, id, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         val notificationIntent = Intent(this, ReminderScreenActivity::class.java)
         notificationIntent.putExtra(NOTES_LOCATION, bundle)
         val pendingIntent = PendingIntent.getActivity(

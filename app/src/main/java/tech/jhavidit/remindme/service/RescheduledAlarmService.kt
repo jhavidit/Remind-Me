@@ -1,6 +1,9 @@
 package tech.jhavidit.remindme.service
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
@@ -34,14 +37,22 @@ class RescheduledAlarmService : LifecycleService() {
                 .setContentIntent(pendingIntent)
                 .build()
 
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                channelId,
+                channelName,
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            notificationManager.createNotificationChannel(channel)
+        }
+
+
         startForeground(2, notification)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        val intentService = Intent(applicationContext, RescheduledAlarmService::class.java)
-        applicationContext.stopService(intentService)
-    }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
@@ -78,6 +89,12 @@ class RescheduledAlarmService : LifecycleService() {
 
         return START_STICKY
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        val intentService = Intent(applicationContext, RescheduledAlarmService::class.java)
+        applicationContext.stopService(intentService)
     }
 
 
