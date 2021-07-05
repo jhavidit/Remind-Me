@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.Observer
@@ -24,7 +23,6 @@ class RescheduledAlarmService : LifecycleService() {
 
     override fun onCreate() {
         super.onCreate()
-
         val channelId = "default"
         val channelName = "Remind Me"
         val notificationIntent = Intent(this, ReminderScreenActivity::class.java)

@@ -12,7 +12,8 @@ import android.net.Uri
 import android.os.*
 import androidx.core.app.NotificationCompat
 import tech.jhavidit.remindme.R
-import tech.jhavidit.remindme.receiver.NotificationReceiver
+import tech.jhavidit.remindme.receiver.DismissReceiver
+import tech.jhavidit.remindme.receiver.SnoozeReceiver
 import tech.jhavidit.remindme.util.LocalKeyStorage
 import tech.jhavidit.remindme.util.NOTES_TIME
 import tech.jhavidit.remindme.util.stringToUri
@@ -51,21 +52,18 @@ class AlarmService : Service() {
         val channelName = "Remind Me"
         val bundle = intent?.getBundleExtra(NOTES_TIME)
         val id: Int = bundle?.getInt("id") ?: 0
-        val dismissIntent = Intent(this, NotificationReceiver::class.java)
-        val snoozeIntent = Intent(this, NotificationReceiver::class.java)
-        snoozeIntent.putExtra(NOTES_TIME, bundle)
-        dismissIntent.putExtra(NOTES_TIME, bundle)
+        val dismissIntent = Intent(this, DismissReceiver::class.java)
+        val snoozeIntent = Intent(this, SnoozeReceiver::class.java)
         snoozeIntent.putExtra("type", "snooze")
         snoozeIntent.putExtra("reminder", "time")
         snoozeIntent.putExtra("id", id)
-        dismissIntent.putExtra("dismiss", true)
         dismissIntent.putExtra("type", "dismiss")
         dismissIntent.putExtra("id", id)
-        dismissIntent.putExtra("reminder","time")
+        dismissIntent.putExtra("reminder", "time")
         val snoozePendingIntent =
-            PendingIntent.getBroadcast(this, id, snoozeIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            PendingIntent.getBroadcast(this, id+21, snoozeIntent, PendingIntent.FLAG_ONE_SHOT)
         val dismissPendingIntent =
-            PendingIntent.getBroadcast(this, id, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            PendingIntent.getBroadcast(this, id+25, dismissIntent, PendingIntent.FLAG_ONE_SHOT)
         val notificationIntent = Intent(this, ReminderScreenActivity::class.java)
         notificationIntent.putExtra(NOTES_TIME, bundle)
         val pendingIntent = PendingIntent.getActivity(
@@ -85,7 +83,7 @@ class AlarmService : Service() {
                 .setContentText(alarmTitle)
                 .setSmallIcon(R.drawable.notification_icon)
                 .setContentIntent(pendingIntent)
-                .addAction(R.drawable.snooze_icon, "Dismiss", dismissPendingIntent)
+                .addAction(R.drawable.ic_reminder_cancel, "Dismiss", dismissPendingIntent)
                 .addAction(R.drawable.snooze_icon, "Snooze", snoozePendingIntent)
                 .build()
 

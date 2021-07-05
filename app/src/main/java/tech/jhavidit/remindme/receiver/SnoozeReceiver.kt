@@ -1,23 +1,14 @@
 package tech.jhavidit.remindme.receiver
 
-import android.app.Application
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
-import tech.jhavidit.remindme.model.NotesModel
-import tech.jhavidit.remindme.repository.NotesRepository
-import tech.jhavidit.remindme.room.NotesDatabase
-import tech.jhavidit.remindme.service.AlarmService
-import tech.jhavidit.remindme.service.LocationReminderService
-import tech.jhavidit.remindme.service.ReminderNotificationService
-import tech.jhavidit.remindme.service.RescheduledAlarmService
-import tech.jhavidit.remindme.util.log
-import tech.jhavidit.remindme.viewModel.NotesViewModel
+import tech.jhavidit.remindme.service.DismissService
+import tech.jhavidit.remindme.service.SnoozeService
 
-class NotificationReceiver : BroadcastReceiver() {
+
+class SnoozeReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
           context?.let {
             intent?.let { it1 -> startNotificationService(context, it1) }
@@ -28,8 +19,8 @@ class NotificationReceiver : BroadcastReceiver() {
         val id = intent.getIntExtra("id", -1)
         val reminder = intent.getStringExtra("reminder")
         val isSnooze = intent.getBooleanExtra("isSnooze", false)
-        val type = intent.getStringExtra("type")
-        val intentService = Intent(context, ReminderNotificationService::class.java)
+        val type = "snooze"
+        val intentService = Intent(context, SnoozeService::class.java)
         intentService.putExtra("id", id)
         intentService.putExtra("reminder", reminder)
         intentService.putExtra("isSnooze", isSnooze)
@@ -40,6 +31,4 @@ class NotificationReceiver : BroadcastReceiver() {
             context.startService(intentService)
         }
     }
-
-
 }
