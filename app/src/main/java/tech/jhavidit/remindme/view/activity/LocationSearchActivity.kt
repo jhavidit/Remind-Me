@@ -106,7 +106,7 @@ class LocationSearchActivity : AppCompatActivity(), OnMapReadyCallback,
         // position on right bottom
         rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0)
         rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE)
-        rlp.setMargins(0, 0, 30, 200);
+        rlp.setMargins(0, 0, 30, 200)
 
 
         binding.selectLocation.setOnClickListener {
@@ -223,6 +223,7 @@ class LocationSearchActivity : AppCompatActivity(), OnMapReadyCallback,
                 val intent = Intent(this, MainActivity::class.java)
                 intent.putExtra("id", id)
                 intent.putExtra("location", locationModel)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP and Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 startActivity(intent)
 
             }
