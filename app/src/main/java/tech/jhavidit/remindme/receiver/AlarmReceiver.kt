@@ -1,8 +1,6 @@
 package tech.jhavidit.remindme.receiver
 
 import android.app.AlarmManager
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -19,6 +17,7 @@ import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.service.AlarmService
 import tech.jhavidit.remindme.util.*
 import tech.jhavidit.remindme.view.activity.MainActivity
+import tech.jhavidit.remindme.view.activity.ReminderScreenActivity
 import java.util.*
 
 class AlarmReceiver : BroadcastReceiver() {
@@ -34,14 +33,21 @@ class AlarmReceiver : BroadcastReceiver() {
         context: Context,
         intent: Intent
     ) {
-        val intentService = Intent(context, AlarmService::class.java)
-        intentService.putExtra(
-            NOTES_TIME, intent.getBundleExtra(NOTES_TIME)
-        )
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            context.startForegroundService(intentService)
+        if (LocalKeyStorage(context).getValue(LocalKeyStorage.DO_NOT_DISTURB) == "true") {
+            intent.getBundleExtra(NOTES_TIME)?.let { notification(context,"We are here to remind you about", it) }
         } else {
-            context.startService(intentService)
+
+            val intentService = Intent(context, AlarmService::class.java)
+            intentService.putExtra(
+                NOTES_TIME, intent.getBundleExtra(NOTES_TIME)
+            )
+
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(intentService)
+            } else {
+                context.startService(intentService)
+            }
         }
     }
 

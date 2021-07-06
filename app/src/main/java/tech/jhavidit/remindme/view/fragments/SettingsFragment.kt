@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
 import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.FragmentSettingsBinding
@@ -48,36 +49,25 @@ class SettingsFragment : Fragment() {
             ?.let { ringtoneName ->
                 binding.ringtoneName.text = ringtoneName
             }
+        binding.doNotDisturbSwitch.isChecked =
+            LocalKeyStorage(requireContext()).getValue(LocalKeyStorage.DO_NOT_DISTURB) == "true"
         binding.doNotDisturbSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                notesViewModel.readAllData.observe(viewLifecycleOwner, Observer { notes ->
-                    notes?.forEach {
-                        if (it.timeReminder == true) {
-                            alarmReceiver.cancelAlarm(requireContext(), it.id)
-                        }
-                        if (it.locationReminder == true) {
-                            geoFencingReceiver.cancelLocationReminder(requireContext(), it.id)
-                        }
-                    }
-                })
+                LocalKeyStorage(requireContext()).saveValue(LocalKeyStorage.DO_NOT_DISTURB, "true")
+                Snackbar.make(
+                    binding.coordinatorLayout,
+                    "Do not Disturb Activated",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+
+
             } else {
-                notesViewModel.readAllData.observe(viewLifecycleOwner, Observer { notes ->
-                    notes?.forEach {
-                        if (it.timeReminder == true) {
-                            alarmReceiver.scheduleAlarm(requireContext(), it)
-                        }
-                        if (it.locationReminder == true) {
-                            geoFencingReceiver.addLocationReminder(
-                                requireContext(),
-                                it.id,
-                                it.latitude!!,
-                                it.longitude!!,
-                                it.radius!!,
-                                it
-                            )
-                        }
-                    }
-                })
+                LocalKeyStorage(requireContext()).saveValue(LocalKeyStorage.DO_NOT_DISTURB, "false")
+                Snackbar.make(
+                    binding.coordinatorLayout,
+                    "Do not Disturb Deactivated",
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
         }
 
