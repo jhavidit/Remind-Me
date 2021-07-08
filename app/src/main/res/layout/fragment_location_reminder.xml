@@ -180,7 +180,7 @@
 
                 <ImageView
                     android:id="@+id/image_radius"
-                    android:layout_width="@dimen/dimen_44"
+                    android:layout_width="wrap_content"
                     android:layout_height="@dimen/dimen_32"
                     android:contentDescription="@string/radius_select_icon"
                     android:src="@drawable/ic_rectangle_27" />
@@ -194,7 +194,7 @@
                     android:gravity="center"
                     android:textColor="@color/white"
                     android:textSize="@dimen/dimen_text_10"
-                    tools:text="200" />
+                    tools:text="2000000" />
 
 
             </FrameLayout>

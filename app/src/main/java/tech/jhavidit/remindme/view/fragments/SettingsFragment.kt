@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView
 import tech.jhavidit.remindme.R
@@ -69,6 +70,10 @@ class SettingsFragment : Fragment() {
                     Snackbar.LENGTH_SHORT
                 ).show()
             }
+        }
+
+        binding.radiusLimit.setOnClickListener {
+            findNavController().navigate(SettingsFragmentDirections.chooseRadiusRange())
         }
 
         binding.ringtone.setOnClickListener {

@@ -46,5 +46,22 @@
 
     </style>
 
+    <style name="MySlider" parent="@style/Widget.MaterialComponents.Slider">
+        <item name="labelStyle">@style/My_Tooltip</item>
+        <item name="materialThemeOverlay">@style/ThemeOverlay.Slider</item>
+    </style>
+
+    <style name="My_Tooltip" parent="Widget.MaterialComponents.Tooltip">
+        <!-- background color of the Tooltip -->
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="backgroundTint">@color/purple_200</item>
+    </style>
+
+    <style name="ThemeOverlay.Slider" parent="">
+        <!-- color used by the text in the Tooltip -->
+        <item name="backgroundTint">@color/purple_200</item>
+        <item name="colorOnPrimary">@color/white</item>
+    </style>
+
 
 </resources>

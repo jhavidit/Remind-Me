@@ -2,12 +2,9 @@ package tech.jhavidit.remindme.view.fragments
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
-import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
@@ -35,10 +32,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_create_notes.*
 import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView
 import tech.jhavidit.remindme.R
-import tech.jhavidit.remindme.databinding.BottomSheetAddColorBinding
 import tech.jhavidit.remindme.databinding.FragmentCreateNotesBinding
 import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.receiver.AlarmReceiver
@@ -46,7 +41,6 @@ import tech.jhavidit.remindme.receiver.GeoFencingReceiver
 import tech.jhavidit.remindme.util.*
 import tech.jhavidit.remindme.view.adapters.SelectBackgroundColorAdapter
 import tech.jhavidit.remindme.viewModel.NotesViewModel
-import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -107,9 +101,9 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
 
         val lastUpdated = args.currentNotes.lastUpdated?.toDateFormat()?.let { getPeriod(it) }
 
-        lastUpdated?.let { binding.lastUpdated.text = "Last edit : ${lastUpdated}" }
+        lastUpdated?.let { binding.lastUpdated.text = String.format("%s","Last edit : $lastUpdated") }
             ?: run {
-                binding.lastUpdated.text = "Last edit : recently"
+                binding.lastUpdated.text = String.format("%s","Last edit : recently")
             }
 
         if (notes.isPinned) {
@@ -542,7 +536,7 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
         val notesModel = NotesModel(0, title, description)
         notesViewModel.addNotes(notesModel)
         updated = true
-        notesViewModel.createdId.observe(viewLifecycleOwner, Observer {
+        notesViewModel.createdId.observe(viewLifecycleOwner, {
             notesId = it ?: 0
         })
     }

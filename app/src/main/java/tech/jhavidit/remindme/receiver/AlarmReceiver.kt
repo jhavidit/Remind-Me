@@ -5,19 +5,12 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.media.RingtoneManager
 import android.os.Build
 import android.widget.Toast
-import androidx.annotation.RequiresApi
-import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
-import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.service.AlarmService
 import tech.jhavidit.remindme.util.*
-import tech.jhavidit.remindme.view.activity.MainActivity
-import tech.jhavidit.remindme.view.activity.ReminderScreenActivity
 import java.util.*
 
 class AlarmReceiver : BroadcastReceiver() {
