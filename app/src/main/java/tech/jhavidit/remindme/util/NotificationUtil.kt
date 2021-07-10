@@ -58,5 +58,5 @@ fun notification(context: Context,title:String, bundle: Bundle) {
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
     }
-    notificationManager.notify((1234 + System.currentTimeMillis()).toInt(), builder.build())
+    notificationManager.notify(id, builder.build())
 }

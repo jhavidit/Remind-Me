@@ -11,8 +11,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.slider.LabelFormatter
 import com.google.android.material.slider.RangeSlider
 import com.google.android.material.slider.Slider
+import kotlinx.android.synthetic.main.fragment_location_reminder.*
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.BottomSheetRadiusChooseBinding
+import tech.jhavidit.remindme.util.LocalKeyStorage
 import tech.jhavidit.remindme.util.log
 import kotlin.math.roundToInt
 
@@ -33,15 +35,26 @@ class RadiusChooseBottomSheet : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.radiusPicker.labelBehavior = LabelFormatter.LABEL_WITHIN_BOUNDS
         binding.radiusPicker.setLabelFormatter { value ->
-            return@setLabelFormatter "${value.roundToInt()} m"
+            if(value<1000)
+                return@setLabelFormatter "${value.roundToInt()} m"
+            else
+                return@setLabelFormatter "${String.format("%.1f",value/1000)} km"
         }
-        binding.radiusPicker.values = mutableListOf(100F,1000F)
+        binding.radiusPicker.values = mutableListOf(LocalKeyStorage(requireContext()).getValue(LocalKeyStorage.MIN_RADIUS)?.toFloat()?:100F, LocalKeyStorage(requireContext()).getValue(LocalKeyStorage.MAX_RADIUS)?.toFloat()?:1000F)
         binding.closeBtn.setOnClickListener {
             findNavController().navigateUp()
         }
         binding.radiusPicker.setMinSeparationValue(100F)
         binding.radiusPicker.addOnChangeListener { slider, _, _ ->
             log("Slider ${slider.values[0].roundToInt()}  ${slider.values[1].roundToInt()} ")
+            LocalKeyStorage(requireContext()).saveValue(
+                LocalKeyStorage.MIN_RADIUS,
+                slider.values[0].roundToInt().toString()
+            )
+            LocalKeyStorage(requireContext()).saveValue(
+                LocalKeyStorage.MAX_RADIUS,
+                slider.values[1].roundToInt().toString()
+            )
         }
 
     }

@@ -12,6 +12,8 @@ class LocalKeyStorage(context: Context) {
         const val RINGTONE = "ringtone"
         const val RINGTONE_NAME = "ringtone_name"
         const val DO_NOT_DISTURB = "do_not_disturb"
+        const val MIN_RADIUS = "min_radius"
+        const val MAX_RADIUS = "max_radius"
     }
 
     fun saveValue(key: String, value: String) {
