@@ -42,7 +42,13 @@ class LocationReminderListAdapter(private val clickListen: LocationReminderAdapt
             holder.itemView.title.text = currentNotes.title
             holder.itemView.description.text = currentNotes.description
             holder.itemView.time.text = currentNotes.locationName
-            holder.itemView.reminder_repeat.text = "Radius - ${currentNotes.radius?.toInt()}m"
+            val radius =currentNotes.radius!!
+            if(radius<1000){
+                holder.itemView.reminder_repeat.text = String.format("%s","Radius - ${radius.toInt()}m")
+            }
+            else{
+                holder.itemView.reminder_repeat.text = String.format("%s","Radius - ${String.format("%.1f","${radius/1000}")} km")
+            }
             holder.itemView.reminder.setCardBackgroundColor(Color.parseColor(currentNotes.backgroundColor))
             holder.itemView.reminder.setOnClickListener {
                 holder.itemView.findNavController().navigate(
