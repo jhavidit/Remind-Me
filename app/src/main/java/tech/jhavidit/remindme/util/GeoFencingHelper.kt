@@ -33,7 +33,7 @@ class GeoFencingHelper(context: Context) : ContextWrapper(context) {
             .setCircularRegion(latitude, longitude, radius.toFloat())
             .setRequestId(id)
             .setTransitionTypes(transitionTypes)
-            .setLoiteringDelay(5000)
+            .setLoiteringDelay(500)
             .setExpirationDuration(Geofence.NEVER_EXPIRE)
             .build()
     }
@@ -51,7 +51,7 @@ class GeoFencingHelper(context: Context) : ContextWrapper(context) {
             "locationName" to notesModel.locationName
         )
         intent.putExtra(NOTES_LOCATION, bundle)
-        log("pendinng intent - ${notesModel}")
+        log("pending intent - ${notesModel}")
         pendingIntent =
             PendingIntent.getBroadcast(this, id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         return pendingIntent

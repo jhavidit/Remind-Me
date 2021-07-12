@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/choose_radius_bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/purple_light"
+        app:strokeColor="@color/purple_200"
+        app:strokeWidth="0.5dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/dimen_20">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/startGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.05" />
+
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/endGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.95" />
+
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/topGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="8dp" />
+
+            <ImageView
+                android:id="@+id/close_btn"
+                android:layout_width="@dimen/dimen_28"
+                android:layout_height="@dimen/dimen_28"
+                android:background="?selectableItemBackgroundBorderless"
+                android:contentDescription="@string/close_bottom_sheet_button"
+                android:src="@drawable/ic_down"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/topGuideline" />
+
+            <LinearLayout
+                android:id="@+id/choose_limit_radius_ll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_8"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/close_btn">
+
+
+                <ImageView
+                    android:id="@+id/choose_limit_radius"
+                    android:layout_width="@dimen/dimen_24"
+                    android:layout_height="@dimen/dimen_24"
+                    android:layout_marginEnd="@dimen/dimen_12"
+                    android:contentDescription="@string/save_location_icon"
+                    android:src="@drawable/ic_add_location" />
+
+                <TextView
+                    android:id="@+id/choose_limit_radius_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/alata_regular"
+                    android:text="Choose Limits Of Radius"
+                    android:textColor="@color/purple_200"
+                    android:textSize="@dimen/dimen_text_16"
+                    app:layout_constraintTop_toBottomOf="@id/close_btn" />
+            </LinearLayout>
+
+            <com.google.android.material.slider.RangeSlider
+                android:id="@+id/radius_picker"
+                style="@style/MySlider"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:valueFrom="100"
+                android:valueTo="100000"
+                app:layout_constraintEnd_toEndOf="@id/endGuideline"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                app:layout_constraintTop_toBottomOf="@id/choose_limit_radius_ll" />
+
+            <TextView
+                android:id="@+id/start_limit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/alata_regular"
+                android:text="100 m"
+                android:textColor="@color/purple_200"
+                android:textSize="@dimen/dimen_text_12"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                app:layout_constraintTop_toBottomOf="@id/radius_picker" />
+
+            <TextView
+                android:id="@+id/end_limit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/alata_regular"
+                android:text="100 km"
+                android:textColor="@color/purple_200"
+                android:textSize="@dimen/dimen_text_12"
+                app:layout_constraintEnd_toEndOf="@id/endGuideline"
+                app:layout_constraintTop_toBottomOf="@id/radius_picker" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

@@ -15,8 +15,9 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import androidx.core.app.NotificationCompat
 import tech.jhavidit.remindme.R
+import tech.jhavidit.remindme.receiver.DismissReceiver
+import tech.jhavidit.remindme.receiver.SnoozeReceiver
 import tech.jhavidit.remindme.util.NOTES_LOCATION
-import tech.jhavidit.remindme.util.NOTES_TIME
 import tech.jhavidit.remindme.view.activity.ReminderScreenActivity
 
 class LocationReminderService : Service() {
@@ -42,21 +43,20 @@ class LocationReminderService : Service() {
         val bundle = intent?.getBundleExtra(NOTES_LOCATION)
         val id = bundle?.getInt("id") ?: 0
         val isSnooze = bundle?.getBoolean("snooze")
-        val dismissIntent = Intent(this, ReminderNotificationService::class.java)
-        val snoozeIntent = Intent(this, ReminderNotificationService::class.java)
-        snoozeIntent.putExtra(NOTES_TIME, bundle)
-        dismissIntent.putExtra(NOTES_TIME, bundle)
-        snoozeIntent.putExtra("snooze", true)
+        val dismissIntent = Intent(this, DismissReceiver::class.java)
+        val snoozeIntent = Intent(this, SnoozeReceiver::class.java)
+        snoozeIntent.putExtra("type", "snooze")
         snoozeIntent.putExtra("isSnooze", isSnooze)
         snoozeIntent.putExtra("reminder", "location")
         snoozeIntent.putExtra("id", id)
-        dismissIntent.putExtra("dismiss", true)
+        dismissIntent.putExtra("isSnooze",isSnooze)
+        dismissIntent.putExtra("type", "dismiss")
         dismissIntent.putExtra("reminder", "location")
         dismissIntent.putExtra("id", id)
         val snoozePendingIntent =
-            PendingIntent.getService(this, id, snoozeIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            PendingIntent.getBroadcast(this, id+23, snoozeIntent, PendingIntent.FLAG_ONE_SHOT)
         val dismissPendingIntent =
-            PendingIntent.getService(this, id, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            PendingIntent.getBroadcast(this, id+22, dismissIntent, PendingIntent.FLAG_ONE_SHOT)
         val notificationIntent = Intent(this, ReminderScreenActivity::class.java)
         notificationIntent.putExtra(NOTES_LOCATION, bundle)
         val pendingIntent = PendingIntent.getActivity(

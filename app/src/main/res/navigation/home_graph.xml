@@ -37,7 +37,13 @@
     <fragment
         android:id="@+id/settingsFragment"
         android:name="tech.jhavidit.remindme.view.fragments.SettingsFragment"
-        android:label="SettingsFragment" />
+        android:label="SettingsFragment" >
+
+        <action
+            android:id="@+id/chooseRadiusRange"
+            app:destination="@id/radiusChooseBottomSheet"/>
+
+    </fragment>
 
     <fragment
         android:id="@+id/reminderFragment"
@@ -233,6 +239,10 @@
         </action>
 
     </fragment>
+    <dialog
+        android:id="@+id/radiusChooseBottomSheet"
+        android:name="tech.jhavidit.remindme.view.fragments.RadiusChooseBottomSheet"
+        android:label="RadiusChooseBottomSheet" />
 
 
 </navigation>

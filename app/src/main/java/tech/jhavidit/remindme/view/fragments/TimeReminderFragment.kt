@@ -216,9 +216,6 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
         }
 
         binding.saveReminderCard.setOnClickListener {
-            c.set(alarmYear, alarmMonth, alarmDay, alarmHour, alarmMinute, 0)
-            val alarmTime = c.timeInMillis
-            val currentTime = Calendar.getInstance().timeInMillis
 
             if (!binding.repeaterSwitch.isChecked)
                 repeatingValue = -1
@@ -232,6 +229,11 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
             } else if (binding.monthly.isChecked) {
                 repeatingValue = AlarmManager.INTERVAL_DAY * 30
             }
+            val calendar = Calendar.getInstance()
+            calendar.set(alarmYear, alarmMonth, alarmDay, alarmHour, alarmMinute, 0)
+            val alarmTime = calendar.timeInMillis
+            val currentTime = Calendar.getInstance().timeInMillis
+
             if (alarmDay == 0 && alarmMonth == 0 && alarmYear == 0) {
                 toast(requireContext(), "Please Select Date")
             } else if (currentTime > alarmTime) {

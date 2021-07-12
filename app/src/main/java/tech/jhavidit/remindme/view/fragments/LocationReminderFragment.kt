@@ -28,6 +28,7 @@ import com.google.android.gms.location.GeofencingClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.slider.LabelFormatter
 import kotlinx.android.synthetic.main.fragment_create_notes.*
 import tech.jhavidit.remindme.databinding.FragmentLocationReminderBinding
 import tech.jhavidit.remindme.model.LocationModel
@@ -38,6 +39,7 @@ import tech.jhavidit.remindme.view.activity.LocationSearchActivity
 import tech.jhavidit.remindme.view.adapters.LocationNameAdapter
 import tech.jhavidit.remindme.viewModel.LocationViewModel
 import tech.jhavidit.remindme.viewModel.NotesViewModel
+import kotlin.math.roundToInt
 
 
 class LocationReminderFragment : BottomSheetDialogFragment(),
@@ -70,13 +72,18 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
         geoFencingReceiver = GeoFencingReceiver()
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
-        binding.radiusValue.text = minRadius.toInt().toString()
-        binding.minRadius.text = "${minRadius.toInt()}m"
-        binding.maxRadius.text = "${maxRadius.toInt()}m"
+        minRadius = LocalKeyStorage(requireContext()).getValue(LocalKeyStorage.MIN_RADIUS)?.toDouble()?:100.0
+        maxRadius = LocalKeyStorage(requireContext()).getValue(LocalKeyStorage.MAX_RADIUS)?.toDouble()?:1000.0
+        if(minRadius<1000)
+        binding.minRadius.text = "${minRadius.roundToInt()}m"
+        else
+            binding.minRadius.text = "${String.format("%.1f",minRadius/1000)} km"
+        if(maxRadius<1000)
+        binding.maxRadius.text = "${maxRadius.roundToInt()}m"
+            else
+                binding.maxRadius.text = "${String.format("%.1f",maxRadius/1000)} km"
         geoFencingClient = LocationServices.getGeofencingClient(requireContext())
         geoFencingHelper = GeoFencingHelper(requireContext())
-
-
         return binding.root
     }
 
@@ -228,12 +235,13 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
                 if (latitude == null || longitude == null) {
                     toast(requireContext(), "Selected Location is invalid")
                 } else if (foregroundAndBackgroundLocationPermissionApproved(requireContext())) {
+                    log(binding.radius.value.toString())
                     geoFencingReceiver.addLocationReminder(
                         context = requireContext(),
                         id = notesValue.id,
                         latitude = latitude,
                         longitude = longitude,
-                        radius = getRadius(minRadius, maxRadius, binding.radius.progress),
+                        radius = binding.radius.value.toDouble(),
                         notesModel = notesValue
                     )
                     val notesModel = NotesModel(
@@ -246,7 +254,7 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
                         timeReminder = notesValue.timeReminder,
                         latitude = selectedLocation?.latitude,
                         longitude = selectedLocation?.longitude,
-                        radius = getRadius(minRadius, maxRadius, binding.radius.progress),
+                        radius =  binding.radius.value.toDouble(),
                         repeatValue = notesValue.repeatValue,
                         reminderTime = notesValue.reminderTime,
                         reminderWaitTime = notesValue.reminderWaitTime,
@@ -263,33 +271,49 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
                 }
             }
         }
+        binding.radius.valueFrom = minRadius.toFloat()
+        binding.radius.valueTo = maxRadius.toFloat()
+        binding.radius.value = minRadius.toFloat()
 
-        binding.radius.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+        binding.radius.labelBehavior = LabelFormatter.LABEL_WITHIN_BOUNDS
+        binding.radius.setLabelFormatter { value ->
+            if(value<1000)
+            return@setLabelFormatter "${value.roundToInt()} m"
+            else
+                return@setLabelFormatter "${String.format("%.1f",value/1000)} km"
 
-                seekBar?.let {
-                    binding.radiusValue.text =
-                        getRadius(minRadius, maxRadius, progress).toInt().toString()
-                    val width = seekBar.width - seekBar.paddingLeft - seekBar.paddingRight
-                    val thumbPos = seekBar.paddingLeft + width * seekBar.progress / seekBar.max
+        }
 
-                    binding.radiusMarker.measure(0, 0)
-                    val txtW: Int = binding.radiusMarker.measuredWidth
-                    val delta = txtW / 2
-                    binding.radiusMarker.x = seekBar.x + thumbPos - delta
-                }
+        binding.radius.addOnChangeListener { slider, _, _ ->
+            log(slider.value.toString())
+        }
 
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-
-            }
-
-        })
+//        binding.radius.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+//            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+//
+//                seekBar?.let {
+//                    binding.radiusValue.text =
+//                        getRadius(minRadius, maxRadius, progress).toInt().toString()
+//                    val width = seekBar.width - seekBar.paddingLeft - seekBar.paddingRight
+//                    val thumbPos = seekBar.paddingLeft + width * seekBar.progress / seekBar.max
+//
+//                    binding.radiusMarker.measure(0, 0)
+//                    val txtW: Int = binding.radiusMarker.measuredWidth
+//                    val delta = txtW / 2
+//                    binding.radiusMarker.x = seekBar.x + thumbPos - delta
+//                }
+//
+//            }
+//
+//            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+//
+//            }
+//
+//            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+//
+//            }
+//
+//        })
 
         binding.locationPicker.setOnClickListener {
             if (foregroundAndBackgroundLocationPermissionApproved(requireContext())) {

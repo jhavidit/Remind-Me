@@ -45,11 +45,14 @@
 
         <receiver android:name=".receiver.AlarmReceiver" />
         <receiver android:name=".receiver.GeoFencingReceiver" />
+        <receiver android:name=".receiver.SnoozeReceiver"/>
+        <receiver android:name=".receiver.DismissReceiver"/>
 
         <service android:name=".service.RescheduledAlarmService" />
         <service android:name=".service.LocationReminderService" />
         <service android:name=".service.AlarmService" />
-        <service android:name=".service.ReminderNotificationService" />
+        <service android:name=".service.DismissService" />
+        <service android:name=".service.SnoozeService"/>
     </application>
 
 </manifest>

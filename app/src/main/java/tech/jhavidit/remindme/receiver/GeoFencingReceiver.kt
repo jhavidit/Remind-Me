@@ -13,18 +13,14 @@ import com.google.android.gms.location.LocationServices
 import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.service.AlarmService
 import tech.jhavidit.remindme.service.LocationReminderService
-import tech.jhavidit.remindme.util.GeoFencingHelper
-import tech.jhavidit.remindme.util.NOTES_LOCATION
-import tech.jhavidit.remindme.util.log
-import tech.jhavidit.remindme.util.toast
+import tech.jhavidit.remindme.util.*
+
 
 class GeoFencingReceiver : BroadcastReceiver() {
     private var notesModel: NotesModel? = null
     override fun onReceive(context: Context?, intent: Intent?) {
         val geofencingEvent = GeofencingEvent.fromIntent(intent)
-        val bundle = intent?.getBundleExtra("notes")
 
-        //intent?.putExtra("notes", notesModel)
         if (geofencingEvent.hasError()) {
             val errorMessage = GeofenceStatusCodes
                 .getStatusCodeString(geofencingEvent.errorCode)
@@ -37,7 +33,19 @@ class GeoFencingReceiver : BroadcastReceiver() {
 
                 log("GEOFENCE_TRANSITION_ENTER")
                 context?.let {
-                    intent?.let { it1 -> startGeoFencingService(it, it1) }
+                    intent?.let { it1 ->
+                        if (LocalKeyStorage(context).getValue(LocalKeyStorage.DO_NOT_DISTURB) == "true") {
+                            intent.getBundleExtra(
+                                NOTES_LOCATION
+                            )?.let { it2 ->
+                                notification(
+                                    context, "You are nearby your reminder location",
+                                    it2
+                                )
+                            }
+                        } else
+                            startGeoFencingService(it, it1)
+                    }
 /*                    val intentNotification = Intent(context, TimeReminderActivity::class.java)
                     val pendingIntent =
                         PendingIntent.getActivity(
@@ -79,9 +87,20 @@ class GeoFencingReceiver : BroadcastReceiver() {
                     notification(context, "GEOFENCE_TRANSITION_EXIT ", pendingIntent)
                 }
             }*/
-                    val intentService = Intent(it, AlarmService::class.java)
-                    intentService.putExtra("notes", notesModel)
-                    it.stopService(intentService)
+                    if (LocalKeyStorage(context).getValue(LocalKeyStorage.DO_NOT_DISTURB) == "true") {
+                        intent?.getBundleExtra(
+                            NOTES_LOCATION
+                        )?.let { it2 ->
+                            notification(
+                                context, "You left the geofence of reminder location",
+                                it2
+                            )
+                        }
+                    } else {
+                        val intentService = Intent(it, AlarmService::class.java)
+                        intentService.putExtra("notes", notesModel)
+                        it.stopService(intentService)
+                    }
                 }
 
             }
@@ -142,7 +161,7 @@ class GeoFencingReceiver : BroadcastReceiver() {
         val intentService = Intent(context, LocationReminderService::class.java)
         log("Service start ${intent.getBundleExtra(NOTES_LOCATION)}")
         intentService.putExtra(
-            NOTES_LOCATION,intent.getBundleExtra(NOTES_LOCATION)
+            NOTES_LOCATION, intent.getBundleExtra(NOTES_LOCATION)
         )
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(intentService)
