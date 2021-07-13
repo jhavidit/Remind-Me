@@ -85,7 +85,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:valueFrom="100"
-                android:valueTo="100000"
+                android:valueTo="10000"
                 app:layout_constraintEnd_toEndOf="@id/endGuideline"
                 app:layout_constraintStart_toStartOf="@id/startGuideline"
                 app:layout_constraintTop_toBottomOf="@id/choose_limit_radius_ll" />
@@ -106,7 +106,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/alata_regular"
-                android:text="100 km"
+                android:text="10 km"
                 android:textColor="@color/purple_200"
                 android:textSize="@dimen/dimen_text_12"
                 app:layout_constraintEnd_toEndOf="@id/endGuideline"
