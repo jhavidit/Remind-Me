@@ -139,6 +139,8 @@
             android:id="@+id/reminder_off_card"
             android:layout_width="@dimen/dimen_0"
             android:layout_height="100dp"
+            android:layout_marginStart="@dimen/dimen_20"
+            android:layout_marginEnd="@dimen/dimen_20"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/endGuideline"
             app:layout_constraintStart_toStartOf="@id/startGuideline">
@@ -149,6 +151,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/white"
+                app:fabSize="normal"
                 android:contentDescription="reminder icon"
                 android:src="@drawable/ic_reminder"
                 app:layout_constraintBottom_toBottomOf="parent"
