@@ -17,13 +17,16 @@ import androidx.core.app.NotificationCompat
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.receiver.DismissReceiver
 import tech.jhavidit.remindme.receiver.SnoozeReceiver
+import tech.jhavidit.remindme.util.LocalKeyStorage
 import tech.jhavidit.remindme.util.NOTES_LOCATION
+import tech.jhavidit.remindme.util.stringToUri
 import tech.jhavidit.remindme.view.activity.ReminderScreenActivity
 
 class LocationReminderService : Service() {
 
     private lateinit var vibrator: Vibrator
     private lateinit var ringtone: Ringtone
+    private lateinit var uri: Uri
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }
@@ -31,8 +34,18 @@ class LocationReminderService : Service() {
     override fun onCreate() {
         super.onCreate()
 
-        val notification: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
-        ringtone = RingtoneManager.getRingtone(applicationContext, notification)
+        LocalKeyStorage(applicationContext).getValue(LocalKeyStorage.RINGTONE)?.let {
+            uri = try {
+                stringToUri(it)!!
+            } catch (e: Exception) {
+                RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+            }
+
+        } ?: run {
+            uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+        }
+
+        ringtone = RingtoneManager.getRingtone(applicationContext, uri)
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     }
 
