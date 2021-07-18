@@ -57,7 +57,28 @@ class NotesFragment : Fragment() {
                 if (note.locationReminder == null && note.timeReminder == null && note.description.isEmpty() && note.title.isEmpty()) {
                     viewModel.deleteNotes(note)
                     toast(requireContext(), "empty note discarded")
+                } else if (note.repeatValue != null && note.repeatValue == -1L && note.reminderWaitTime!! < System.currentTimeMillis()) {
+                    val notesModel = NotesModel(
+                        id = note.id,
+                        title = note.title,
+                        description = note.description,
+                        locationReminder = note.locationReminder,
+                        timeReminder = null,
+                        reminderWaitTime = null,
+                        reminderTime = null,
+                        reminderDate = null,
+                        image = note.image,
+                        isPinned = note.isPinned,
+                        latitude = note.latitude,
+                        longitude = note.longitude,
+                        radius = note.radius,
+                        repeatValue = null,
+                        locationName = note.locationName,
+                        backgroundColor = note.backgroundColor
+                    )
+                    viewModel.updateNotes(notesModel)
                 }
+
             }
 
             adapter.setNotes(it)
