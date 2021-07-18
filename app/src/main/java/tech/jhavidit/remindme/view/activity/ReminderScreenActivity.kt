@@ -23,6 +23,8 @@ import tech.jhavidit.remindme.util.log
 import tech.jhavidit.remindme.util.toast
 import tech.jhavidit.remindme.viewModel.NotesViewModel
 import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 
 
 class ReminderScreenActivity : AppCompatActivity(), View.OnTouchListener {
@@ -30,11 +32,12 @@ class ReminderScreenActivity : AppCompatActivity(), View.OnTouchListener {
     private lateinit var viewModel: NotesViewModel
     private lateinit var alarmReceiver: AlarmReceiver
     private lateinit var geoFencingReceiver: GeoFencingReceiver
+    private var notes: NotesModel? = null
     private var id: Int = 0
     private var snooze: Boolean = false
     private var reminder: String? = ""
-    private var originalX = 50F
-    private var originalY = 50F
+    private var originalX = 0F
+    private var originalY = 0F
     private var downRawX = 0f
     private var downRawY = 0f
     private var dX = 0f
@@ -48,10 +51,8 @@ class ReminderScreenActivity : AppCompatActivity(), View.OnTouchListener {
         geoFencingReceiver = GeoFencingReceiver()
         viewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
         val notesTimeBundle = intent?.getBundleExtra(NOTES_TIME)
-        val snoozeAlarm = intent?.getBooleanExtra("snooze", false)
-        val dismissAlarm = intent?.getBooleanExtra("dismiss", false)
-        originalX = getRelativeLeft(binding.reminderFab).toFloat()
-        originalY = getRelativeTop(binding.reminderFab).toFloat()
+
+
 
         binding.reminderFab.setOnTouchListener(this)
         notesTimeBundle?.let {
@@ -85,18 +86,14 @@ class ReminderScreenActivity : AppCompatActivity(), View.OnTouchListener {
 
         }
 
+        viewModel.selectedNote(id).observe(this, {
+            notes = it[0]
+        })
+
         binding.openApp.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
-        }
-
-        if (snoozeAlarm == true) {
-            snoozeReminder()
-        }
-
-        if (dismissAlarm == true) {
-            cancelReminder()
         }
 
         notesTimeBundle?.clear()
@@ -105,39 +102,9 @@ class ReminderScreenActivity : AppCompatActivity(), View.OnTouchListener {
     }
 
     private fun cancelReminder() {
-        if (!snooze && reminder == "location") {
-            viewModel.selectedNote(id).observe(this, Observer { note ->
-                val notes = note[0]
-                geoFencingReceiver.cancelLocationReminder(this, notes.id)
-                val notesModel = NotesModel(
-                    id = notes.id,
-                    title = notes.title,
-                    description = notes.description,
-                    locationReminder = null,
-                    timeReminder = notes.timeReminder,
-                    reminderWaitTime = notes.reminderWaitTime,
-                    reminderTime = notes.reminderTime,
-                    reminderDate = notes.reminderDate,
-                    isPinned = notes.isPinned,
-                    latitude = null,
-                    image = notes.image,
-                    longitude = null,
-                    radius = null,
-                    repeatValue = notes.repeatValue,
-                    locationName = null,
-                    backgroundColor = notes.backgroundColor
-                )
-                viewModel.updateNotes(notesModel)
-                val intentService =
-                    Intent(applicationContext, LocationReminderService::class.java)
-                applicationContext.stopService(intentService)
-                finish()
-            })
 
-
-        } else if (reminder == "time") {
-            viewModel.selectedNote(id).observe(this, Observer { note ->
-                val notes = note[0]
+        notes?.let { notes ->
+            if (reminder == "time") {
                 if (notes.repeatValue == -1L) {
                     val notesModel = NotesModel(
                         id = notes.id,
@@ -161,14 +128,35 @@ class ReminderScreenActivity : AppCompatActivity(), View.OnTouchListener {
                 }
                 val intentService = Intent(applicationContext, AlarmService::class.java)
                 applicationContext.stopService(intentService)
-                finish()
+            } else if (reminder == "location" && !snooze) {
 
-            })
+                geoFencingReceiver.cancelLocationReminder(this, notes.id)
+                val notesModel = NotesModel(
+                    id = notes.id,
+                    title = notes.title,
+                    description = notes.description,
+                    locationReminder = null,
+                    timeReminder = notes.timeReminder,
+                    reminderWaitTime = notes.reminderWaitTime,
+                    reminderTime = notes.reminderTime,
+                    reminderDate = notes.reminderDate,
+                    isPinned = notes.isPinned,
+                    latitude = null,
+                    image = notes.image,
+                    longitude = null,
+                    radius = null,
+                    repeatValue = notes.repeatValue,
+                    locationName = null,
+                    backgroundColor = notes.backgroundColor
+                )
+                viewModel.updateNotes(notesModel)
+                val intentService =
+                    Intent(applicationContext, LocationReminderService::class.java)
+                applicationContext.stopService(intentService)
 
 
-        } else if (snooze && reminder == "location") {
-            viewModel.selectedNote(id).observe(this, Observer { note ->
-                val notes = note[0]
+            } else if (reminder == "location" && snooze) {
+
                 val notesModel = NotesModel(
                     id = notes.id,
                     title = notes.title,
@@ -191,31 +179,33 @@ class ReminderScreenActivity : AppCompatActivity(), View.OnTouchListener {
                 val intentService =
                     Intent(applicationContext, AlarmService::class.java)
                 applicationContext.stopService(intentService)
-                finish()
-            })
+            }
+
+
+            finish()
         }
+
     }
 
     private fun snoozeReminder() {
-        viewModel.selectedNote(id).observe(this, Observer { notes ->
-            notes?.let {
-                val note = it[0]
-                reminder?.let { remind ->
-                    alarmReceiver.scheduleSnoozeAlarm(this, note, remind)
-                    toast(this, "Alarm snoozed for five minutes")
-                    if (remind == "time") {
-                        val intentService = Intent(applicationContext, AlarmService::class.java)
-                        applicationContext.stopService(intentService)
-                        finish()
-                    } else if (remind == "location") {
-                        val intentService =
-                            Intent(applicationContext, LocationReminderService::class.java)
-                        applicationContext.stopService(intentService)
-                        finish()
-                    }
+
+        notes?.let { notes->
+            reminder?.let { remind ->
+                alarmReceiver.scheduleSnoozeAlarm(this, notes, remind)
+                toast(this, "Alarm snoozed for five minutes")
+                if (remind == "time") {
+                    val intentService = Intent(applicationContext, AlarmService::class.java)
+                    applicationContext.stopService(intentService)
+                    finish()
+                } else if (remind == "location") {
+                    val intentService =
+                        Intent(applicationContext, LocationReminderService::class.java)
+                    applicationContext.stopService(intentService)
+                    finish()
                 }
             }
-        })
+        }
+
 
     }
 
@@ -240,20 +230,20 @@ class ReminderScreenActivity : AppCompatActivity(), View.OnTouchListener {
             val parentWidth = viewParent.width
             val parentHeight = viewParent.height
             var newX = motionEvent.rawX + dX
-            newX = Math.max(
+            newX = max(
                 layoutParams.leftMargin.toFloat(),
                 newX
             ) // Don't allow the FAB past the left hand side of the parent
-            newX = Math.min(
+            newX = min(
                 (parentWidth - viewWidth - layoutParams.rightMargin).toFloat(),
                 newX
             ) // Don't allow the FAB past the right hand side of the parent
             var newY = motionEvent.rawY + dY
-            newY = Math.max(
+            newY = max(
                 layoutParams.topMargin.toFloat(),
                 newY
             ) // Don't allow the FAB past the top of the parent
-            newY = Math.min(
+            newY = min(
                 (parentHeight - viewHeight - layoutParams.bottomMargin).toFloat(),
                 newY
             ) // Don't allow the FAB past the bottom of the parent
@@ -286,11 +276,6 @@ class ReminderScreenActivity : AppCompatActivity(), View.OnTouchListener {
         } else {
             super.onTouchEvent(motionEvent)
         }
-    }
-
-    companion object {
-        const val CLICK_DRAG_TOLERANCE =
-            100f // Often, there will be a slight, unintentional, drag when the user taps the FAB, so we need to account for this.
     }
 
     private fun getRelativeLeft(myView: View): Int {

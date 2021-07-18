@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import np.com.susanthapa.curved_bottom_navigation.CbnMenuItem
 import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView
@@ -19,13 +20,12 @@ import tech.jhavidit.remindme.viewModel.NotesViewModel
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var bottomNavigationView: CurvedBottomNavigationView
-    private lateinit var viewModel: NotesViewModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        viewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
 
         val activeIndex = savedInstanceState?.getInt("activeIndex") ?: 1
 
@@ -58,19 +58,22 @@ class MainActivity : AppCompatActivity() {
 
         bottomNavigationView = binding.bottomNav
 
-        if (intent.hasExtra("id") && intent.hasExtra("location")) {
-            val id = intent.getIntExtra("id", -1)
-            if (id != -1) {
-                viewModel.selectedNote(id).observe(this, Observer {
-                    val notesModel = it.firstOrNull()
-                    val locationModel = intent.getParcelableExtra<LocationModel>("location")
-                    val args = bundleOf("currentNotes" to notesModel, "location" to locationModel)
-                    navController.navigate(R.id.locationReminderFragment, args)
-                })
-            }
+
+        if (intent.hasExtra("notesModel") && intent.hasExtra("location")) {
+
+            val locationModel = intent.getParcelableExtra<LocationModel>("location")
+            val notesModel = intent.getParcelableExtra<NotesModel>("notesModel")
+            val args = bundleOf("currentNotes" to notesModel, "location" to locationModel)
+            intent.removeExtra("notesModel")
+            intent.removeExtra("location")
+            //    navController.popBackStack(R.id.locationReminderFragment, false)
+
+            navController.navigate(R.id.locationReminderFragment, args)
 
 
         }
+
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

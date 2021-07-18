@@ -220,8 +220,10 @@ class LocationSearchActivity : AppCompatActivity(), OnMapReadyCallback,
                     name = locationName?.text.toString()
                 )
                 viewModel.addLocation(locationModel)
+                val notesModel = intent.getParcelableExtra<NotesModel>("notesModel")
                 val intent = Intent(this, MainActivity::class.java)
-                intent.putExtra("id", id)
+
+                intent.putExtra("notesModel", notesModel)
                 intent.putExtra("location", locationModel)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP and Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 startActivity(intent)

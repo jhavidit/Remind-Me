@@ -130,7 +130,7 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
             val intent = Intent(requireContext(), LocationSearchActivity::class.java)
             intent.putExtra("latitude", lat)
             intent.putExtra("longitude", lon)
-            intent.putExtra("id", notesValue.id)
+            intent.putExtra("notesModel", notesValue)
             startActivity(intent)
         } else
             requestForegroundAndBackgroundLocationPermissions()
@@ -193,7 +193,9 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
         })
 
         notesValue = args.currentNotes
-        if (notesValue.radius != null && notesValue.radius!! >= minRadius && notesValue.radius!! <= maxRadius)
+
+
+     //   if (notesValue.radius != null && notesValue.radius!! >= minRadius && notesValue.radius!! <= maxRadius)
             selectedLocation = arguments?.getParcelable("location")
         if (selectedLocation != null) {
             binding.selectedLocation.text = selectedLocation?.name
