@@ -52,6 +52,9 @@ class SettingsFragment : Fragment() {
             }
         binding.doNotDisturbSwitch.isChecked =
             LocalKeyStorage(requireContext()).getValue(LocalKeyStorage.DO_NOT_DISTURB) == "true"
+        binding.doNotDisturb.setOnClickListener {
+            binding.doNotDisturbSwitch.isChecked = !binding.doNotDisturbSwitch.isChecked
+        }
         binding.doNotDisturbSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 LocalKeyStorage(requireContext()).saveValue(LocalKeyStorage.DO_NOT_DISTURB, "true")
