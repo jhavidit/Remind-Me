@@ -29,6 +29,13 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.025" />
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/bottomGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="@dimen/dimen_4" />
+
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/search_note_card"
@@ -101,7 +108,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="@dimen/dimen_0"
-            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/bottomGuideline"
+            android:layout_height="0dp"
             android:layout_marginTop="@dimen/dimen_8"
             app:layout_constraintEnd_toEndOf="@id/endGuideline"
             app:layout_constraintStart_toStartOf="@id/startGuideline"

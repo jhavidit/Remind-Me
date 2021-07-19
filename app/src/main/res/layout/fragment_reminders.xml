@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.95" />
+            app:layout_constraintGuide_end="@dimen/dimen_10" />
 
         <TextView
             android:id="@+id/reminder_heading"
@@ -79,12 +79,16 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="@dimen/dimen_0"
-            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/bottomGuideline"
+            android:layout_marginTop="@dimen/dimen_4"
+            android:layout_height="0dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintStart_toStartOf="@id/startGuideline"
             app:layout_constraintEnd_toEndOf="@id/endGuideline"
             app:layout_constraintTop_toBottomOf="@id/rb_reminder"
             tools:listitem="@layout/reminder_item"/>
+
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
