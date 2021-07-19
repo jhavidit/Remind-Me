@@ -1,5 +1,6 @@
 package tech.jhavidit.remindme.view.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.os.bundleOf
@@ -15,6 +16,9 @@ import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.ActivityMainBinding
 import tech.jhavidit.remindme.model.LocationModel
 import tech.jhavidit.remindme.model.NotesModel
+import tech.jhavidit.remindme.util.LocalKeyStorage
+import tech.jhavidit.remindme.util.NOTES_LOCATION
+import tech.jhavidit.remindme.util.NOTES_TIME
 import tech.jhavidit.remindme.viewModel.NotesViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -57,6 +61,22 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNav.setupWithNavController(navController)
 
         bottomNavigationView = binding.bottomNav
+
+        if (LocalKeyStorage(this).getValue(LocalKeyStorage.ID) != null) {
+            val id = LocalKeyStorage(this).getValue(LocalKeyStorage.ID)?.toInt()
+            val reminder = LocalKeyStorage(this).getValue(LocalKeyStorage.REMINDER)
+            var snooze = false
+            if (LocalKeyStorage(this).getValue(LocalKeyStorage.SNOOZE) == "true")
+                snooze = true
+            val bundle = bundleOf("id" to id, "reminder" to reminder, "snooze" to snooze)
+            val intent = Intent(this, ReminderScreenActivity::class.java)
+            if (reminder == "time") {
+                intent.putExtra(NOTES_TIME, bundle)
+            } else
+                intent.putExtra(NOTES_LOCATION, bundle)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP and Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+        }
 
 
         if (intent.hasExtra("notesModel") && intent.hasExtra("location")) {
