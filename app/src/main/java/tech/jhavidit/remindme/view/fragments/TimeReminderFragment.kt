@@ -13,6 +13,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -107,7 +108,7 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
                 alarmYear = year
                 alarmMonth = monthOfYear
                 alarmDay = dayOfMonth
-                val realMonthOfYear = monthOfYear+1
+                val realMonthOfYear = monthOfYear + 1
                 binding.calendarText.text = "$dayOfMonth/$realMonthOfYear/$year"
 
                 val monthFormat = if (realMonthOfYear < 10)
@@ -221,7 +222,7 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
                 repeatingValue = -1
             else if (binding.hours.isChecked)
                 repeatingValue =
-                    repeatList[binding.repeatPicker.value-1].toLong() * AlarmManager.INTERVAL_HOUR
+                    repeatList[binding.repeatPicker.value - 1].toLong() * AlarmManager.INTERVAL_HOUR
             else if (binding.weekly.isChecked) {
                 repeatingValue = AlarmManager.INTERVAL_DAY * 7
             } else if (binding.daily.isChecked) {
@@ -260,7 +261,8 @@ class TimeReminderFragment : BottomSheetDialogFragment() {
                 )
                 viewModel.updateNotes(notes)
                 alarmReceiver.scheduleAlarm(requireContext(), notes)
-                findNavController().navigate(R.id.notesFragment)
+                val navOptions = NavOptions.Builder().setPopUpTo(R.id.notesFragment,true).build()
+                findNavController().navigate(R.id.notesFragment,null,navOptions)
             }
         }
 
