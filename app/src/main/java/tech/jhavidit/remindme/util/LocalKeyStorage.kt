@@ -14,6 +14,9 @@ class LocalKeyStorage(context: Context) {
         const val DO_NOT_DISTURB = "do_not_disturb"
         const val MIN_RADIUS = "min_radius"
         const val MAX_RADIUS = "max_radius"
+        const val REMINDER = "reminder"
+        const val SNOOZE = "snooze"
+        const val ID = "id"
     }
 
     fun saveValue(key: String, value: String) {

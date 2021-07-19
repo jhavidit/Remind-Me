@@ -17,10 +17,7 @@ import tech.jhavidit.remindme.receiver.AlarmReceiver
 import tech.jhavidit.remindme.receiver.GeoFencingReceiver
 import tech.jhavidit.remindme.service.AlarmService
 import tech.jhavidit.remindme.service.LocationReminderService
-import tech.jhavidit.remindme.util.NOTES_LOCATION
-import tech.jhavidit.remindme.util.NOTES_TIME
-import tech.jhavidit.remindme.util.log
-import tech.jhavidit.remindme.util.toast
+import tech.jhavidit.remindme.util.*
 import tech.jhavidit.remindme.viewModel.NotesViewModel
 import kotlin.math.abs
 import kotlin.math.max
@@ -184,7 +181,7 @@ class ReminderScreenActivity : AppCompatActivity(), View.OnTouchListener {
                 applicationContext.stopService(intentService)
             }
 
-
+            deleteKey()
             finish()
         }
 
@@ -192,10 +189,10 @@ class ReminderScreenActivity : AppCompatActivity(), View.OnTouchListener {
 
     private fun snoozeReminder() {
 
-        notes?.let { notes->
+        notes?.let { notes ->
             reminder?.let { remind ->
                 alarmReceiver.scheduleSnoozeAlarm(this, notes, remind)
-                toast(this, "Alarm snoozed for five minutes")
+                toast(this, "Reminder snoozed for five minutes")
                 if (remind == "time") {
                     val intentService = Intent(applicationContext, AlarmService::class.java)
                     applicationContext.stopService(intentService)
@@ -204,6 +201,7 @@ class ReminderScreenActivity : AppCompatActivity(), View.OnTouchListener {
                     val intentService =
                         Intent(applicationContext, LocationReminderService::class.java)
                     applicationContext.stopService(intentService)
+                    deleteKey()
                     finish()
                 }
             }
@@ -242,17 +240,17 @@ class ReminderScreenActivity : AppCompatActivity(), View.OnTouchListener {
                 newX
             ) // Don't allow the FAB past the right hand side of the parent
             var newY = motionEvent.rawY + dY
-            newY = max(
-                layoutParams.topMargin.toFloat(),
-                newY
-            ) // Don't allow the FAB past the top of the parent
-            newY = min(
-                (parentHeight - viewHeight - layoutParams.bottomMargin).toFloat(),
-                newY
-            ) // Don't allow the FAB past the bottom of the parent
+//            newY = max(
+//                layoutParams.topMargin.toFloat(),
+//                newY
+//            ) // Don't allow the FAB past the top of the parent
+//            newY = min(
+//                (parentHeight - viewHeight - layoutParams.bottomMargin).toFloat(),
+//                newY
+         //   ) // Don't allow the FAB past the bottom of the parent
             view.animate()
                 .x(newX)
-                .y(newY)
+                .y(originalY)
                 .setDuration(0)
                 .start()
             true // Consumed
@@ -291,6 +289,12 @@ class ReminderScreenActivity : AppCompatActivity(), View.OnTouchListener {
         return if (myView.parent === myView.rootView) myView.top else myView.top + getRelativeTop(
             myView.parent as View
         )
+    }
+
+    private fun deleteKey() {
+        LocalKeyStorage(this).deleteValue(LocalKeyStorage.SNOOZE)
+        LocalKeyStorage(this).deleteValue(LocalKeyStorage.REMINDER)
+        LocalKeyStorage(this).deleteValue(LocalKeyStorage.ID)
     }
 
 }

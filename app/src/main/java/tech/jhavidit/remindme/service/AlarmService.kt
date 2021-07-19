@@ -52,6 +52,12 @@ class AlarmService : Service() {
         val channelName = "Remind Me"
         val bundle = intent?.getBundleExtra(NOTES_TIME)
         val id: Int = bundle?.getInt("id") ?: 0
+        LocalKeyStorage(applicationContext).saveValue(LocalKeyStorage.ID, id.toString())
+        LocalKeyStorage(applicationContext).saveValue(LocalKeyStorage.REMINDER, "time")
+        LocalKeyStorage(applicationContext).saveValue(
+            LocalKeyStorage.SNOOZE,
+            bundle?.getBoolean("snooze", false).toString()
+        )
         val dismissIntent = Intent(this, DismissReceiver::class.java)
         val snoozeIntent = Intent(this, SnoozeReceiver::class.java)
         snoozeIntent.putExtra("type", "snooze")
@@ -61,9 +67,9 @@ class AlarmService : Service() {
         dismissIntent.putExtra("id", id)
         dismissIntent.putExtra("reminder", "time")
         val snoozePendingIntent =
-            PendingIntent.getBroadcast(this, id+21, snoozeIntent, PendingIntent.FLAG_ONE_SHOT)
+            PendingIntent.getBroadcast(this, id + 21, snoozeIntent, PendingIntent.FLAG_ONE_SHOT)
         val dismissPendingIntent =
-            PendingIntent.getBroadcast(this, id+25, dismissIntent, PendingIntent.FLAG_ONE_SHOT)
+            PendingIntent.getBroadcast(this, id + 25, dismissIntent, PendingIntent.FLAG_ONE_SHOT)
         val notificationIntent = Intent(this, ReminderScreenActivity::class.java)
         notificationIntent.putExtra(NOTES_TIME, bundle)
         val pendingIntent = PendingIntent.getActivity(
