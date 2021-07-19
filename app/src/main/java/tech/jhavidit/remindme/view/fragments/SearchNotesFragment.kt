@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.FragmentSearchNotesBinding
 import tech.jhavidit.remindme.util.log
 import tech.jhavidit.remindme.view.adapters.SearchNoteAdapter
@@ -69,8 +70,18 @@ class SearchNotesFragment : Fragment() {
                     binding.clearBtn.visibility = VISIBLE
                     viewModel.searchNote("%$str%").observe(viewLifecycleOwner, Observer {
                         log("searching $str $it")
-                        adapter.setNotes(it)
+                        if (it.isEmpty()) {
+                            binding.lottieText.text = String.format("%s", "No notes found")
+                            binding.lottie.setAnimation(R.raw.no_notes_search)
+                            binding.recyclerView.visibility = GONE
+                            binding.animationLayout.visibility = VISIBLE
 
+
+                        } else {
+                            binding.animationLayout.visibility = GONE
+                            binding.recyclerView.visibility = VISIBLE
+                            adapter.setNotes(it)
+                        }
                     })
                 }
 

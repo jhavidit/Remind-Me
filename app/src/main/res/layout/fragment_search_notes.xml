@@ -105,12 +105,46 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/animation_layout"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/search_note_card">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottie"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lottie_autoPlay="true"
+                app:lottie_repeatMode="restart"
+                app:lottie_loop="true" />
+
+            <TextView
+                android:id="@+id/lottie_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/alata_regular"
+                android:textColor="@color/purple_200"
+                android:textSize="@dimen/dimen_text_28"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lottie" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="@dimen/dimen_0"
-            app:layout_constraintBottom_toTopOf="@id/bottomGuideline"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/dimen_8"
+            app:layout_constraintBottom_toTopOf="@id/bottomGuideline"
             app:layout_constraintEnd_toEndOf="@id/endGuideline"
             app:layout_constraintStart_toStartOf="@id/startGuideline"
             app:layout_constraintTop_toBottomOf="@id/search_note_card"
