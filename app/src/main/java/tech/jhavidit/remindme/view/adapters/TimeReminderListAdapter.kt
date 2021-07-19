@@ -43,7 +43,7 @@ class TimeReminderListAdapter(private val clickListen: TimeReminderAdapterInterf
             holder.itemView.description.text = currentNotes.description
             holder.itemView.time.text =
                 currentNotes.reminderTime.toString()
-            if (currentNotes.repeatValue == -1L && System.currentTimeMillis() < currentNotes.reminderWaitTime!!)
+            if (currentNotes.repeatValue == -1L && System.currentTimeMillis() > currentNotes.reminderWaitTime!!)
                 holder.itemView.reminder_repeat.text = String.format("%s", "Missed Reminder")
             else if (currentNotes.repeatValue == -1L)
                 holder.itemView.reminder_repeat.text = String.format("%s", "Not Repeating")

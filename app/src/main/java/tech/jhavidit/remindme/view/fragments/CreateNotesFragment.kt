@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -20,7 +21,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -28,6 +28,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DecodeFormat
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.request.target.Target.SIZE_ORIGINAL
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -126,11 +130,11 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
             binding.description.setText(notes.description)
         }
 
-        if (args.currentNotes.repeatValue == -1L && (System.currentTimeMillis() < args.currentNotes.reminderWaitTime!!)) {
+        if (args.currentNotes.repeatValue == -1L && (System.currentTimeMillis() > args.currentNotes.reminderWaitTime!!)) {
             Snackbar.make(
                 binding.coordinatorLayout,
                 "The reminder time is already passed. Do you want to delete this time reminder?",
-                Snackbar.LENGTH_LONG
+                Snackbar.LENGTH_SHORT
             ).setAction("Delete", View.OnClickListener {
                 val notesModel = NotesModel(
                     id = notesId,

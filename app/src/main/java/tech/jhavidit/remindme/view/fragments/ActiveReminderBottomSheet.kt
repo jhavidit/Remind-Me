@@ -44,7 +44,9 @@ class ActiveReminderBottomSheet : BottomSheetDialogFragment() {
             binding.timeReminderSwitch.isChecked = args.currentNotes.timeReminder ?: false
             binding.reminderTime.text =
                 args.currentNotes.reminderTime.toString()
-            if (args.currentNotes.repeatValue == -1L)
+            if (args.currentNotes.repeatValue == -1L && System.currentTimeMillis() > args.currentNotes.reminderWaitTime!!)
+                binding.reminderRepeat.text = String.format("%s","Missed Reminder")
+            if (args.currentNotes.repeatValue == -1L )
                 binding.reminderRepeat.text = "Not Repeating"
             else
                 binding.reminderRepeat.text = "Repeating"
