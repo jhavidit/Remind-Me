@@ -13,6 +13,7 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.FragmentNotesBinding
@@ -29,6 +30,7 @@ class NotesFragment : Fragment() {
     private lateinit var adapter: NotesListAdapter
     private lateinit var viewModel: NotesViewModel
     private var notesCount = 0
+    private var hasMissedReminder = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,30 +60,37 @@ class NotesFragment : Fragment() {
                     viewModel.deleteNotes(note)
                     toast(requireContext(), "empty note discarded")
                 } else if (note.repeatValue != null && note.repeatValue == -1L && note.reminderWaitTime!! < System.currentTimeMillis()) {
-                    val notesModel = NotesModel(
-                        id = note.id,
-                        title = note.title,
-                        description = note.description,
-                        locationReminder = note.locationReminder,
-                        timeReminder = null,
-                        reminderWaitTime = null,
-                        reminderTime = null,
-                        reminderDate = null,
-                        image = note.image,
-                        lastUpdated = note.lastUpdated,
-                        isPinned = note.isPinned,
-                        latitude = note.latitude,
-                        longitude = note.longitude,
-                        radius = note.radius,
-                        repeatValue = null,
-                        locationName = note.locationName,
-                        backgroundColor = note.backgroundColor
-                    )
-                    viewModel.updateNotes(notesModel)
+//                    val notesModel = NotesModel(
+//                        id = note.id,
+//                        title = note.title,
+//                        description = note.description,
+//                        locationReminder = note.locationReminder,
+//                        timeReminder = null,
+//                        reminderWaitTime = null,
+//                        reminderTime = null,
+//                        reminderDate = null,
+//                        image = note.image,
+//                        lastUpdated = note.lastUpdated,
+//                        isPinned = note.isPinned,
+//                        latitude = note.latitude,
+//                        longitude = note.longitude,
+//                        radius = note.radius,
+//                        repeatValue = null,
+//                        locationName = note.locationName,
+//                        backgroundColor = note.backgroundColor
+//                    )
+//                    viewModel.updateNotes(notesModel)
+
+                    hasMissedReminder = true
                 }
 
             }
-
+            if (hasMissedReminder)
+                Snackbar.make(
+                    binding.coordinatorLayout,
+                    "You have missed time reminders in reminder section",
+                    Snackbar.LENGTH_SHORT
+                ).show()
             adapter.setNotes(it)
         })
         viewModel.notesCount.observe(viewLifecycleOwner, Observer {

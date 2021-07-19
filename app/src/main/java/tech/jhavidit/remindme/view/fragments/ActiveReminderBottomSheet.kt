@@ -27,11 +27,6 @@ class ActiveReminderBottomSheet : BottomSheetDialogFragment() {
     private lateinit var alarmReceiver: AlarmReceiver
     private val args: ActiveReminderBottomSheetArgs by navArgs()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.NotClearConfirmationTheme)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
