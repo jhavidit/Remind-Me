@@ -68,6 +68,7 @@ class NotesFragment : Fragment() {
                         reminderTime = null,
                         reminderDate = null,
                         image = note.image,
+                        lastUpdated = note.lastUpdated,
                         isPinned = note.isPinned,
                         latitude = note.latitude,
                         longitude = note.longitude,

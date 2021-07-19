@@ -121,6 +121,7 @@ class ReminderScreenActivity : AppCompatActivity(), View.OnTouchListener {
                         longitude = notes.longitude,
                         radius = notes.radius,
                         repeatValue = null,
+                        lastUpdated = notes.lastUpdated,
                         locationName = notes.locationName,
                         backgroundColor = notes.backgroundColor
                     )
@@ -142,6 +143,7 @@ class ReminderScreenActivity : AppCompatActivity(), View.OnTouchListener {
                     reminderDate = notes.reminderDate,
                     isPinned = notes.isPinned,
                     latitude = null,
+                    lastUpdated = notes.lastUpdated,
                     image = notes.image,
                     longitude = null,
                     radius = null,
@@ -170,6 +172,7 @@ class ReminderScreenActivity : AppCompatActivity(), View.OnTouchListener {
                     isPinned = notes.isPinned,
                     latitude = null,
                     longitude = null,
+                    lastUpdated = notes.lastUpdated,
                     radius = null,
                     repeatValue = notes.repeatValue,
                     locationName = null,
