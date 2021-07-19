@@ -50,7 +50,10 @@ class SearchNotesFragment : Fragment() {
         binding.recyclerView.adapter = adapter
 
         binding.searchNote.addTextChangedListener(textWatcher)
-
+        binding.lottieText.text = String.format("%s", "Search Notes")
+        binding.lottie.setAnimation(R.raw.search_notes)
+        binding.recyclerView.visibility = GONE
+        binding.animationLayout.visibility = VISIBLE
         return binding.root
     }
 
@@ -66,6 +69,13 @@ class SearchNotesFragment : Fragment() {
                 if (str.isEmpty()) {
                     binding.clearBtn.visibility = GONE
                     adapter.setNotes(listOf())
+                    binding.lottieText.text = String.format("%s", "Search Notes")
+                    binding.lottie.setAnimation(R.raw.search_notes)
+                    binding.lottie.playAnimation()
+                    binding.recyclerView.visibility = GONE
+                    binding.animationLayout.visibility = VISIBLE
+
+
                 } else {
                     binding.clearBtn.visibility = VISIBLE
                     viewModel.searchNote("%$str%").observe(viewLifecycleOwner, Observer {
@@ -73,6 +83,7 @@ class SearchNotesFragment : Fragment() {
                         if (it.isEmpty()) {
                             binding.lottieText.text = String.format("%s", "No notes found")
                             binding.lottie.setAnimation(R.raw.no_notes_search)
+                            binding.lottie.playAnimation()
                             binding.recyclerView.visibility = GONE
                             binding.animationLayout.visibility = VISIBLE
 
