@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.FragmentSearchNotesBinding
 import tech.jhavidit.remindme.util.log
 import tech.jhavidit.remindme.view.adapters.SearchNoteAdapter
@@ -49,7 +50,10 @@ class SearchNotesFragment : Fragment() {
         binding.recyclerView.adapter = adapter
 
         binding.searchNote.addTextChangedListener(textWatcher)
-
+        binding.lottieText.text = String.format("%s", "Search Notes")
+        binding.lottie.setAnimation(R.raw.search_notes)
+        binding.recyclerView.visibility = GONE
+        binding.animationLayout.visibility = VISIBLE
         return binding.root
     }
 
@@ -65,12 +69,30 @@ class SearchNotesFragment : Fragment() {
                 if (str.isEmpty()) {
                     binding.clearBtn.visibility = GONE
                     adapter.setNotes(listOf())
+                    binding.lottieText.text = String.format("%s", "Search Notes")
+                    binding.lottie.setAnimation(R.raw.search_notes)
+                    binding.lottie.playAnimation()
+                    binding.recyclerView.visibility = GONE
+                    binding.animationLayout.visibility = VISIBLE
+
+
                 } else {
                     binding.clearBtn.visibility = VISIBLE
                     viewModel.searchNote("%$str%").observe(viewLifecycleOwner, Observer {
                         log("searching $str $it")
-                        adapter.setNotes(it)
+                        if (it.isEmpty()) {
+                            binding.lottieText.text = String.format("%s", "No notes found")
+                            binding.lottie.setAnimation(R.raw.no_notes_search)
+                            binding.lottie.playAnimation()
+                            binding.recyclerView.visibility = GONE
+                            binding.animationLayout.visibility = VISIBLE
 
+
+                        } else {
+                            binding.animationLayout.visibility = GONE
+                            binding.recyclerView.visibility = VISIBLE
+                            adapter.setNotes(it)
+                        }
                     })
                 }
 

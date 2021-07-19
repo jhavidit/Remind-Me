@@ -86,6 +86,7 @@ class ActiveReminderBottomSheet : BottomSheetDialogFragment() {
                         isPinned = args.currentNotes.isPinned,
                         image = args.currentNotes.image,
                         latitude = null,
+                        lastUpdated = args.currentNotes.lastUpdated,
                         longitude = null,
                         radius = null,
                         repeatValue = args.currentNotes.repeatValue,

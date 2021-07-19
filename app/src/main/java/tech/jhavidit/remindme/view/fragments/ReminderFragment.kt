@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
 import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.FragmentRemindersBinding
@@ -15,6 +16,7 @@ import tech.jhavidit.remindme.receiver.AlarmReceiver
 import tech.jhavidit.remindme.receiver.GeoFencingReceiver
 import tech.jhavidit.remindme.util.foregroundAndBackgroundLocationPermissionApproved
 import tech.jhavidit.remindme.util.showLocationPermissionAlertDialog
+import tech.jhavidit.remindme.util.toast
 import tech.jhavidit.remindme.view.adapters.LocationReminderListAdapter
 import tech.jhavidit.remindme.view.adapters.TimeReminderListAdapter
 import tech.jhavidit.remindme.viewModel.NotesViewModel
@@ -30,6 +32,7 @@ class ReminderFragment : Fragment(), TimeReminderListAdapter.TimeReminderAdapter
     private lateinit var locationReminderList: List<NotesModel>
     private lateinit var alarmReceiver: AlarmReceiver
     private lateinit var geoFencingReceiver: GeoFencingReceiver
+    private var hasMissedReminder = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,6 +48,20 @@ class ReminderFragment : Fragment(), TimeReminderListAdapter.TimeReminderAdapter
         geoFencingReceiver = GeoFencingReceiver()
         viewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
 
+        viewModel.readAllData.observe(viewLifecycleOwner, Observer {
+            it.forEach { note ->
+                if (note.repeatValue != null && note.repeatValue == -1L && System.currentTimeMillis() < note.reminderWaitTime!!) {
+                    hasMissedReminder = true
+                }
+            }
+        })
+
+        if (hasMissedReminder)
+            Snackbar.make(
+                binding.coordinatorLayout,
+                "You have missed/snoozed time reminders. Kindly check",
+                Snackbar.LENGTH_SHORT
+            ).show()
 
         return binding.root
     }

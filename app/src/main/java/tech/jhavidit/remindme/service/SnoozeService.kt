@@ -72,7 +72,6 @@ class SnoozeService : LifecycleService() {
         val type = intent?.getStringExtra("type")
         notes = id?.let { notesRepository.selectedNote(it).asLiveData() }
         notes?.observe(this, {
-            val notes = it[0]
             if (type != null) {
                 alarmReceiver.scheduleSnoozeAlarm(applicationContext, it[0], type)
             }

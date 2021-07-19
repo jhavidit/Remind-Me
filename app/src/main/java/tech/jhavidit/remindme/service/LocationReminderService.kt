@@ -17,13 +17,16 @@ import androidx.core.app.NotificationCompat
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.receiver.DismissReceiver
 import tech.jhavidit.remindme.receiver.SnoozeReceiver
+import tech.jhavidit.remindme.util.LocalKeyStorage
 import tech.jhavidit.remindme.util.NOTES_LOCATION
+import tech.jhavidit.remindme.util.stringToUri
 import tech.jhavidit.remindme.view.activity.ReminderScreenActivity
 
 class LocationReminderService : Service() {
 
     private lateinit var vibrator: Vibrator
     private lateinit var ringtone: Ringtone
+    private lateinit var uri: Uri
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }
@@ -31,8 +34,18 @@ class LocationReminderService : Service() {
     override fun onCreate() {
         super.onCreate()
 
-        val notification: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
-        ringtone = RingtoneManager.getRingtone(applicationContext, notification)
+        LocalKeyStorage(applicationContext).getValue(LocalKeyStorage.RINGTONE)?.let {
+            uri = try {
+                stringToUri(it)!!
+            } catch (e: Exception) {
+                RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+            }
+
+        } ?: run {
+            uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+        }
+
+        ringtone = RingtoneManager.getRingtone(applicationContext, uri)
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     }
 
@@ -43,20 +56,26 @@ class LocationReminderService : Service() {
         val bundle = intent?.getBundleExtra(NOTES_LOCATION)
         val id = bundle?.getInt("id") ?: 0
         val isSnooze = bundle?.getBoolean("snooze")
+        LocalKeyStorage(applicationContext).saveValue(LocalKeyStorage.ID, id.toString())
+        LocalKeyStorage(applicationContext).saveValue(LocalKeyStorage.REMINDER, "time")
+        LocalKeyStorage(applicationContext).saveValue(
+            LocalKeyStorage.SNOOZE,
+            isSnooze.toString()
+        )
         val dismissIntent = Intent(this, DismissReceiver::class.java)
         val snoozeIntent = Intent(this, SnoozeReceiver::class.java)
         snoozeIntent.putExtra("type", "snooze")
         snoozeIntent.putExtra("isSnooze", isSnooze)
         snoozeIntent.putExtra("reminder", "location")
         snoozeIntent.putExtra("id", id)
-        dismissIntent.putExtra("isSnooze",isSnooze)
+        dismissIntent.putExtra("isSnooze", isSnooze)
         dismissIntent.putExtra("type", "dismiss")
         dismissIntent.putExtra("reminder", "location")
         dismissIntent.putExtra("id", id)
         val snoozePendingIntent =
-            PendingIntent.getBroadcast(this, id+23, snoozeIntent, PendingIntent.FLAG_ONE_SHOT)
+            PendingIntent.getBroadcast(this, id + 23, snoozeIntent, PendingIntent.FLAG_ONE_SHOT)
         val dismissPendingIntent =
-            PendingIntent.getBroadcast(this, id+22, dismissIntent, PendingIntent.FLAG_ONE_SHOT)
+            PendingIntent.getBroadcast(this, id + 22, dismissIntent, PendingIntent.FLAG_ONE_SHOT)
         val notificationIntent = Intent(this, ReminderScreenActivity::class.java)
         notificationIntent.putExtra(NOTES_LOCATION, bundle)
         val pendingIntent = PendingIntent.getActivity(

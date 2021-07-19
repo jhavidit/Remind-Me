@@ -72,16 +72,22 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
         geoFencingReceiver = GeoFencingReceiver()
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
-        minRadius = LocalKeyStorage(requireContext()).getValue(LocalKeyStorage.MIN_RADIUS)?.toDouble()?:100.0
-        maxRadius = LocalKeyStorage(requireContext()).getValue(LocalKeyStorage.MAX_RADIUS)?.toDouble()?:1000.0
-        if(minRadius<1000)
-        binding.minRadius.text = "${minRadius.roundToInt()}m"
+        minRadius =
+            LocalKeyStorage(requireContext()).getValue(LocalKeyStorage.MIN_RADIUS)?.toDouble()
+                ?: 100.0
+        maxRadius =
+            LocalKeyStorage(requireContext()).getValue(LocalKeyStorage.MAX_RADIUS)?.toDouble()
+                ?: 1000.0
+        if (minRadius < 1000)
+            binding.minRadius.text = String.format("%s", "${minRadius.roundToInt()}m")
         else
-            binding.minRadius.text = "${String.format("%.1f",minRadius/1000)} km"
-        if(maxRadius<1000)
-        binding.maxRadius.text = "${maxRadius.roundToInt()}m"
-            else
-                binding.maxRadius.text = "${String.format("%.1f",maxRadius/1000)} km"
+            binding.minRadius.text =
+                String.format("%s", "${String.format("%.1f", minRadius / 1000)} km")
+        if (maxRadius < 1000)
+            binding.maxRadius.text = String.format("%s", "${maxRadius.roundToInt()}m")
+        else
+            binding.maxRadius.text =
+                String.format("%s", "${String.format("%.1f", maxRadius / 1000)} km")
         geoFencingClient = LocationServices.getGeofencingClient(requireContext())
         geoFencingHelper = GeoFencingHelper(requireContext())
         return binding.root
@@ -124,7 +130,7 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
             val intent = Intent(requireContext(), LocationSearchActivity::class.java)
             intent.putExtra("latitude", lat)
             intent.putExtra("longitude", lon)
-            intent.putExtra("id", notesValue.id)
+            intent.putExtra("notesModel", notesValue)
             startActivity(intent)
         } else
             requestForegroundAndBackgroundLocationPermissions()
@@ -188,7 +194,9 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
 
         notesValue = args.currentNotes
 
-        selectedLocation = arguments?.getParcelable("location")
+
+     //   if (notesValue.radius != null && notesValue.radius!! >= minRadius && notesValue.radius!! <= maxRadius)
+            selectedLocation = arguments?.getParcelable("location")
         if (selectedLocation != null) {
             binding.selectedLocation.text = selectedLocation?.name
             binding.selectedLocation.alpha = 1F
@@ -253,8 +261,9 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
                         image = notesValue.image,
                         timeReminder = notesValue.timeReminder,
                         latitude = selectedLocation?.latitude,
+                        lastUpdated = args.currentNotes.lastUpdated,
                         longitude = selectedLocation?.longitude,
-                        radius =  binding.radius.value.toDouble(),
+                        radius = binding.radius.value.toDouble(),
                         repeatValue = notesValue.repeatValue,
                         reminderTime = notesValue.reminderTime,
                         reminderWaitTime = notesValue.reminderWaitTime,
@@ -277,10 +286,10 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
 
         binding.radius.labelBehavior = LabelFormatter.LABEL_WITHIN_BOUNDS
         binding.radius.setLabelFormatter { value ->
-            if(value<1000)
-            return@setLabelFormatter "${value.roundToInt()} m"
+            if (value < 1000)
+                return@setLabelFormatter "${value.roundToInt()} m"
             else
-                return@setLabelFormatter "${String.format("%.1f",value/1000)} km"
+                return@setLabelFormatter "${String.format("%.1f", value / 1000)} km"
 
         }
 

@@ -122,6 +122,8 @@
 
         <action
             android:id="@+id/homeScreen"
+            app:popUpTo="@id/notesFragment"
+            app:popUpToInclusive="true"
             app:destination="@id/notesFragment" />
 
         <argument

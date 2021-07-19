@@ -101,9 +101,11 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
 
         val lastUpdated = args.currentNotes.lastUpdated?.toDateFormat()?.let { getPeriod(it) }
 
-        lastUpdated?.let { binding.lastUpdated.text = String.format("%s","Last edit : $lastUpdated") }
+        lastUpdated?.let {
+            binding.lastUpdated.text = String.format("%s", "Last edit : $lastUpdated")
+        }
             ?: run {
-                binding.lastUpdated.text = String.format("%s","Last edit : recently")
+                binding.lastUpdated.text = String.format("%s", "Last edit : recently")
             }
 
         if (notes.isPinned) {
@@ -122,6 +124,41 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
         if (updated) {
             binding.title.setText(notes.title)
             binding.description.setText(notes.description)
+        }
+
+        if (args.currentNotes.repeatValue == -1L && (System.currentTimeMillis() < args.currentNotes.reminderWaitTime!!)) {
+            Snackbar.make(
+                binding.coordinatorLayout,
+                "The reminder time is already passed. Do you want to delete this time reminder?",
+                Snackbar.LENGTH_LONG
+            ).setAction("Delete", View.OnClickListener {
+                val notesModel = NotesModel(
+                    id = notesId,
+                    title = binding.title.text.toString(),
+                    description = binding.description.text.toString(),
+                    locationReminder = args.currentNotes.locationReminder,
+                    timeReminder = null,
+                    reminderTime = null,
+                    reminderWaitTime = null,
+                    reminderDate = null,
+                    latitude = args.currentNotes.latitude,
+                    isPinned = isPinned,
+                    lastUpdated = args.currentNotes.lastUpdated,
+                    longitude = args.currentNotes.longitude,
+                    radius = args.currentNotes.radius,
+                    repeatValue = null,
+                    locationName = args.currentNotes.locationName,
+                    backgroundColor = args.currentNotes.backgroundColor,
+                    image = args.currentNotes.image
+                )
+                notesViewModel.updateNotes(notesModel)
+                Snackbar.make(
+                    binding.coordinatorLayout,
+                    "Missed Time Reminder Removed",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+            ).show()
         }
 
         binding.backBtn.setOnClickListener {
@@ -146,6 +183,7 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                         reminderDate = args.currentNotes.reminderDate,
                         latitude = args.currentNotes.latitude,
                         isPinned = isPinned,
+                        lastUpdated = args.currentNotes.lastUpdated,
                         longitude = args.currentNotes.longitude,
                         radius = args.currentNotes.radius,
                         repeatValue = args.currentNotes.repeatValue,
@@ -186,6 +224,7 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                 isPinned = isPinned,
                 longitude = args.currentNotes.longitude,
                 radius = args.currentNotes.radius,
+                lastUpdated = args.currentNotes.lastUpdated,
                 repeatValue = args.currentNotes.repeatValue,
                 locationName = args.currentNotes.locationName,
                 image = args.currentNotes.image,
@@ -256,6 +295,7 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                 isPinned = args.currentNotes.isPinned,
                 latitude = args.currentNotes.latitude,
                 longitude = args.currentNotes.longitude,
+                lastUpdated = args.currentNotes.lastUpdated,
                 radius = args.currentNotes.radius,
                 repeatValue = args.currentNotes.repeatValue,
                 locationName = args.currentNotes.locationName,
@@ -530,10 +570,32 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
         notesViewModel.updateNotes(notesModel)
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun insertDataToDatabase() {
         val title = binding.title.text.toString()
         val description = binding.description.text.toString()
-        val notesModel = NotesModel(0, title, description)
+        val calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+        val formattedDate: String = dateFormat.format(calendar.time)
+        val notesModel = NotesModel(
+            id = 0,
+            title = title,
+            description = description,
+            locationReminder = args.currentNotes.locationReminder,
+            timeReminder = args.currentNotes.timeReminder,
+            reminderTime = args.currentNotes.reminderTime,
+            reminderWaitTime = args.currentNotes.reminderWaitTime,
+            reminderDate = args.currentNotes.reminderDate,
+            latitude = args.currentNotes.latitude,
+            longitude = args.currentNotes.longitude,
+            isPinned = args.currentNotes.isPinned,
+            radius = args.currentNotes.radius,
+            repeatValue = args.currentNotes.repeatValue,
+            locationName = args.currentNotes.locationName,
+            backgroundColor = args.currentNotes.backgroundColor,
+            lastUpdated = formattedDate,
+            image = args.currentNotes.image
+        )
         notesViewModel.addNotes(notesModel)
         updated = true
         notesViewModel.createdId.observe(viewLifecycleOwner, {

@@ -19,7 +19,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RemindMe">
         <activity android:name=".view.activity.LocationSearchActivity" />
-        <activity android:name=".view.activity.ReminderScreenActivity" />
+        <activity android:name=".view.activity.ReminderScreenActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".view.activity.MainActivity"
             android:windowSoftInputMode="adjustPan">
