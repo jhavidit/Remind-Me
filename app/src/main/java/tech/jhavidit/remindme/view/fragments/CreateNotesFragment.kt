@@ -61,6 +61,8 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
     private val args: CreateNotesFragmentArgs by navArgs()
     private var updated = false
     private var notesId = 0
+    private var latestColor : String = "#FFFFFF"
+    private var latestImage : String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,6 +78,8 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
         geoFencingReceiver = GeoFencingReceiver()
         notes = args.currentNotes
         notesId = args.currentNotes.id
+        latestColor = notes.backgroundColor
+        latestImage = notes.image
         args.currentNotes.image?.let {
 
             if (checkStoragePermission(requireContext())) {
@@ -192,7 +196,7 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                         radius = args.currentNotes.radius,
                         repeatValue = args.currentNotes.repeatValue,
                         locationName = args.currentNotes.locationName,
-                        backgroundColor = args.currentNotes.backgroundColor,
+                        backgroundColor =latestColor,
                         image = null
                     )
 
@@ -231,8 +235,8 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                 lastUpdated = args.currentNotes.lastUpdated,
                 repeatValue = args.currentNotes.repeatValue,
                 locationName = args.currentNotes.locationName,
-                image = args.currentNotes.image,
-                backgroundColor = args.currentNotes.backgroundColor
+                image = latestImage,
+                backgroundColor =latestColor
             )
             notesViewModel.updateNotes(notes)
         }
@@ -303,8 +307,8 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                 radius = args.currentNotes.radius,
                 repeatValue = args.currentNotes.repeatValue,
                 locationName = args.currentNotes.locationName,
-                image = args.currentNotes.image,
-                backgroundColor = args.currentNotes.backgroundColor
+                image = latestImage,
+                backgroundColor = latestColor
             )
             navController.navigate(CreateNotesFragmentDirections.addReminder(notes))
         }
@@ -466,10 +470,11 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                 radius = args.currentNotes.radius,
                 repeatValue = args.currentNotes.repeatValue,
                 locationName = args.currentNotes.locationName,
-                backgroundColor = args.currentNotes.backgroundColor,
+                backgroundColor =latestColor,
                 lastUpdated = args.currentNotes.lastUpdated,
                 image = path
             )
+            latestImage = path
             notesViewModel.updateNotes(notes)
 
 
@@ -495,10 +500,11 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                 radius = args.currentNotes.radius,
                 repeatValue = args.currentNotes.repeatValue,
                 locationName = args.currentNotes.locationName,
-                backgroundColor = args.currentNotes.backgroundColor,
+                backgroundColor = latestColor,
                 lastUpdated = args.currentNotes.lastUpdated,
                 image = path
             )
+            latestImage = path
             notesViewModel.updateNotes(notes)
 
 
@@ -567,9 +573,9 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
             radius = args.currentNotes.radius,
             repeatValue = args.currentNotes.repeatValue,
             locationName = args.currentNotes.locationName,
-            backgroundColor = args.currentNotes.backgroundColor,
+            backgroundColor = latestColor,
             lastUpdated = formattedDate,
-            image = args.currentNotes.image
+            image = latestImage
         )
         notesViewModel.updateNotes(notesModel)
     }
@@ -596,9 +602,9 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
             radius = args.currentNotes.radius,
             repeatValue = args.currentNotes.repeatValue,
             locationName = args.currentNotes.locationName,
-            backgroundColor = args.currentNotes.backgroundColor,
+            backgroundColor = latestColor,
             lastUpdated = formattedDate,
-            image = args.currentNotes.image
+            image = latestImage
         )
         notesViewModel.addNotes(notesModel)
         updated = true
@@ -629,10 +635,11 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
             radius = args.currentNotes.radius,
             repeatValue = args.currentNotes.repeatValue,
             locationName = args.currentNotes.locationName,
-            image = args.currentNotes.image,
+            image = latestImage,
             backgroundColor = color,
             lastUpdated = args.currentNotes.lastUpdated
         )
+        latestColor = color
         notesViewModel.updateNotes(notes)
     }
 
