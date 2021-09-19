@@ -9,10 +9,10 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class LocationModel(
     @PrimaryKey(autoGenerate = true)
-    val id : Int = 0,
-    val latitude : Double = 0.0,
-    val longitude : Double = 0.0,
-    val name : String = "",
-    val placeId : String = ""
+    var id : Int = 0,
+    var latitude : Double = 0.0,
+    var longitude : Double = 0.0,
+    var name : String = "",
+    var placeId : String = ""
 
 ):Parcelable

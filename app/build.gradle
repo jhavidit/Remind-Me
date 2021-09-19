@@ -96,8 +96,6 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt "androidx.room:room-compiler:$version_room"
 
-    // WorkManager
-    implementation "android.arch.work:work-runtime-ktx:$version_work"
 
 
     //ViewPager2

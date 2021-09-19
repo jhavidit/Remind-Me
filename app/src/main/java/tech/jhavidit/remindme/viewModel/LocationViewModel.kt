@@ -28,22 +28,4 @@ class LocationViewModel(application: Application) : AndroidViewModel(application
             repository.addLocation(location)
         }
     }
-
-    fun updateLocation(location: LocationModel) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.updateLocation(location)
-        }
-    }
-
-    fun deleteLocation(location: LocationModel) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.deleteLocation(location)
-        }
-    }
-
-    fun deleteAllLocation() {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.deleteAllLocation()
-        }
-    }
 }
