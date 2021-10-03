@@ -19,9 +19,9 @@ import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.model.ColorModel
 import tech.jhavidit.remindme.util.toast
 
-class SelectBackgroundColorAdapter(private val clickListen: AdapterInterface) :
+class SelectBackgroundColorAdapter(private val clickListen: AdapterInterface,var isSelected : Int) :
     RecyclerView.Adapter<SelectBackgroundColorAdapter.MyViewHolder>() {
-    var isSelected = -1
+
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
