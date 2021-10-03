@@ -50,13 +50,12 @@ class ReminderScreenActivity : AppCompatActivity(), View.OnTouchListener {
         val notesTimeBundle = intent?.getBundleExtra(NOTES_TIME)
 
 
-
         binding.reminderFab.setOnTouchListener(this)
         notesTimeBundle?.let {
             id = notesTimeBundle.getInt("id")
             viewModel.selectedNote(id).observe(this, Observer {
                 binding.reminderLocationTime.text =
-                    it[0].reminderTime
+                    showCurrentTime()
                 binding.title.text = it[0].title
                 binding.description.text = it[0].description
             })
@@ -247,7 +246,7 @@ class ReminderScreenActivity : AppCompatActivity(), View.OnTouchListener {
 //            newY = min(
 //                (parentHeight - viewHeight - layoutParams.bottomMargin).toFloat(),
 //                newY
-         //   ) // Don't allow the FAB past the bottom of the parent
+            //   ) // Don't allow the FAB past the bottom of the parent
             view.animate()
                 .x(newX)
                 .y(originalY)
