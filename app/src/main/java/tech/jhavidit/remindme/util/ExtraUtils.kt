@@ -16,6 +16,8 @@ import android.widget.Toast
 import com.google.android.gms.location.GeofenceStatusCodes
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.*
+import java.util.*
+import kotlin.math.min
 
 
 @SuppressLint("LogNotTimber")
@@ -39,6 +41,19 @@ fun errorMessage(context: Context, errorCode: Int): String {
 
 fun stringToUri(image: String): Uri? {
     return Uri.parse(image)
+}
+
+fun showCurrentTime(): String {
+    val calendar = Calendar.getInstance()
+    val hour = calendar.get(Calendar.HOUR)
+    val minutes = calendar.get(Calendar.MINUTE)
+    if (hour > 12) {
+        return "$hour:$minutes PM"
+    } else if (hour < 10) {
+        return "0$hour:$minutes AM"
+    } else {
+        return "$hour:$minutes AM"
+    }
 }
 
 fun uriToBitmap(context: Context, selectedFileUri: Uri): Bitmap? {

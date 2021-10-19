@@ -13,11 +13,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
-import android.widget.ImageView
-import android.widget.RelativeLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
@@ -98,15 +96,15 @@ class LocationSearchActivity : AppCompatActivity(), OnMapReadyCallback,
         options.mapType(GoogleMap.MAP_TYPE_HYBRID)
             .compassEnabled(false)
 
-        val locationButton =
-            (findViewById<View>(Integer.parseInt("1")).parent as View).findViewById<View>(
+        val locationButton: View? =
+            (findViewById<View>(Integer.parseInt("1"))?.parent as View).findViewById<View>(
                 Integer.parseInt("2")
             )
-        val rlp = locationButton.layoutParams as (RelativeLayout.LayoutParams)
+        val rlp = locationButton?.layoutParams as (RelativeLayout.LayoutParams?)
         // position on right bottom
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0)
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE)
-        rlp.setMargins(0, 0, 30, 200)
+        rlp?.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0)
+        rlp?.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE)
+        rlp?.setMargins(0, 0, 30, 200)
 
 
         binding.selectLocation.setOnClickListener {
@@ -200,39 +198,56 @@ class LocationSearchActivity : AppCompatActivity(), OnMapReadyCallback,
         bottomSheetDialogs.setContentView(R.layout.bottom_sheet_save_location)
         val closeButton = bottomSheetDialogs.findViewById<ImageView>(R.id.close_btn_save_location)
         val locationName =
-            bottomSheetDialogs.findViewById<TextView>(R.id.location_name_save_location)
+            bottomSheetDialogs.findViewById<EditText>(R.id.location_name_save_location)
         val saveButton = bottomSheetDialogs.findViewById<MaterialCardView>(R.id.save_location_card)
-        locationName?.text = locationPlace
+        locationName?.setText(locationPlace)
 
         closeButton?.setOnClickListener {
             bottomSheetDialogs.dismiss()
         }
 
-        saveButton?.setOnClickListener {
-
-            val latLng = map?.cameraPosition?.target
-            latLng?.let {
-                val locationModel = LocationModel(
-                    id = 0,
-                    latitude = it.latitude,
-                    longitude = it.longitude,
-                    placeId = locationId,
-                    name = locationName?.text.toString()
-                )
-                viewModel.addLocation(locationModel)
-                val notesModel = intent.getParcelableExtra<NotesModel>("notesModel")
-                val intent = Intent(this, MainActivity::class.java)
-
-                intent.putExtra("notesModel", notesModel)
-                intent.putExtra("location", locationModel)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP and Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                startActivity(intent)
-
+        locationName?.setOnKeyListener(object : View.OnKeyListener {
+            override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
+                if (event?.action == KeyEvent.ACTION_DOWN) {
+                    when (keyCode) {
+                        KeyEvent.KEYCODE_ENTER -> {
+                            saveLocation(locationName)
+                            return true
+                        }
+                    }
+                }
+                return false
             }
 
+        })
+
+        saveButton?.setOnClickListener {
+            saveLocation(locationName)
         }
 
         bottomSheetDialogs.show()
+    }
+
+    fun saveLocation(locationName: EditText?) {
+        val latLng = map?.cameraPosition?.target
+        latLng?.let {
+            val locationModel = LocationModel(
+                id = 0,
+                latitude = it.latitude,
+                longitude = it.longitude,
+                placeId = locationId,
+                name = locationName?.text.toString()
+            )
+            viewModel.addLocation(locationModel)
+            val notesModel = intent.getParcelableExtra<NotesModel>("notesModel")
+            val intent = Intent(this, MainActivity::class.java)
+
+            intent.putExtra("notesModel", notesModel)
+            intent.putExtra("location", locationModel)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP and Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            startActivity(intent)
+
+        }
     }
 
 }

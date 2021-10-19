@@ -1,14 +1,18 @@
 package tech.jhavidit.remindme.view.fragments
 
+import android.R.attr
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.os.Environment.getExternalStoragePublicDirectory
 import android.provider.MediaStore
 import android.provider.Settings
 import android.text.Editable
@@ -20,6 +24,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.app.ActivityCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -36,17 +41,27 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.FragmentCreateNotesBinding
+import tech.jhavidit.remindme.model.ColorModel
 import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.receiver.AlarmReceiver
 import tech.jhavidit.remindme.receiver.GeoFencingReceiver
 import tech.jhavidit.remindme.util.*
 import tech.jhavidit.remindme.view.adapters.SelectBackgroundColorAdapter
 import tech.jhavidit.remindme.viewModel.NotesViewModel
+import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.max
+import kotlin.math.min
+import android.R.attr.bitmap
+import com.airbnb.lottie.utils.Utils
+import okio.ByteString.decodeBase64
 
 
 class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInterface {
@@ -57,26 +72,23 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
     private lateinit var notesViewModel: NotesViewModel
     private lateinit var notes: NotesModel
     private lateinit var navController: NavController
+    private var cameraImagePath: String? = null
     private var isPinned = false
     private val args: CreateNotesFragmentArgs by navArgs()
     private var updated = false
     private var notesId = 0
-    private var latestColor : String = "#FFFFFF"
-    private var latestImage : String? = null
+    private var latestColor: String = "#FFFFFF"
+    private var latestImage: String? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        binding = FragmentCreateNotesBinding.inflate(inflater, container, false)
-        navController = Navigation.findNavController(requireActivity(), R.id.NavHostFragment)
-        notesViewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         binding.note.setBackgroundColor(Color.parseColor(args.currentNotes.backgroundColor))
         binding.notesImageCard.setBackgroundColor(Color.parseColor(args.currentNotes.backgroundColor))
         alarmReceiver = AlarmReceiver()
         geoFencingReceiver = GeoFencingReceiver()
         notes = args.currentNotes
+
         notesId = args.currentNotes.id
         latestColor = notes.backgroundColor
         latestImage = notes.image
@@ -196,7 +208,7 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                         radius = args.currentNotes.radius,
                         repeatValue = args.currentNotes.repeatValue,
                         locationName = args.currentNotes.locationName,
-                        backgroundColor =latestColor,
+                        backgroundColor = latestColor,
                         image = null
                     )
 
@@ -236,7 +248,7 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                 repeatValue = args.currentNotes.repeatValue,
                 locationName = args.currentNotes.locationName,
                 image = latestImage,
-                backgroundColor =latestColor
+                backgroundColor = latestColor
             )
             notesViewModel.updateNotes(notes)
         }
@@ -315,6 +327,17 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
 
         binding.title.addTextChangedListener(textWatcher)
         binding.description.addTextChangedListener(textWatcher)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        binding = FragmentCreateNotesBinding.inflate(inflater, container, false)
+        navController = Navigation.findNavController(requireActivity(), R.id.NavHostFragment)
+        notesViewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
+
 
         return binding.root
     }
@@ -358,8 +381,7 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                     android.Manifest.permission.CAMERA
                 ) == PackageManager.PERMISSION_GRANTED
             ) {
-                val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                startActivityForResult(cameraIntent, PICK_IMAGE_FROM_CAMERA)
+                dispatchTakePictureIntent()
             } else {
                 requestPermissions(
                     arrayOf(android.Manifest.permission.CAMERA),
@@ -369,6 +391,47 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
         }
 
         bottomSheetDialogs.show()
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    @Throws(IOException::class)
+    fun createImageFileFromCamera(): File {
+        val timeStamp: String = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
+        val storageDir: File? = activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(
+            "JPEG_${timeStamp}_", /* prefix */
+            ".jpg", /* suffix */
+            storageDir /* directory */
+        ).apply {
+            // Save a file: path for use with ACTION_VIEW intents
+            absolutePath.also { cameraImagePath = it }
+        }
+    }
+
+    private fun dispatchTakePictureIntent() {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            // Ensure that there's a camera activity to handle the intent
+            takePictureIntent.resolveActivity(requireActivity().packageManager)?.also {
+                // Create the File where the photo should go
+                val photoFile: File? = try {
+                    createImageFileFromCamera()
+                } catch (ex: IOException) {
+                    // Error occurred while creating the File
+                    null
+                }
+                // Continue only if the File was successfully created
+                photoFile?.also {
+                    val photoURI: Uri = FileProvider.getUriForFile(
+                        requireContext(),
+                        "tech.jhavidit.remindme.fileprovider",
+                        it
+                    )
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                    takePictureIntent.setFlags(Intent.FLAG_ACTIVITY_TASK_ON_HOME)
+                    startActivityForResult(takePictureIntent, PICK_IMAGE_FROM_CAMERA)
+                }
+            }
+        }
     }
 
 
@@ -470,7 +533,7 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
                 radius = args.currentNotes.radius,
                 repeatValue = args.currentNotes.repeatValue,
                 locationName = args.currentNotes.locationName,
-                backgroundColor =latestColor,
+                backgroundColor = latestColor,
                 lastUpdated = args.currentNotes.lastUpdated,
                 image = path
             )
@@ -480,7 +543,34 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
 
         } else if (requestCode == PICK_IMAGE_FROM_CAMERA && resultCode == Activity.RESULT_OK) {
             binding.notesImageCard.visibility = VISIBLE
-            val bitmap = data?.extras?.get("data") as Bitmap
+
+
+            val dir = File(cameraImagePath)
+            val str = dir.path
+            val bitmap = BitmapFactory.decodeFile(str)
+//            val bitmap: Bitmap =
+//            val file = File(cameraImagePath)
+//            val fOut = FileOutputStream(dir)
+//            bitmap.compress(Bitmap.CompressFormat.PNG, 85, fOut)
+//            fOut.flush()
+//            fOut.close()
+
+            //                // Get the dimensions of the bitmap
+//                inJustDecodeBounds = true
+//
+//                val photoW: Int = outWidth
+//                val photoH: Int = outHeight
+//
+//                // Determine how much to scale down the image
+//                val scaleFactor: Int = max(1, min(photoW, photoH))
+//
+//                // Decode the image file into a Bitmap sized to fill the View
+//                inJustDecodeBounds = false
+//                inSampleSize = scaleFactor
+//                inPurgeable = true
+//            }
+//            val bitmap: Bitmap = BitmapFactory.decodeFile(cameraImagePath, bmOptions)
+//
             Glide.with(requireContext())
                 .load(bitmap)
                 .into(binding.image)
@@ -520,8 +610,8 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
         val recyclerView =
             bottomSheetDialogs.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.color_recycler_view)
         val closeButton = bottomSheetDialogs.findViewById<ImageView>(R.id.close_btn_color)
-
-        val adapter = SelectBackgroundColorAdapter(this)
+        val adapter =
+            SelectBackgroundColorAdapter(this, ColorModel.getColorIndex(notes.backgroundColor))
         recyclerView?.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         recyclerView?.adapter = adapter
@@ -641,6 +731,16 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
         )
         latestColor = color
         notesViewModel.updateNotes(notes)
+    }
+
+    private fun galleryAddPick() {
+        cameraImagePath?.let {
+            Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE).also { mediaScanIntent ->
+                val f = File(it)
+                mediaScanIntent.data = Uri.fromFile(f)
+                requireActivity().sendBroadcast(mediaScanIntent)
+            }
+        }
     }
 
 

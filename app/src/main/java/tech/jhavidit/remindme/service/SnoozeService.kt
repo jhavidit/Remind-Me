@@ -17,6 +17,7 @@ import tech.jhavidit.remindme.model.NotesModel
 import tech.jhavidit.remindme.receiver.AlarmReceiver
 import tech.jhavidit.remindme.repository.NotesRepository
 import tech.jhavidit.remindme.room.NotesDatabase
+import tech.jhavidit.remindme.util.LocalKeyStorage
 import tech.jhavidit.remindme.util.toast
 import tech.jhavidit.remindme.view.activity.MainActivity
 import tech.jhavidit.remindme.viewModel.NotesViewModel
@@ -71,6 +72,7 @@ class SnoozeService : LifecycleService() {
         val isSnooze = intent?.getBooleanExtra("isSnooze", false)
         val type = intent?.getStringExtra("type")
         notes = id?.let { notesRepository.selectedNote(it).asLiveData() }
+        deleteKey()
         notes?.observe(this, {
             if (type != null) {
                 alarmReceiver.scheduleSnoozeAlarm(applicationContext, it[0], type)
@@ -90,6 +92,7 @@ class SnoozeService : LifecycleService() {
 
 
         })
+
         return START_STICKY
     }
 
@@ -104,6 +107,12 @@ class SnoozeService : LifecycleService() {
     override fun onBind(intent: Intent): IBinder? {
         super.onBind(intent)
         return null
+    }
+
+    private fun deleteKey() {
+        LocalKeyStorage(this).deleteValue(LocalKeyStorage.SNOOZE)
+        LocalKeyStorage(this).deleteValue(LocalKeyStorage.REMINDER)
+        LocalKeyStorage(this).deleteValue(LocalKeyStorage.ID)
     }
 
 }

@@ -82,7 +82,7 @@ class NotesFragment : Fragment() {
             }
 
             it.forEach { note ->
-                if (note.locationReminder == null && note.timeReminder == null && note.description.isEmpty() && note.title.isEmpty()) {
+                if (note.locationReminder == null && note.timeReminder == null && note.description.isEmpty() && note.title.isEmpty() && note.image==null) {
                     viewModel.deleteNotes(note)
                     Snackbar.make(
                         binding.coordinatorLayout,
