@@ -53,9 +53,10 @@ class ReminderScreenActivity : AppCompatActivity(), View.OnTouchListener {
         binding.reminderFab.setOnTouchListener(this)
         notesTimeBundle?.let {
             id = notesTimeBundle.getInt("id")
+            val time = notesTimeBundle.getString("reminderTime")
             viewModel.selectedNote(id).observe(this, Observer {
                 binding.reminderLocationTime.text =
-                    showCurrentTime()
+                    time
                 binding.title.text = it[0].title
                 binding.description.text = it[0].description
             })

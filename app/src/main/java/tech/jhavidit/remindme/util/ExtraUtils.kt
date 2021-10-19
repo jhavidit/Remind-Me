@@ -101,8 +101,6 @@ fun loadImageFromStorage(path: String, id: Int): Bitmap? {
         e.printStackTrace()
         null
     }
-
-
 }
 
 

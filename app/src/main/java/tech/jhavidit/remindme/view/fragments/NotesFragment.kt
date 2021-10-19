@@ -70,7 +70,8 @@ class NotesFragment : Fragment() {
                     var snooze = false
                     if (LocalKeyStorage(requireContext()).getValue(LocalKeyStorage.SNOOZE) == "true")
                         snooze = true
-                    val bundle = bundleOf("id" to id, "reminder" to reminder, "snooze" to snooze)
+                    val currentTime = showCurrentTime()
+                    val bundle = bundleOf("id" to id, "reminder" to reminder, "snooze" to snooze,"reminderTime" to currentTime)
                     val intent = Intent(requireContext(), ReminderScreenActivity::class.java)
                     if (reminder == "time") {
                         intent.putExtra(NOTES_TIME, bundle)
