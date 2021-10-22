@@ -17,12 +17,4 @@ class  LocationRepository(private val locationDao: LocationDao)
     suspend fun updateLocation(location: LocationModel) {
         locationDao.updateLocation(location)
     }
-
-    suspend fun deleteLocation(location: LocationModel) {
-        locationDao.deleteLocation(location)
-    }
-
-    suspend fun deleteAllLocation() {
-        locationDao.deleteAllLocation()
-    }
 }

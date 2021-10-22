@@ -67,14 +67,16 @@ class RescheduledAlarmService : LifecycleService() {
                 if (foregroundAndBackgroundLocationPermissionApproved(applicationContext)) {
                     if (currentNote.locationReminder == true) {
                         if (currentNote.latitude != null && currentNote.longitude != null && currentNote.radius != null)
-                            geoFencingReceiver.addLocationReminder(
-                                context = applicationContext,
-                                id = currentNote.id,
-                                latitude = currentNote.longitude.toDouble(),
-                                longitude = currentNote.longitude.toDouble(),
-                                radius = currentNote.radius,
-                                notesModel = currentNote
-                            )
+                            currentNote.longitude?.toDouble()?.let {
+                                geoFencingReceiver.addLocationReminder(
+                                    context = applicationContext,
+                                    id = currentNote.id,
+                                    latitude = it,
+                                    longitude = currentNote.longitude!!.toDouble(),
+                                    radius = currentNote.radius!!,
+                                    notesModel = currentNote
+                                )
+                            }
                     }
                 } else {
                     showLocationPermissionAlertDialog(applicationContext)

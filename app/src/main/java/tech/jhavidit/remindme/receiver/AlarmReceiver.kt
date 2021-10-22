@@ -27,7 +27,8 @@ class AlarmReceiver : BroadcastReceiver() {
         intent: Intent
     ) {
         if (LocalKeyStorage(context).getValue(LocalKeyStorage.DO_NOT_DISTURB) == "true") {
-            intent.getBundleExtra(NOTES_TIME)?.let { notification(context,"We are here to remind you about", it) }
+            intent.getBundleExtra(NOTES_TIME)
+                ?.let { notification(context, "We are here to remind you about", it) }
         } else {
 
             val intentService = Intent(context, AlarmService::class.java)
@@ -59,7 +60,7 @@ class AlarmReceiver : BroadcastReceiver() {
                 "title" to notes.title,
                 "description" to notes.description,
                 "snooze" to false,
-                "reminderTime" to notes.reminderTime,
+                "reminderTime" to showCurrentTime(),
                 "reminder" to "time",
                 "locationName" to notes.locationName
             )

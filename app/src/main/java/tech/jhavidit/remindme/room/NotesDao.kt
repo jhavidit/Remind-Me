@@ -7,7 +7,7 @@ import tech.jhavidit.remindme.model.NotesModel
 
 
 @Dao
-interface NotesDao {
+sealed interface NotesDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addNotes(user: NotesModel)
@@ -17,9 +17,6 @@ interface NotesDao {
 
     @Delete
     suspend fun deleteNotes(user: NotesModel)
-
-    @Query("DELETE FROM notes_table")
-    suspend fun deleteAllNotes()
 
     @Query("SELECT * FROM notes_table ORDER BY  isPinned DESC , id DESC ")
     fun readAllData(): LiveData<List<NotesModel>>
