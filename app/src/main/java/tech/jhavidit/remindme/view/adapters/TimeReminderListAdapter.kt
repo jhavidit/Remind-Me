@@ -43,7 +43,7 @@ class TimeReminderListAdapter(private val clickListen: TimeReminderAdapterInterf
             holder.itemView.description.text = currentNotes.description
             holder.itemView.time.text =
                 currentNotes.reminderTime.toString()
-            if (currentNotes.repeatValue == -1L && System.currentTimeMillis() < currentNotes.reminderWaitTime!!)
+            if (currentNotes.repeatValue == -1L && System.currentTimeMillis() > currentNotes.reminderWaitTime!!)
                 holder.itemView.reminder_repeat.text = String.format("%s", "Missed Reminder")
             else if (currentNotes.repeatValue == -1L)
                 holder.itemView.reminder_repeat.text = String.format("%s", "Not Repeating")
@@ -53,7 +53,7 @@ class TimeReminderListAdapter(private val clickListen: TimeReminderAdapterInterf
             currentNotes.image?.let {
                 if (checkStoragePermission(holder.itemView.context)) {
                     Glide.with(holder.itemView.context)
-                        .load(loadImageFromStorage(currentNotes.image, currentNotes.id))
+                        .load(loadImageFromStorage(currentNotes.image!!, currentNotes.id))
                         .into(holder.itemView.reminder_image)
                 } else {
                     holder.itemView.image_card.visibility = GONE

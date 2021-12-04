@@ -14,12 +14,6 @@ interface LocationDao {
     @Update
     suspend fun updateLocation(location: LocationModel)
 
-    @Delete
-    suspend fun deleteLocation(location: LocationModel)
-
-    @Query("DELETE FROM location_table")
-    suspend fun deleteAllLocation()
-
     @Query("SELECT * FROM location_table ORDER BY id DESC LIMIT 6")
     fun readAllData(): LiveData<List<LocationModel>>
 }

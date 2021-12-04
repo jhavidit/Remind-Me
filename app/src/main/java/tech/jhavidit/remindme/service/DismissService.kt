@@ -19,6 +19,7 @@ import tech.jhavidit.remindme.receiver.AlarmReceiver
 import tech.jhavidit.remindme.receiver.GeoFencingReceiver
 import tech.jhavidit.remindme.repository.NotesRepository
 import tech.jhavidit.remindme.room.NotesDatabase
+import tech.jhavidit.remindme.util.LocalKeyStorage
 import tech.jhavidit.remindme.view.activity.MainActivity
 import tech.jhavidit.remindme.viewModel.NotesViewModel
 
@@ -122,9 +123,6 @@ class DismissService : LifecycleService() {
                     locationName = null,
                     backgroundColor = notes.backgroundColor
                 )
-//                    lifecycleScope.launch(Dispatchers.IO)  {
-//                        notesRepository.updateNotes(notesModel)
-//                    }
                 viewModel.updateNotes(notesModel)
                 val intentService =
                     Intent(applicationContext, LocationReminderService::class.java)
@@ -152,9 +150,6 @@ class DismissService : LifecycleService() {
                     locationName = null,
                     backgroundColor = notes.backgroundColor
                 )
-//                    lifecycleScope.launch(Dispatchers.IO)  {
-//                        notesRepository.updateNotes(notesModel)
-//                    }
                 viewModel.updateNotes(notesModel)
                 val intentService =
                     Intent(applicationContext, AlarmService::class.java)
@@ -162,8 +157,7 @@ class DismissService : LifecycleService() {
 
             }
 
-
-
+            deleteKey()
         val notificationService =
             Intent(applicationContext, DismissService::class.java)
         applicationContext.stopService(notificationService)
@@ -181,6 +175,12 @@ class DismissService : LifecycleService() {
     override fun onBind(intent: Intent): IBinder? {
         super.onBind(intent)
         return null
+    }
+
+    private fun deleteKey() {
+        LocalKeyStorage(this).deleteValue(LocalKeyStorage.SNOOZE)
+        LocalKeyStorage(this).deleteValue(LocalKeyStorage.REMINDER)
+        LocalKeyStorage(this).deleteValue(LocalKeyStorage.ID)
     }
 
 }

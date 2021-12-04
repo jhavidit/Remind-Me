@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -48,7 +49,21 @@ class SearchNotesFragment : Fragment() {
         }
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
+        binding.searchNote.setOnKeyListener(object : View.OnKeyListener {
+            override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
+                if (event?.action == KeyEvent.ACTION_DOWN) {
+                    when (keyCode) {
+                        KeyEvent.KEYCODE_ENTER -> {
+                            binding.searchNote.isFocusable = false
+                            inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
+                            return true
+                        }
+                    }
+                }
+                return false
+            }
 
+        })
         binding.searchNote.addTextChangedListener(textWatcher)
         binding.lottieText.text = String.format("%s", "Search Notes")
         binding.lottie.setAnimation(R.raw.search_notes)

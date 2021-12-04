@@ -12,22 +12,22 @@ import java.util.*
 @Parcelize
 data class NotesModel(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    var id: Int = 0,
     var title: String = "",
-    val description: String = "",
-    val locationReminder: Boolean? = null,
-    val timeReminder: Boolean? = null,
-    val reminderWaitTime: Long? = null,
-    val latitude: Double? = null,
-    val longitude: Double? = null,
-    val locationName: String? = null,
-    val radius: Double? = null,
-    val reminderTime: String? = null,
-    val reminderDate: String? = null,
-    val repeatValue: Long? = null,
-    val isPinned: Boolean = false,
-    val image: String? = null,
-    val lastUpdated: String? = null,
-    val backgroundColor: String = "#FFFFFF"
+    var description: String = "",
+    var locationReminder: Boolean? = null,
+    var timeReminder: Boolean? = null,
+    var reminderWaitTime: Long? = null,
+    var latitude: Double? = null,
+    var longitude: Double? = null,
+    var locationName: String? = null,
+    var radius: Double? = null,
+    var reminderTime: String? = null,
+    var reminderDate: String? = null,
+    var repeatValue: Long? = null,
+    var isPinned: Boolean = false,
+    var image: String? = null,
+    var lastUpdated: String? = null,
+    var backgroundColor: String = "#FFFFFF"
 
 ) : Parcelable

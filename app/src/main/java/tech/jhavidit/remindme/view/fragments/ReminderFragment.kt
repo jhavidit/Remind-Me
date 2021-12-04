@@ -50,18 +50,19 @@ class ReminderFragment : Fragment(), TimeReminderListAdapter.TimeReminderAdapter
 
         viewModel.readAllData.observe(viewLifecycleOwner, Observer {
             it.forEach { note ->
-                if (note.repeatValue != null && note.repeatValue == -1L && System.currentTimeMillis() < note.reminderWaitTime!!) {
+                if (note.repeatValue != null && note.repeatValue == -1L && System.currentTimeMillis() > note.reminderWaitTime!!) {
                     hasMissedReminder = true
                 }
             }
+            if (hasMissedReminder)
+                Snackbar.make(
+                    binding.coordinatorLayout,
+                    "You have missed/snoozed time reminders. Kindly check",
+                    Snackbar.LENGTH_SHORT
+                ).show()
         })
 
-        if (hasMissedReminder)
-            Snackbar.make(
-                binding.coordinatorLayout,
-                "You have missed/snoozed time reminders. Kindly check",
-                Snackbar.LENGTH_SHORT
-            ).show()
+
 
         return binding.root
     }

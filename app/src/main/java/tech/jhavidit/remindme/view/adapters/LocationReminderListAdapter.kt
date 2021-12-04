@@ -60,7 +60,7 @@ class LocationReminderListAdapter(private val clickListen: LocationReminderAdapt
             currentNotes.image?.let {
                 if (checkStoragePermission(holder.itemView.context)) {
                     Glide.with(holder.itemView.context)
-                        .load(loadImageFromStorage(currentNotes.image,currentNotes.id))
+                        .load(loadImageFromStorage(currentNotes.image!!,currentNotes.id))
                         .into(holder.itemView.reminder_image)
                 } else {
                     holder.itemView.image_card.visibility = GONE

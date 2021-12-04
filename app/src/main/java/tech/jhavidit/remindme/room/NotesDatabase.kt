@@ -7,7 +7,7 @@ import tech.jhavidit.remindme.model.LocationModel
 import tech.jhavidit.remindme.model.NotesModel
 import java.util.concurrent.Executors
 
-@Database(entities = [NotesModel::class, LocationModel::class], version = 1, exportSchema = false)
+@Database(entities = [NotesModel::class, LocationModel::class], version = 2, exportSchema = false)
 abstract class NotesDatabase : RoomDatabase() {
 
     abstract fun userDao(): NotesDao
