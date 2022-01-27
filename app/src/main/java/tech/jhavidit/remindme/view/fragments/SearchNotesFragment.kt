@@ -27,6 +27,7 @@ class SearchNotesFragment : Fragment() {
     private lateinit var binding: FragmentSearchNotesBinding
     private lateinit var viewModel: NotesViewModel
     private lateinit var adapter: SearchNoteAdapter
+    private var isNotesFound = true
 
 
     override fun onCreateView(
@@ -39,6 +40,10 @@ class SearchNotesFragment : Fragment() {
         adapter = SearchNoteAdapter()
         binding.backBtn.setOnClickListener {
             findNavController().navigateUp()
+        }
+        binding.searchNoteCard.setOnClickListener {
+            binding.searchNote.isFocusable = true
+            binding.searchNote.requestFocus()
         }
         binding.searchNote.requestFocus()
         val inputMethodManager =
@@ -54,7 +59,6 @@ class SearchNotesFragment : Fragment() {
                 if (event?.action == KeyEvent.ACTION_DOWN) {
                     when (keyCode) {
                         KeyEvent.KEYCODE_ENTER -> {
-                            binding.searchNote.isFocusable = false
                             inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
                             return true
                         }
@@ -97,13 +101,17 @@ class SearchNotesFragment : Fragment() {
                         log("searching $str $it")
                         if (it.isEmpty()) {
                             binding.lottieText.text = String.format("%s", "No notes found")
-                            binding.lottie.setAnimation(R.raw.no_notes_search)
-                            binding.lottie.playAnimation()
+                            if(isNotesFound) {
+                                binding.lottie.setAnimation(R.raw.no_notes_search)
+                                binding.lottie.playAnimation()
+                                isNotesFound = false
+                            }
                             binding.recyclerView.visibility = GONE
                             binding.animationLayout.visibility = VISIBLE
 
 
                         } else {
+                            isNotesFound = true
                             binding.animationLayout.visibility = GONE
                             binding.recyclerView.visibility = VISIBLE
                             adapter.setNotes(it)
