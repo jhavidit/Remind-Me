@@ -33,7 +33,7 @@ class GeoFencingHelper(context: Context) : ContextWrapper(context) {
             .setCircularRegion(latitude, longitude, radius.toFloat())
             .setRequestId(id)
             .setTransitionTypes(transitionTypes)
-            .setLoiteringDelay(500)
+            .setLoiteringDelay(1000)
             .setExpirationDuration(Geofence.NEVER_EXPIRE)
             .build()
     }
