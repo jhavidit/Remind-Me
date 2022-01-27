@@ -11,6 +11,8 @@
     android:background="?selectableItemBackground"
     android:paddingStart="@dimen/dimen_10"
     android:paddingEnd="@dimen/dimen_10"
+    android:maxLines="1"
+    android:maxLength="24"
     tools:text="Location"
     android:textColor="#323232"
     android:textSize="@dimen/dimen_text_20"

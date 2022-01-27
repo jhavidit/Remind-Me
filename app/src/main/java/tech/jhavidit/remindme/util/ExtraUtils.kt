@@ -70,8 +70,8 @@ fun uriToBitmap(context: Context, selectedFileUri: Uri): Bitmap? {
     }
 }
 
-fun saveToInternalStorage(bitmapImage: Bitmap, id: Int, activity: Activity): String? {
-    val cw = ContextWrapper(activity.applicationContext)
+fun saveToInternalStorage(bitmapImage: Bitmap, id: Int, context: Context): String? {
+    val cw = ContextWrapper(context)
     // path to /data/data/yourapp/app_data/imageDir
     val directory: File = cw.getDir("imageDir", Context.MODE_PRIVATE)
     // Create imageDir

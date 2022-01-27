@@ -17,6 +17,10 @@ class LocalKeyStorage(context: Context) {
         const val REMINDER = "reminder"
         const val SNOOZE = "snooze"
         const val ID = "id"
+        const val CAMERA_IMAGE_PATH = "camera_image_path"
+        const val CAMERA_IMAGE_ID = "camera_image_id"
+        const val IMAGE_SAVED  = "image_saved"
+        const val CAMERA_PATH = "camera_path"
     }
 
     fun saveValue(key: String, value: String) {
