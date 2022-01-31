@@ -79,5 +79,6 @@
     <string name="daily">Daily</string>
     <string name="clear_text">clear text</string>
     <string name="search_location">Search Location</string>
+    <string name="add_your_first_note">Add your first note</string>
 
 </resources>

@@ -96,11 +96,12 @@ class GeoFencingReceiver : BroadcastReceiver() {
                                 it2
                             )
                         }
-                    } else {
-                        val intentService = Intent(it, AlarmService::class.java)
-                        intentService.putExtra("notes", notesModel)
-                        it.stopService(intentService)
                     }
+//                    else {
+//                        val intentService = Intent(it, AlarmService::class.java)
+//                        intentService.putExtra("notes", notesModel)
+//                        it.stopService(intentService)
+//                    }
                 }
 
             }
@@ -123,7 +124,7 @@ class GeoFencingReceiver : BroadcastReceiver() {
             latitude = latitude,
             longitude = longitude,
             radius = radius,
-            transitionTypes = Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_DWELL or Geofence.GEOFENCE_TRANSITION_EXIT
+            transitionTypes = Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_EXIT
         )
         val geofencingRequest = geoFencingHelper.getGeoFencingRequest(geofence)
         val pendingIntent = geoFencingHelper.getPendingIntent(id, notesModel)

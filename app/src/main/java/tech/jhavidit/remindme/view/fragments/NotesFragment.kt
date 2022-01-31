@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
@@ -57,8 +58,14 @@ class NotesFragment : Fragment() {
         val staggeredGridLayoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
         binding.recyclerView.layoutManager = staggeredGridLayoutManager
         viewModel.readAllData.observe(viewLifecycleOwner, Observer {
-
-            if (LocalKeyStorage(requireContext()).getValue(LocalKeyStorage.ID) != null) {
+            if(it.isEmpty()){
+                binding.lottieText.visibility = VISIBLE
+                binding.recyclerView.visibility = GONE
+                binding.lottieAnimation.visibility = VISIBLE
+                binding.lottieAnimation.setAnimation(R.raw.add_note)
+                binding.lottieAnimation.playAnimation()
+            }
+            else if (LocalKeyStorage(requireContext()).getValue(LocalKeyStorage.ID) != null) {
                 Snackbar.make(
                     binding.coordinatorLayout,
                     "You have an active reminder",
@@ -79,7 +86,15 @@ class NotesFragment : Fragment() {
                         intent.putExtra(NOTES_LOCATION, bundle)
                     startActivity(intent)
                 }).show()
+                binding.lottieAnimation.visibility = GONE
+                binding.recyclerView.visibility = VISIBLE
+                binding.lottieText.visibility = GONE
 
+            }
+            else {
+                binding.lottieAnimation.visibility = GONE
+                binding.recyclerView.visibility = VISIBLE
+                binding.lottieText.visibility = GONE
             }
 
             it.forEach { note ->
