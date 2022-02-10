@@ -35,12 +35,17 @@ class RadiusChooseBottomSheet : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.radiusPicker.labelBehavior = LabelFormatter.LABEL_WITHIN_BOUNDS
         binding.radiusPicker.setLabelFormatter { value ->
-            if(value<1000)
+            if (value < 1000)
                 return@setLabelFormatter "${value.roundToInt()} m"
             else
-                return@setLabelFormatter "${String.format("%.1f",value/1000)} km"
+                return@setLabelFormatter "${String.format("%.1f", value / 1000)} km"
         }
-        binding.radiusPicker.values = mutableListOf(LocalKeyStorage(requireContext()).getValue(LocalKeyStorage.MIN_RADIUS)?.toFloat()?:100F, LocalKeyStorage(requireContext()).getValue(LocalKeyStorage.MAX_RADIUS)?.toFloat()?:1000F)
+        binding.radiusPicker.values = mutableListOf(
+            LocalKeyStorage(requireContext()).getValue(LocalKeyStorage.MIN_RADIUS)?.toFloat()
+                ?: 500F,
+            LocalKeyStorage(requireContext()).getValue(LocalKeyStorage.MAX_RADIUS)?.toFloat()
+                ?: 1500F
+        )
         binding.closeBtn.setOnClickListener {
             findNavController().navigateUp()
         }

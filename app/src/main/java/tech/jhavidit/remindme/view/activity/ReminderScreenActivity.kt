@@ -83,9 +83,9 @@ class ReminderScreenActivity : AppCompatActivity(), View.OnTouchListener {
 
         }
 
-        viewModel.selectedNote(id).observe(this, {
+        viewModel.selectedNote(id).observe(this) {
             notes = it[0]
-        })
+        }
 
         binding.openApp.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)

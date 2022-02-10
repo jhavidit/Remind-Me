@@ -87,6 +87,7 @@
                 android:layout_height="300dp"
                 android:layout_marginEnd="@dimen/dimen_10"
                 android:layout_marginStart="@dimen/dimen_10"
+                android:visibility="gone"
                 android:layout_marginTop="@dimen/dimen_40"
                 app:layout_constraintEnd_toEndOf="@id/endGuideline"
                 app:layout_constraintStart_toStartOf="@id/startGuideline"
@@ -98,6 +99,9 @@
             <TextView
                 android:id="@+id/lottie_text"
                 android:layout_width="wrap_content"
+                android:visibility="gone"
+                android:layout_marginStart="@dimen/dimen_20"
+                android:layout_marginEnd="@dimen/dimen_20"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="@id/startGuideline"
                 app:layout_constraintEnd_toEndOf="@id/endGuideline"

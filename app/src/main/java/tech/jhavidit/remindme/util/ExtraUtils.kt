@@ -111,7 +111,7 @@ fun getRadius(minRadius: Double, maxRadius: Double, progress: Int): Double {
 fun showLocationPermissionAlertDialog(context: Context) {
     MaterialAlertDialogBuilder(context)
         .setTitle("Location Permission Required")
-        .setMessage("You need to provide location permission to access this feature. Kindly enable it from settings")
+        .setMessage("You need to provide location permission to access this feature. Kindly enable allow location all time for location reminders.")
         .setPositiveButton(
             "Ok"
         ) { _, _ ->

@@ -29,6 +29,7 @@
             android:id="@+id/open_app"
             android:layout_width="@dimen/dimen_28"
             android:layout_height="@dimen/dimen_28"
+            android:visibility="gone"
             android:layout_marginTop="@dimen/dimen_10"
             android:background="?selectableItemBackgroundBorderless"
             android:contentDescription="@string/go_to_app"

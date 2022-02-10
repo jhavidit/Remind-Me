@@ -87,11 +87,11 @@ class ReminderFragment : Fragment(), TimeReminderListAdapter.TimeReminderAdapter
                     binding.lottieText.visibility = VISIBLE
                     binding.lottieAnimation.setAnimation(R.raw.time_reminder)
                     binding.lottieAnimation.playAnimation()
-                    binding.lottieText.text = String.format("%s", "No active time reminders")
+                    binding.lottieText.text = String.format("%s\n%s", "No Active Time", "Reminders")
                 } else {
                     binding.recyclerView.visibility = VISIBLE
                     binding.lottieText.visibility = GONE
-                    binding.lottieAnimation.visibility = VISIBLE
+                    binding.lottieAnimation.visibility = GONE
                     binding.recyclerView.adapter = timeAdapter
                     timeAdapter.setNotes(timeReminderList)
                 }
@@ -102,11 +102,11 @@ class ReminderFragment : Fragment(), TimeReminderListAdapter.TimeReminderAdapter
                     binding.lottieText.visibility = VISIBLE
                     binding.lottieAnimation.setAnimation(R.raw.location_reminder)
                     binding.lottieAnimation.playAnimation()
-                    binding.lottieText.text = String.format("%s", "No active location reminders")
+                    binding.lottieText.text = String.format("%s\n%s", "No Active Location", "Reminders")
                 } else {
                     binding.recyclerView.visibility = VISIBLE
                     binding.lottieText.visibility = GONE
-                    binding.lottieAnimation.visibility = VISIBLE
+                    binding.lottieAnimation.visibility = GONE
                     binding.recyclerView.adapter = locationAdapter
                     locationAdapter.setNotes(locationReminderList)
                 }
@@ -121,11 +121,11 @@ class ReminderFragment : Fragment(), TimeReminderListAdapter.TimeReminderAdapter
                         binding.lottieAnimation.setAnimation(R.raw.location_reminder)
                         binding.lottieAnimation.playAnimation()
                         binding.lottieText.text =
-                            String.format("%s", "No active location reminders")
+                            String.format("%s\n%s", "No Active Location", "Reminders")
                     } else {
                         binding.recyclerView.visibility = VISIBLE
                         binding.lottieText.visibility = GONE
-                        binding.lottieAnimation.visibility = VISIBLE
+                        binding.lottieAnimation.visibility = GONE
                         binding.recyclerView.adapter = locationAdapter
                         locationAdapter.setNotes(locationReminderList)
                     }
@@ -136,11 +136,11 @@ class ReminderFragment : Fragment(), TimeReminderListAdapter.TimeReminderAdapter
                         binding.lottieText.visibility = VISIBLE
                         binding.lottieAnimation.setAnimation(R.raw.time_reminder)
                         binding.lottieAnimation.playAnimation()
-                        binding.lottieText.text = String.format("%s", "No active time reminders")
+                        binding.lottieText.text = String.format("%s\n%s", "No Active Time", "Reminders")
                     } else {
                         binding.recyclerView.visibility = VISIBLE
                         binding.lottieText.visibility = GONE
-                        binding.lottieAnimation.visibility = VISIBLE
+                        binding.lottieAnimation.visibility = GONE
                         binding.recyclerView.adapter = timeAdapter
                         timeAdapter.setNotes(timeReminderList)
                     }

@@ -96,7 +96,7 @@ class AlarmReceiver : BroadcastReceiver() {
                 }
 
             }
-            Toast.makeText(context, "Alarm Set", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Time Reminder Set", Toast.LENGTH_SHORT).show()
         }
 
     }
@@ -147,6 +147,6 @@ class AlarmReceiver : BroadcastReceiver() {
         val pendingIntent =
             PendingIntent.getBroadcast(context, id, intent, 0)
         alarmManager.cancel(pendingIntent)
-        Toast.makeText(context, "Alarm Cancelled", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Time Reminder Cancelled", Toast.LENGTH_SHORT).show()
     }
 }

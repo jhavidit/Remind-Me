@@ -151,6 +151,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/radius_limit"
                 android:layout_width="0dp"
+
                 android:layout_height="@dimen/dimen_50"
                 android:background="?selectableItemBackground"
                 app:layout_constraintEnd_toEndOf="@id/endGuideline"
@@ -197,6 +198,7 @@
                 android:id="@+id/share"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/dimen_50"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="@id/endGuideline"
                 app:layout_constraintStart_toStartOf="@id/startGuideline"
                 app:layout_constraintTop_toBottomOf="@id/radius_limit">
@@ -237,10 +239,13 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+
+
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/development_details"
+                android:id="@+id/feedback"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/dimen_50"
+                android:background="?selectableItemBackground"
                 app:layout_constraintEnd_toEndOf="@id/endGuideline"
                 app:layout_constraintStart_toStartOf="@id/startGuideline"
                 app:layout_constraintTop_toBottomOf="@id/share">
@@ -249,7 +254,51 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/alata_regular"
-                    android:text="@string/development_details"
+                    android:text="Feedback"
+                    android:textColor="@color/description_color"
+                    android:textSize="@dimen/dimen_text_20"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="@dimen/dimen_0"
+                    android:layout_height="1dp"
+                    android:alpha="0.6"
+                    android:background="@color/description_color"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <ImageView
+                    android:id="@+id/feedback_image"
+                    android:layout_width="@dimen/dimen_28"
+                    android:layout_height="@dimen/dimen_28"
+                    android:layout_marginEnd="@dimen/dimen_8"
+                    android:contentDescription="@string/change_limits_of_radius_icon"
+                    android:src="@drawable/ic_radius"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/description_color" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/development_details"
+                android:layout_width="0dp"
+                android:background="?selectableItemBackground"
+                android:layout_height="@dimen/dimen_50"
+                app:layout_constraintEnd_toEndOf="@id/endGuideline"
+                app:layout_constraintStart_toStartOf="@id/startGuideline"
+                app:layout_constraintTop_toBottomOf="@id/feedback">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/alata_regular"
+                    android:text="Open Source Licenses"
                     android:textColor="@color/description_color"
                     android:textSize="@dimen/dimen_text_20"
                     app:layout_constraintBottom_toBottomOf="parent"

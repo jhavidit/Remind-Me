@@ -58,10 +58,10 @@ class GeoFencingReceiver : BroadcastReceiver() {
                 }*/
                 }
             }
-            Geofence.GEOFENCE_TRANSITION_DWELL -> {
+           /* Geofence.GEOFENCE_TRANSITION_DWELL -> {
                 // Log the error.
                 log("GEOFENCE_TRANSITION_DWELL")
-                /* context?.let {
+                *//* context?.let {
                      val intentNotification = Intent(context, TimeReminderActivity::class.java)
                      val pendingIntent =
                          PendingIntent.getActivity(
@@ -71,8 +71,8 @@ class GeoFencingReceiver : BroadcastReceiver() {
                              PendingIntent.FLAG_UPDATE_CURRENT
                          )
                      notification(context, "GEOFENCE_TRANSITION_DWELL ", pendingIntent)
-                 }*/
-            }
+                 }*//*
+            }*/
             Geofence.GEOFENCE_TRANSITION_EXIT -> {
 
                 context?.let {
