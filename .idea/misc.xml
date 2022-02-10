@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Remind-Me/app/src/main/res/drawable/ic_feedback.xml" value="0.1875" />
         <entry key="..\:/Remind-Me/app/src/main/res/layout/activity_location_search.xml" value="0.15942028985507245" />
         <entry key="..\:/Remind-Me/app/src/main/res/layout/activity_main.xml" value="0.11499493414387031" />
         <entry key="..\:/Remind-Me/app/src/main/res/layout/activity_time_reminder.xml" value="0.2318840579710145" />
@@ -18,7 +19,7 @@
         <entry key="..\:/Remind-Me/app/src/main/res/layout/fragment_notes.xml" value="0.21806167400881057" />
         <entry key="..\:/Remind-Me/app/src/main/res/layout/fragment_reminders.xml" value="0.2318840579710145" />
         <entry key="..\:/Remind-Me/app/src/main/res/layout/fragment_search_notes.xml" value="0.23645833333333333" />
-        <entry key="..\:/Remind-Me/app/src/main/res/layout/fragment_settings.xml" value="0.1490036231884058" />
+        <entry key="..\:/Remind-Me/app/src/main/res/layout/fragment_settings.xml" value="0.12" />
         <entry key="..\:/Remind-Me/app/src/main/res/layout/fragment_time_reminder.xml" value="0.2318840579710145" />
         <entry key="..\:/Remind-Me/app/src/main/res/layout/notes_item.xml" value="0.2164855072463768" />
         <entry key="..\:/Remind-Me/app/src/main/res/layout/reminder_item.xml" value="0.2318840579710145" />
