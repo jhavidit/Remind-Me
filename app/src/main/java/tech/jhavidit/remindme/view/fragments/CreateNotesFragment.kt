@@ -60,8 +60,15 @@ import java.util.*
 import kotlin.math.max
 import kotlin.math.min
 import android.R.attr.bitmap
+import android.content.Context
+import android.graphics.Matrix
+import androidx.work.*
 import com.airbnb.lottie.utils.Utils
 import okio.ByteString.decodeBase64
+import android.R.attr.bitmap
+import android.media.ExifInterface
+
+import com.bumptech.glide.load.resource.bitmap.TransformationUtils.rotateImage
 
 
 class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInterface {
@@ -74,11 +81,13 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
     private lateinit var navController: NavController
     private var cameraImagePath: String? = null
     private var isPinned = false
+    private lateinit var localKeyStorage: LocalKeyStorage
     private val args: CreateNotesFragmentArgs by navArgs()
     private var updated = false
     private var notesId = 0
     private var latestColor: String = "#FFFFFF"
     private var latestImage: String? = null
+    var path: String = ""
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -87,11 +96,54 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
         binding.notesImageCard.setBackgroundColor(Color.parseColor(args.currentNotes.backgroundColor))
         alarmReceiver = AlarmReceiver()
         geoFencingReceiver = GeoFencingReceiver()
+        localKeyStorage = LocalKeyStorage(requireContext())
         notes = args.currentNotes
-
         notesId = args.currentNotes.id
         latestColor = notes.backgroundColor
         latestImage = notes.image
+        val cameraPathLocal = localKeyStorage.getValue(LocalKeyStorage.CAMERA_IMAGE_PATH)
+        val cameraPathIdLocal = localKeyStorage.getValue(LocalKeyStorage.CAMERA_IMAGE_ID)
+        val imageSaved = localKeyStorage.getValue(LocalKeyStorage.IMAGE_SAVED)
+        if (cameraPathIdLocal != null && cameraPathLocal != null && imageSaved != null && Integer.parseInt(
+                cameraPathIdLocal
+            ) == notesId
+        ) {
+            val bitmap = loadImageFromStorage(cameraPathLocal, notesId)
+            val bit = bitmap?.let { cameraImagePath?.let { it1 -> checkingOrientation(it, it1) } }
+            Glide.with(requireContext())
+                .load(bit)
+                .into(binding.image)
+            val notes = NotesModel(
+                id = notesId,
+                title = args.currentNotes.title,
+                description = args.currentNotes.description,
+                locationReminder = args.currentNotes.locationReminder,
+                timeReminder = args.currentNotes.timeReminder,
+                reminderTime = args.currentNotes.reminderTime,
+                reminderWaitTime = args.currentNotes.reminderWaitTime,
+                reminderDate = args.currentNotes.reminderDate,
+                latitude = args.currentNotes.latitude,
+                longitude = args.currentNotes.longitude,
+                isPinned = args.currentNotes.isPinned,
+                radius = args.currentNotes.radius,
+                repeatValue = args.currentNotes.repeatValue,
+                locationName = args.currentNotes.locationName,
+                backgroundColor = args.currentNotes.backgroundColor,
+                lastUpdated = args.currentNotes.lastUpdated,
+                image = cameraPathLocal
+            )
+            latestImage = cameraPathLocal
+
+            notesViewModel.updateNotes(notes)
+            localKeyStorage.deleteValue(LocalKeyStorage.CAMERA_IMAGE_PATH)
+            localKeyStorage.deleteValue(LocalKeyStorage.CAMERA_IMAGE_ID)
+            localKeyStorage.deleteValue(LocalKeyStorage.IMAGE_SAVED)
+            localKeyStorage.deleteValue(LocalKeyStorage.CAMERA_PATH)
+
+
+        }
+
+
         args.currentNotes.image?.let {
 
             if (checkStoragePermission(requireContext())) {
@@ -509,8 +561,8 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
             var path: String? = null
             pickedImage?.let {
                 val bitmap = uriToBitmap(requireContext(), pickedImage)
-                bitmap?.let {
-                    path = saveToInternalStorage(bitmap, notesId, requireActivity())
+                bitmap?.let { bit ->
+                    path = saveToInternalStorage(bit, notesId, requireContext())
                     Glide.with(requireContext())
                         .load(bitmap)
                         .into(binding.image)
@@ -546,8 +598,21 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
 
 
             val dir = File(cameraImagePath)
-            val str = dir.path
-            val bitmap = BitmapFactory.decodeFile(str)
+            val path = dir.path
+            val bitmap = BitmapFactory.decodeFile(path)
+
+            val bit = cameraImagePath?.let { checkingOrientation(bitmap, it) }
+
+            val localKeyStorage = LocalKeyStorage(requireContext())
+
+            localKeyStorage.saveValue(LocalKeyStorage.CAMERA_IMAGE_ID, notesId.toString())
+            localKeyStorage.saveValue(LocalKeyStorage.CAMERA_IMAGE_PATH, path)
+            cameraImagePath?.let {
+                localKeyStorage.saveValue(
+                    LocalKeyStorage.CAMERA_PATH,
+                    it
+                )
+            }
 //            val bitmap: Bitmap =
 //            val file = File(cameraImagePath)
 //            val fOut = FileOutputStream(dir)
@@ -571,36 +636,46 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
 //            }
 //            val bitmap: Bitmap = BitmapFactory.decodeFile(cameraImagePath, bmOptions)
 //
-            Glide.with(requireContext())
-                .load(bitmap)
-                .into(binding.image)
-            val path = saveToInternalStorage(bitmap, notesId, requireActivity())
-            val notes = NotesModel(
-                id = notesId,
-                title = binding.title.text.toString(),
-                description = binding.description.text.toString(),
-                locationReminder = args.currentNotes.locationReminder,
-                timeReminder = args.currentNotes.timeReminder,
-                reminderTime = args.currentNotes.reminderTime,
-                reminderWaitTime = args.currentNotes.reminderWaitTime,
-                reminderDate = args.currentNotes.reminderDate,
-                latitude = args.currentNotes.latitude,
-                longitude = args.currentNotes.longitude,
-                isPinned = args.currentNotes.isPinned,
-                radius = args.currentNotes.radius,
-                repeatValue = args.currentNotes.repeatValue,
-                locationName = args.currentNotes.locationName,
-                backgroundColor = latestColor,
-                lastUpdated = args.currentNotes.lastUpdated,
-                image = path
-            )
-            latestImage = path
-            notesViewModel.updateNotes(notes)
 
+            Glide.with(requireContext())
+                .load(bit)
+                .into(binding.image)
+
+            val request = OneTimeWorkRequestBuilder<UploadWorker>()
+                .build()
+
+            WorkManager.getInstance(requireContext())
+                .enqueue(request)
 
         } else {
             binding.notesImageCard.visibility = GONE
         }
+    }
+
+    private fun checkingOrientation(bitmap: Bitmap, photoPath: String): Bitmap? {
+        val ei = ExifInterface(photoPath)
+        val orientation: Int = ei.getAttributeInt(
+            ExifInterface.TAG_ORIENTATION,
+            ExifInterface.ORIENTATION_UNDEFINED
+        )
+
+        val rotatedBitmap: Bitmap? = when (orientation) {
+            ExifInterface.ORIENTATION_ROTATE_90 -> this.rotateImage(bitmap, 90f)
+            ExifInterface.ORIENTATION_ROTATE_180 -> this.rotateImage(bitmap, 180f)
+            ExifInterface.ORIENTATION_ROTATE_270 -> this.rotateImage(bitmap, 270f)
+            ExifInterface.ORIENTATION_NORMAL -> bitmap
+            else -> bitmap
+        }
+        return rotatedBitmap
+    }
+
+    private fun rotateImage(bitmap: Bitmap, angle: Float): Bitmap {
+        val matrix: Matrix = Matrix()
+        matrix.postRotate(angle)
+        return Bitmap.createBitmap(
+            bitmap, 0, 0, bitmap.width, bitmap.height,
+            matrix, true
+        );
     }
 
 
@@ -743,5 +818,57 @@ class CreateNotesFragment : Fragment(), SelectBackgroundColorAdapter.AdapterInte
         }
     }
 
+    fun uploadImage(context: Context) {
+        val localKeyStorage = LocalKeyStorage(context)
+        val str = localKeyStorage.getValue(LocalKeyStorage.CAMERA_IMAGE_PATH)
+        val notesId = Integer.parseInt(localKeyStorage.getValue(LocalKeyStorage.CAMERA_IMAGE_ID)!!)
+        val cameraImagePath = localKeyStorage.getValue(LocalKeyStorage.CAMERA_PATH)
+        str?.let {
+            var bitmap = BitmapFactory.decodeFile(str)
+            bitmap = cameraImagePath?.let { it1 -> checkingOrientation(bitmap, it1) }
+            log(bitmap.toString() + " " + cameraImagePath.toString())
+            val path = saveToInternalStorage(bitmap, notesId, context)
+            path?.let {
+                localKeyStorage.saveValue(LocalKeyStorage.CAMERA_IMAGE_PATH, it)
+                localKeyStorage.saveValue(LocalKeyStorage.IMAGE_SAVED, "true")
+            }
 
+
+//            val notes = NotesModel(
+//                id = notesId,
+//                title = binding.title.text.toString(),
+//                description = binding.description.text.toString(),
+//                locationReminder = args.currentNotes.locationReminder,
+//                timeReminder = args.currentNotes.timeReminder,
+//                reminderTime = args.currentNotes.reminderTime,
+//                reminderWaitTime = args.currentNotes.reminderWaitTime,
+//                reminderDate = args.currentNotes.reminderDate,
+//                latitude = args.currentNotes.latitude,
+//                longitude = args.currentNotes.longitude,
+//                isPinned = args.currentNotes.isPinned,
+//                radius = args.currentNotes.radius,
+//                repeatValue = args.currentNotes.repeatValue,
+//                locationName = args.currentNotes.locationName,
+//                backgroundColor = latestColor,
+//                lastUpdated = args.currentNotes.lastUpdated,
+//                image = path
+//            )
+//            latestImage = path
+//            notesViewModel.updateNotes(notes)
+//            localKeyStorage.deleteValue(LocalKeyStorage.CAMERA_IMAGE_PATH)
+//            localKeyStorage.deleteValue(LocalKeyStorage.CAMERA_IMAGE_ID)
+        }
+    }
+}
+
+
+class UploadWorker(val context: Context, workerParams: WorkerParameters) :
+    Worker(context, workerParams) {
+    override fun doWork(): Result {
+        val obj = CreateNotesFragment()
+        obj.uploadImage(context)
+        log("chalega kya yeh")
+        //toast(context = context,"Kya chutiye developer ne app banai hai")
+        return Result.success()
+    }
 }

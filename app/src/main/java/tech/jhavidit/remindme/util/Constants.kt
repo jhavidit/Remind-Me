@@ -19,5 +19,6 @@ const val NOTES_TIME = "notes_time"
 const val CREATE = "created"
 const val AUTOCOMPLETE_REQUEST_CODE = 1
 const val fiveMinutes: Long = 300000
+const val developerEmailId = "jhavidit@gmail.com"
 val runningQOrLater =
     android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q

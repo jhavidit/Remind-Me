@@ -77,6 +77,8 @@
                     android:background="@null"
                     android:fontFamily="@font/alata_regular"
                     android:text="@string/search_location"
+                    android:maxLength="24"
+                    android:maxLines="1"
                     android:textColor="@color/purple_200"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="parent"

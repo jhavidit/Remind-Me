@@ -11,16 +11,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.android.material.snackbar.Snackbar
 import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView
 import tech.jhavidit.remindme.R
 import tech.jhavidit.remindme.databinding.FragmentSettingsBinding
 import tech.jhavidit.remindme.receiver.AlarmReceiver
 import tech.jhavidit.remindme.receiver.GeoFencingReceiver
-import tech.jhavidit.remindme.util.LocalKeyStorage
-import tech.jhavidit.remindme.util.RINGTONE_RESULT_CODE
-import tech.jhavidit.remindme.util.getNameFromUri
-import tech.jhavidit.remindme.util.log
+import tech.jhavidit.remindme.util.*
 import tech.jhavidit.remindme.viewModel.NotesViewModel
 
 
@@ -75,6 +73,16 @@ class SettingsFragment : Fragment() {
             }
         }
 
+        binding.feedback.setOnClickListener {
+            val emailIntent = Intent(
+                Intent.ACTION_SENDTO, Uri.fromParts(
+                    "mailto", developerEmailId, null
+                )
+            )
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Feedback for Remind Me app")
+            requireContext().startActivity(Intent.createChooser(emailIntent, null))
+        }
+
         binding.radiusLimit.setOnClickListener {
             findNavController().navigate(SettingsFragmentDirections.chooseRadiusRange())
         }
@@ -83,6 +91,11 @@ class SettingsFragment : Fragment() {
             val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
             intent.putExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI, RingtoneManager.TYPE_ALARM)
             startActivityForResult(intent, RINGTONE_RESULT_CODE)
+        }
+
+        binding.developmentDetails.setOnClickListener {
+            val intent = Intent(requireContext(), OssLicensesMenuActivity::class.java)
+            startActivity(intent)
         }
     }
 

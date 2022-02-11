@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -79,20 +81,69 @@ class ReminderFragment : Fragment(), TimeReminderListAdapter.TimeReminderAdapter
             } ?: listOf()
 
             if (binding.rbReminder.checkedRadioButtonId == R.id.rb_time) {
-                binding.recyclerView.adapter = timeAdapter
-                timeAdapter.setNotes(timeReminderList)
+                if (timeReminderList.isEmpty()) {
+                    binding.recyclerView.visibility = GONE
+                    binding.lottieAnimation.visibility = VISIBLE
+                    binding.lottieText.visibility = VISIBLE
+                    binding.lottieAnimation.setAnimation(R.raw.time_reminder)
+                    binding.lottieAnimation.playAnimation()
+                    binding.lottieText.text = String.format("%s\n%s", "No Active Time", "Reminders")
+                } else {
+                    binding.recyclerView.visibility = VISIBLE
+                    binding.lottieText.visibility = GONE
+                    binding.lottieAnimation.visibility = GONE
+                    binding.recyclerView.adapter = timeAdapter
+                    timeAdapter.setNotes(timeReminderList)
+                }
             } else {
-                binding.recyclerView.adapter = locationAdapter
-                locationAdapter.setNotes(locationReminderList)
+                if (locationReminderList.isEmpty()) {
+                    binding.recyclerView.visibility = GONE
+                    binding.lottieAnimation.visibility = VISIBLE
+                    binding.lottieText.visibility = VISIBLE
+                    binding.lottieAnimation.setAnimation(R.raw.location_reminder)
+                    binding.lottieAnimation.playAnimation()
+                    binding.lottieText.text = String.format("%s\n%s", "No Active Location", "Reminders")
+                } else {
+                    binding.recyclerView.visibility = VISIBLE
+                    binding.lottieText.visibility = GONE
+                    binding.lottieAnimation.visibility = GONE
+                    binding.recyclerView.adapter = locationAdapter
+                    locationAdapter.setNotes(locationReminderList)
+                }
             }
 
             binding.rbReminder.setOnCheckedChangeListener { group, checkedId ->
                 if (checkedId == R.id.rb_location) {
-                    binding.recyclerView.adapter = locationAdapter
-                    locationAdapter.setNotes(locationReminderList)
+                    if (locationReminderList.isEmpty()) {
+                        binding.recyclerView.visibility = GONE
+                        binding.lottieAnimation.visibility = VISIBLE
+                        binding.lottieText.visibility = VISIBLE
+                        binding.lottieAnimation.setAnimation(R.raw.location_reminder)
+                        binding.lottieAnimation.playAnimation()
+                        binding.lottieText.text =
+                            String.format("%s\n%s", "No Active Location", "Reminders")
+                    } else {
+                        binding.recyclerView.visibility = VISIBLE
+                        binding.lottieText.visibility = GONE
+                        binding.lottieAnimation.visibility = GONE
+                        binding.recyclerView.adapter = locationAdapter
+                        locationAdapter.setNotes(locationReminderList)
+                    }
                 } else if (checkedId == R.id.rb_time) {
-                    binding.recyclerView.adapter = timeAdapter
-                    timeAdapter.setNotes(timeReminderList)
+                    if (timeReminderList.isEmpty()) {
+                        binding.recyclerView.visibility = GONE
+                        binding.lottieAnimation.visibility = VISIBLE
+                        binding.lottieText.visibility = VISIBLE
+                        binding.lottieAnimation.setAnimation(R.raw.time_reminder)
+                        binding.lottieAnimation.playAnimation()
+                        binding.lottieText.text = String.format("%s\n%s", "No Active Time", "Reminders")
+                    } else {
+                        binding.recyclerView.visibility = VISIBLE
+                        binding.lottieText.visibility = GONE
+                        binding.lottieAnimation.visibility = GONE
+                        binding.recyclerView.adapter = timeAdapter
+                        timeAdapter.setNotes(timeReminderList)
+                    }
                 }
             }
         })

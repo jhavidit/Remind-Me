@@ -269,7 +269,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/alata_regular"
-                        android:text="@string/open_map"
+                        android:text="@string/add_location"
                         android:textColor="@color/purple_200"
                         android:textSize="@dimen/dimen_text_16"
                         app:layout_constraintBottom_toBottomOf="parent"

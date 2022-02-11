@@ -70,8 +70,8 @@ fun uriToBitmap(context: Context, selectedFileUri: Uri): Bitmap? {
     }
 }
 
-fun saveToInternalStorage(bitmapImage: Bitmap, id: Int, activity: Activity): String? {
-    val cw = ContextWrapper(activity.applicationContext)
+fun saveToInternalStorage(bitmapImage: Bitmap, id: Int, context: Context): String? {
+    val cw = ContextWrapper(context)
     // path to /data/data/yourapp/app_data/imageDir
     val directory: File = cw.getDir("imageDir", Context.MODE_PRIVATE)
     // Create imageDir
@@ -111,7 +111,7 @@ fun getRadius(minRadius: Double, maxRadius: Double, progress: Int): Double {
 fun showLocationPermissionAlertDialog(context: Context) {
     MaterialAlertDialogBuilder(context)
         .setTitle("Location Permission Required")
-        .setMessage("You need to provide location permission to access this feature. Kindly enable it from settings")
+        .setMessage("You need to provide location permission to access this feature. Kindly enable allow location all time for location reminders.")
         .setPositiveButton(
             "Ok"
         ) { _, _ ->

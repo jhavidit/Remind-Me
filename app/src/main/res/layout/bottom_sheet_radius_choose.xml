@@ -66,7 +66,8 @@
                     android:layout_height="@dimen/dimen_24"
                     android:layout_marginEnd="@dimen/dimen_12"
                     android:contentDescription="@string/save_location_icon"
-                    android:src="@drawable/ic_add_location" />
+                    android:src="@drawable/ic_radius"
+                    app:tint="@color/purple_200" />
 
                 <TextView
                     android:id="@+id/choose_limit_radius_text"

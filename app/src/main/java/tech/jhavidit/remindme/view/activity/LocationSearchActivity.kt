@@ -180,7 +180,7 @@ class LocationSearchActivity : AppCompatActivity(), OnMapReadyCallback,
                     // TODO: Handle the error.
                     data?.let {
                         val status = Autocomplete.getStatusFromIntent(data)
-                        log(status.statusMessage)
+                     //   log(status.statusMessage)
                     }
                 }
                 Activity.RESULT_CANCELED -> {

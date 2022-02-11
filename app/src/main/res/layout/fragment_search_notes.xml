@@ -76,6 +76,7 @@
                     android:fontFamily="@font/alata_regular"
                     android:hint="@string/search_your_notes"
                     android:maxLines="1"
+                    android:inputType="text"
                     android:textColor="@color/purple_200"
                     android:textColorHint="#B31E40AF"
                     android:textSize="@dimen/dimen_text_20"

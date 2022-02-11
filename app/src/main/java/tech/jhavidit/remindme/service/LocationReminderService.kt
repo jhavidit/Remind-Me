@@ -57,7 +57,7 @@ class LocationReminderService : Service() {
         val id = bundle?.getInt("id") ?: 0
         val isSnooze = bundle?.getBoolean("snooze")
         LocalKeyStorage(applicationContext).saveValue(LocalKeyStorage.ID, id.toString())
-        LocalKeyStorage(applicationContext).saveValue(LocalKeyStorage.REMINDER, "time")
+        LocalKeyStorage(applicationContext).saveValue(LocalKeyStorage.REMINDER, "location")
         LocalKeyStorage(applicationContext).saveValue(
             LocalKeyStorage.SNOOZE,
             isSnooze.toString()

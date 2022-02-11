@@ -73,7 +73,7 @@ class SnoozeService : LifecycleService() {
         val type = intent?.getStringExtra("type")
         notes = id?.let { notesRepository.selectedNote(it).asLiveData() }
         deleteKey()
-        notes?.observe(this, {
+        notes?.observe(this) {
             if (type != null) {
                 alarmReceiver.scheduleSnoozeAlarm(applicationContext, it[0], type)
             }
@@ -86,12 +86,12 @@ class SnoozeService : LifecycleService() {
                     Intent(applicationContext, LocationReminderService::class.java)
                 applicationContext.stopService(intentService)
             }
-                val notificationService =
-                    Intent(applicationContext, SnoozeService::class.java)
-                applicationContext.stopService(notificationService)
+            val notificationService =
+                Intent(applicationContext, SnoozeService::class.java)
+            applicationContext.stopService(notificationService)
 
 
-        })
+        }
 
         return START_STICKY
     }

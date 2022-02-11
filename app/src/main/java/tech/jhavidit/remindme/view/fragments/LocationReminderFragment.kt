@@ -74,10 +74,10 @@ class LocationReminderFragment : BottomSheetDialogFragment(),
         binding.recyclerView.adapter = adapter
         minRadius =
             LocalKeyStorage(requireContext()).getValue(LocalKeyStorage.MIN_RADIUS)?.toDouble()
-                ?: 100.0
+                ?: 500.0
         maxRadius =
             LocalKeyStorage(requireContext()).getValue(LocalKeyStorage.MAX_RADIUS)?.toDouble()
-                ?: 1000.0
+                ?: 1500.0
         if (minRadius < 1000)
             binding.minRadius.text = String.format("%s", "${minRadius.roundToInt()}m")
         else
