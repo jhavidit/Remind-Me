@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -35,12 +35,12 @@
             android:screenOrientation="fullSensor" />
         <activity
             android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
-            android:theme="@style/OpenSourceLicenseTheme"
-            android:icon="@drawable/ic_back_button"/>
+            android:icon="@drawable/ic_back_button"
+            android:theme="@style/OpenSourceLicenseTheme" />
         <activity
             android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
-            android:theme="@style/OpenSourceLicenseTheme"
-            android:icon="@drawable/ic_back_button"/>
+            android:icon="@drawable/ic_back_button"
+            android:theme="@style/OpenSourceLicenseTheme" />
         <activity
             android:name=".view.activity.MainActivity"
             android:windowSoftInputMode="adjustPan">
@@ -51,7 +51,8 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".receiver.BootReceiver"
+        <receiver
+            android:name=".receiver.BootReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -70,8 +71,7 @@
         <receiver
             android:name=".receiver.GeoFencingReceiver"
             android:enabled="true"
-            android:exported="true"
-            />
+            android:exported="true" />
         <receiver android:name=".receiver.SnoozeReceiver" />
         <receiver android:name=".receiver.DismissReceiver" />
 

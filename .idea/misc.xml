@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Remind-Me/app/src/main/res/drawable/ic_feedback.xml" value="0.1875" />
+        <entry key="..\:/Remind-Me/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2025" />
         <entry key="..\:/Remind-Me/app/src/main/res/layout/activity_location_search.xml" value="0.15942028985507245" />
         <entry key="..\:/Remind-Me/app/src/main/res/layout/activity_main.xml" value="0.11499493414387031" />
         <entry key="..\:/Remind-Me/app/src/main/res/layout/activity_time_reminder.xml" value="0.2318840579710145" />
@@ -25,6 +26,8 @@
         <entry key="..\:/Remind-Me/app/src/main/res/layout/reminder_item.xml" value="0.2318840579710145" />
         <entry key="..\:/Remind-Me/app/src/main/res/layout/saved_location_item.xml" value="0.2318840579710145" />
         <entry key="..\:/Remind-Me/app/src/main/res/layout/search_note_item.xml" value="0.23645833333333333" />
+        <entry key="..\:/Remind-Me/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2025" />
+        <entry key="..\:/Remind-Me/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2025" />
         <entry key="..\:/Remind-Me/app/src/main/res/xml/file_paths.xml" value="0.15217391304347827" />
       </map>
     </option>
