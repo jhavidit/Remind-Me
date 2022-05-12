@@ -20,7 +20,7 @@
 * Directions to setup/install
 	- Clone this repository to your local folder using Git bash:
 	```bash
-	git clone https://github.com/dsckiet/covid-tracker-android-app.git
+	git clone https://github.com/jhavidit/Remind-Me.git
 	```
 	- Open this project from Android Studio
 	- Connect to an Android physical device or emulator
