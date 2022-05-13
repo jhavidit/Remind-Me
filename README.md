@@ -10,6 +10,10 @@
 - [ ] Add time based reminder using Alarm Manager.
 - [ ] Notes Section using Room persistance library.
 <br>
+
+## Location Based Reminder Flow
+https://user-images.githubusercontent.com/54817177/168296359-7df76f67-2b73-4135-810e-ff5d3dc5fd00.mp4	
+	
 	
 ## Instructions to run
 
