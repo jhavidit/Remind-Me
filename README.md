@@ -28,6 +28,10 @@
 	```bash
 	gradlew installDebug
 	```
+	Now add your google maps api key to the local.properties in this format
+	```bash
+	MAPS_API_KEY="yourapikey"
+	```
 
 * Directions to execute
 	-  To launch hands free, run the following using command line tools
